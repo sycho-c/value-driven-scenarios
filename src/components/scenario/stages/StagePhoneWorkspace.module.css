@@ -1,0 +1,66 @@
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 22px;
+  align-items: stretch;
+  padding: 0;
+}
+
+@media (max-width: 1024px) {
+  .stage {
+    grid-template-columns: minmax(0, 1fr) 240px;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stage {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+.workspaceColumn {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 12px;
+}
+
+
+.phoneColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.guide {
+  width: 100%;
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-align: left;
+  line-height: 1.5;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.guideLabel {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 768px) {
+  .guide {
+    max-width: 320px;
+  }
+}

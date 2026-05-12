@@ -1,0 +1,103 @@
+.row {
+  display: flex;
+  gap: 6px;
+  margin: 6px 0;
+  align-items: flex-end;
+}
+
+.row.toMe {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  max-width: 78%;
+  min-width: 0;
+}
+
+.sender {
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.65);
+  margin-bottom: 3px;
+  font-weight: 500;
+}
+
+.bubble {
+  position: relative;
+  padding: 9px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  line-height: 1.45;
+  background: linear-gradient(135deg, #1A1040 0%, #2E1A5C 100%);
+  color: #fff;
+  border-top-left-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  box-shadow: var(--shadow-bubble);
+  cursor: pointer;
+  transition: transform 0.15s var(--easing-out), box-shadow 0.2s var(--easing-out);
+}
+
+.row.toMe .bubble {
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: 4px;
+}
+
+.bubble:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.lockHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #FFE0F0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lockBody {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.lockBody.locked {
+  color: rgba(255, 255, 255, 0.42);
+  font-style: italic;
+}
+
+.revealHint {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: -0.01em;
+}
+
+.meta {
+  display: flex;
+  gap: 4px;
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 2px;
+}
+
+.row.toMe .meta {
+  flex-direction: row-reverse;
+}

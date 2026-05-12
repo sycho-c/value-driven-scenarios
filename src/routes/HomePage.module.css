@@ -1,0 +1,75 @@
+.page {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 18% -10%, rgba(139, 111, 255, 0.16), transparent 50%),
+    radial-gradient(ellipse at 82% 8%, rgba(91, 63, 228, 0.08), transparent 60%),
+    var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.navInner {
+  max-width: var(--layout-marketing-max);
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.brand {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.brand .productMark {
+  color: var(--brand);
+}
+
+.navLinks {
+  display: flex;
+  gap: 18px;
+  margin-left: 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.navLinks a {
+  transition: color 0.15s var(--easing-out);
+}
+
+.navLinks a:hover {
+  color: var(--brand);
+}
+
+@media (max-width: 700px) {
+  .navLinks {
+    display: none;
+  }
+}
+
+.navSpacer {
+  flex: 1;
+}
+
+.navCta {
+  font-size: 13px;
+  font-weight: 800;
+  padding: 8px 14px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  letter-spacing: -0.01em;
+}

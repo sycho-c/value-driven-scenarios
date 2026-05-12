@@ -1,0 +1,51 @@
+:root {
+  --brand: #5B3FE4;
+  --brand-light: #8B6FFF;
+  --brand-soft: #F0EBFF;
+  --brand-ink: #1A1040;
+
+  --good: #00C896;
+  --warn: #FFB800;
+  --danger: #FF4757;
+
+  --ink: #1A1A2E;
+  --ink-soft: #5A5F7A;
+  --muted: #8890B0;
+
+  --bg: #FAFBFD;
+  --bg-soft: #F0F3FA;
+  --border: #E2E8F0;
+  --surface: #FFFFFF;
+
+  --kakao-group-bg: #B2C7DB;
+  --kakao-chat-bg: #ABC1D1;
+  --kakao-self: #FFE500;
+  --kakao-other: #FFFFFF;
+  --kakao-header: #2C2C2C;
+  --kakao-notice: #2D7DD2;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 4px 18px rgba(15, 22, 60, 0.07);
+  --shadow-card-hover: 0 12px 32px rgba(15, 22, 60, 0.12);
+  --shadow-bubble: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-push: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-phone: 0 22px 48px rgba(15, 22, 60, 0.18);
+
+  --layout-marketing-max: 1200px;
+  --layout-stage-max: 1280px;
+  --layout-prose-max: 880px;
+
+  --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
+    system-ui, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-kakao: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Pretendard Variable',
+    system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  --easing-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --easing-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}

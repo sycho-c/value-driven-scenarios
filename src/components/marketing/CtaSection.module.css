@@ -1,0 +1,117 @@
+.section {
+  max-width: var(--layout-marketing-max);
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+.wrap {
+  position: relative;
+  padding: 56px 40px 52px;
+  border-radius: 28px;
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(139, 111, 255, 0.42), transparent 55%),
+    radial-gradient(ellipse at 88% 100%, rgba(91, 63, 228, 0.5), transparent 55%),
+    var(--brand-ink);
+  color: #fff;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: center;
+}
+
+@media (max-width: 880px) {
+  .wrap {
+    grid-template-columns: 1fr;
+    padding: 40px 24px 36px;
+    gap: 20px;
+  }
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--brand-light);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.headline {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+.sub {
+  font-size: 14.5px;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.6;
+  font-weight: 500;
+  max-width: 520px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+@media (max-width: 880px) {
+  .actions {
+    align-items: flex-start;
+  }
+}
+
+.primaryBtn {
+  padding: 16px 24px;
+  background: #fff;
+  color: var(--brand-ink);
+  border-radius: var(--radius-pill);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transition: transform 0.18s var(--easing-out), box-shadow 0.2s var(--easing-out);
+}
+
+.primaryBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+}
+
+.secondaryBtn {
+  padding: 12px 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.32);
+  background: transparent;
+  color: #fff;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 13px;
+  transition: background 0.18s var(--easing-out);
+}
+
+.secondaryBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.hint {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 600;
+}
+
+.footer {
+  max-width: var(--layout-marketing-max);
+  margin: 0 auto;
+  padding: 0 24px 48px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}

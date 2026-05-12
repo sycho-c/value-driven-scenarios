@@ -1,0 +1,15 @@
+.divider {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 6px;
+}
+
+.pill {
+  background: rgba(0, 0, 0, 0.18);
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 12px;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}

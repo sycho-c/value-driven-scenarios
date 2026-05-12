@@ -1,0 +1,46 @@
+.note {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.text {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: rgba(20, 20, 30, 0.72);
+  font-weight: 600;
+  font-style: normal;
+  font-family: var(--font-kakao);
+  letter-spacing: -0.01em;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.tone-warn {
+  background: #FFF1CC;
+  color: #7A4F00;
+  border-color: rgba(122, 79, 0, 0.22);
+  font-weight: 700;
+}
+
+.tone-danger {
+  background: #FFE0E3;
+  color: #B81A2A;
+  border-color: rgba(184, 26, 42, 0.22);
+  font-weight: 700;
+}
+
+.tone-good {
+  background: #D7F5E8;
+  color: #007A5A;
+  border-color: rgba(0, 122, 90, 0.22);
+  font-weight: 700;
+}
+
+.tone-brand {
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  border-color: rgba(91, 63, 228, 0.22);
+  font-weight: 700;
+}

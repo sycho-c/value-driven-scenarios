@@ -1,0 +1,347 @@
+.runner {
+  max-width: var(--layout-stage-max);
+  margin: 0 auto;
+  padding: 0 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .runner {
+    padding: 0 16px 24px;
+  }
+}
+
+.intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 10px 16px 12px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(91, 63, 228, 0.08), rgba(139, 111, 255, 0.04));
+  border: 1px solid var(--border);
+}
+
+.introLeft {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.introHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.actLabel {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--brand);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  background: var(--brand-soft);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.chapterTitle {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chapterSubtitle {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.narration {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.narration.expanded {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+  white-space: normal;
+}
+
+.introRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.progressLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.caseMeta {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.actionsRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 10px 14px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: #fff;
+}
+
+.actionsRow.prompt {
+  background: linear-gradient(135deg, #FFFCE0 0%, #FFF7B8 100%);
+  border-color: #F4D24A;
+}
+
+.actionsRow.complete {
+  background: linear-gradient(135deg, rgba(0, 200, 150, 0.1) 0%, rgba(0, 200, 150, 0.04) 100%);
+  border-color: var(--good);
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.actionsRow.advance {
+  background: linear-gradient(135deg, var(--brand-soft) 0%, #fff 100%);
+  border-color: var(--brand-light);
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.actionsLabel {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.actionsLabel.prompt {
+  color: #8A6800;
+}
+
+.actionsLabel.complete {
+  color: var(--good);
+}
+
+.actionsLabel.advance {
+  color: var(--brand);
+}
+
+.completeBadge {
+  color: var(--good);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+}
+
+.chapterTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+.chapterTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-weight: 600;
+  transition: background 0.15s var(--easing-out), border-color 0.15s var(--easing-out),
+    color 0.15s var(--easing-out);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+}
+
+.chapterTab:hover {
+  background: var(--bg-soft);
+  border-color: var(--brand-light);
+}
+
+.chapterTabActive,
+.chapterTabActive:hover {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.chapterTabNum {
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.chapterTabTitle {
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .chapterTabTitle {
+    display: none;
+  }
+}
+
+
+.advanceBtn {
+  padding: 9px 16px;
+  background: var(--brand);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: -0.01em;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.15s var(--easing-out), box-shadow 0.2s var(--easing-out);
+}
+
+.advanceBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.actionsHint {
+  font-size: 10.5px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 900px) {
+  .intro {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .introRight {
+    align-items: flex-start;
+  }
+  .narration {
+    -webkit-line-clamp: 2;
+  }
+}
+
+.guideOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(20, 16, 48, 0.46);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: pointer;
+}
+
+.guideCard {
+  cursor: default;
+  width: min(560px, 100%);
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--brand-light);
+  box-shadow: 0 24px 64px rgba(20, 16, 48, 0.32);
+  padding: 28px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.guideEyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.guideEyebrow > span:first-child {
+  padding: 4px 10px;
+  background: var(--brand-soft);
+  border-radius: var(--radius-pill);
+}
+
+.guideStep {
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.guideBody {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  word-break: keep-all;
+}
+
+.guideDismiss {
+  align-self: flex-end;
+  padding: 11px 20px;
+  background: var(--brand);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.15s var(--easing-out), box-shadow 0.2s var(--easing-out);
+  cursor: pointer;
+}
+
+.guideDismiss:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+@media (max-width: 600px) {
+  .guideCard {
+    padding: 22px 22px 20px;
+  }
+  .guideBody {
+    font-size: 15.5px;
+  }
+}

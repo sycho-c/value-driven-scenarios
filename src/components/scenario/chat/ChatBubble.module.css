@@ -1,0 +1,108 @@
+.row {
+  display: flex;
+  margin: 6px 0;
+}
+
+.row.mine {
+  justify-content: flex-end;
+}
+
+.row.system {
+  justify-content: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  max-width: 78%;
+  min-width: 0;
+  gap: 4px;
+}
+
+.column.mine {
+  align-items: flex-end;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 11px;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+
+.sender {
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.bubbleRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 0;
+}
+
+.bubbleRow.mine {
+  flex-direction: row-reverse;
+}
+
+.bubble {
+  position: relative;
+  display: inline-block;
+  padding: 8px 11px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  line-height: 1.45;
+  word-break: break-word;
+  white-space: pre-wrap;
+  background: var(--kakao-other);
+  color: var(--ink);
+  box-shadow: var(--shadow-bubble);
+  border-top-left-radius: 4px;
+  font-family: var(--font-kakao);
+}
+
+.bubble.mine {
+  background: var(--kakao-self);
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: 4px;
+}
+
+.bubble.urgent {
+  box-shadow: 0 0 0 2px var(--danger);
+}
+
+.bubble.danger {
+  background: #FFE3E5;
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.meta {
+  display: flex;
+  gap: 4px;
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  padding-bottom: 2px;
+  flex-shrink: 0;
+}
+
+.unreadCount {
+  color: #FFA500;
+  font-weight: 700;
+}

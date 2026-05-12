@@ -1,0 +1,141 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #FBFBFE;
+  font-family: var(--font-kakao);
+}
+
+.header {
+  padding: 14px 16px 12px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  color: #fff;
+}
+
+.headerMain {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.headerSub {
+  margin-top: 3px;
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 18px;
+  align-items: stretch;
+}
+
+.intro {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.introIcon {
+  font-size: 32px;
+  margin: 0 auto 4px;
+}
+
+.introTitle {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.introBody {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.phoneRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.phoneLabel {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.phoneValue {
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 600;
+  flex: 1;
+  font-family: var(--font-mono);
+}
+
+.codeBoxes {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.codeBox {
+  width: 32px;
+  height: 40px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brand);
+  font-family: var(--font-mono);
+  background: #fff;
+}
+
+.codeBox.filled {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.directoryNote {
+  margin-top: 4px;
+  padding: 8px 10px;
+  background: var(--brand-soft);
+  border-radius: var(--radius-sm);
+  font-size: 10.5px;
+  color: var(--brand-ink);
+  line-height: 1.5;
+}
+
+.directoryNote strong {
+  color: var(--brand);
+}
+
+.cta {
+  margin-top: auto;
+  padding: 12px;
+  background: var(--brand);
+  color: #fff;
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  box-shadow: var(--shadow-card);
+}
+
+.cta.done {
+  background: var(--good);
+}
