@@ -270,7 +270,12 @@ export function ChapterRunner({
       ) : chapter.stage === 'salesbridge-workspace' ? (
         <StageSalesBridgeWorkspace state={node} actions={actions} onAdvance={setStateIndex} />
       ) : (
-        <StagePhoneWorkspace state={node} cast={caseDef.cast} actions={actions} />
+        <StagePhoneWorkspace
+          state={node}
+          cast={caseDef.cast}
+          actions={actions}
+          phoneSide={caseDef.id === 'wontalk-woori' ? 'left' : 'right'}
+        />
       )}
 
       {node.memo && <ChapterMemo memo={node.memo} />}
