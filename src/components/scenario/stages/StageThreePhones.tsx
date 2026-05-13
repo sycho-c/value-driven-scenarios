@@ -26,7 +26,8 @@ function computeActiveSet(state: ChapterStateNode): Set<string> {
   }
   if (state.activeCastId) active.add(state.activeCastId);
 
-  const entries = Object.entries(state.phones);
+  const phones = state.phones ?? {};
+  const entries = Object.entries(phones);
   const pairs: Array<[string, string]> = [];
 
   // Rule 1: 1:1 채팅 — 한쪽 폰의 메시지 senderId가 다른 폰 슬롯이면 페어
@@ -34,7 +35,7 @@ function computeActiveSet(state: ChapterStateNode): Set<string> {
     if (screen.type !== 'kakao-1to1') continue;
     for (const msg of screen.messages ?? []) {
       const sender = msg.senderId;
-      if (sender && sender !== slotId && state.phones[sender]) {
+      if (sender && sender !== slotId && phones[sender]) {
         pairs.push([slotId, sender]);
       }
     }
@@ -67,7 +68,7 @@ function computeActiveSet(state: ChapterStateNode): Set<string> {
 
 export function StageThreePhones({ state, cast, actions }: StageThreePhonesProps) {
   const castById = Object.fromEntries(cast.map((c) => [c.id, c]));
-  const slots = Object.entries(state.phones);
+  const slots = Object.entries(state.phones ?? {});
   const activeSet = computeActiveSet(state);
 
   return (

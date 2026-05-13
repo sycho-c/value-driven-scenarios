@@ -1,0 +1,236 @@
+.window {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 480px;
+  height: 700px;
+  background: white;
+  border: 1px solid #888;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.titlebar {
+  background: #217346;
+  color: white;
+  padding: 6px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.winControls span {
+  display: inline-block;
+  width: 12px;
+  text-align: center;
+  margin-left: 6px;
+  opacity: 0.85;
+}
+
+.ribbon {
+  background: #F3F2F1;
+  padding: 4px 10px;
+  border-bottom: 1px solid #E0E0E0;
+  font-size: 11px;
+  color: #555;
+  display: flex;
+  gap: 12px;
+}
+
+.formulaBar {
+  background: white;
+  padding: 4px 10px;
+  border-bottom: 1px solid #DDD;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+}
+
+.cellRef {
+  width: 60px;
+  border: 1px solid #DDD;
+  padding: 2px 6px;
+  font-size: 10px;
+  background: #fff;
+  color: #222;
+  border-radius: 2px;
+}
+
+.fx {
+  color: #999;
+}
+
+.formula {
+  flex: 1;
+  color: #666;
+}
+
+.sheet {
+  flex: 1;
+  overflow: auto;
+  background: white;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #D0D7DE;
+  padding: 6px 8px;
+  text-align: left;
+  height: 28px;
+  color: #222;
+}
+
+.table th {
+  background: #F3F2F1;
+  font-weight: 600;
+  text-align: center;
+  color: #555;
+  font-size: 11px;
+}
+
+.rowHeader {
+  background: #E1E1E1;
+  text-align: center;
+  font-weight: 600;
+  color: #555;
+  width: 28px;
+}
+
+.titleRow {
+  font-weight: 700;
+  background: #F3F2F1;
+  text-align: center;
+}
+
+.headerRow {
+  font-weight: 600;
+  background: #F3F2F1;
+}
+
+.miu {
+  background: #FFFCE0;
+}
+
+.daedong {
+  background: #FFF0F0;
+}
+
+.priceCell {
+  text-align: right;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+}
+
+.highlight {
+  background: #FFE9B0 !important;
+  animation: rowFlash 1.5s ease-in-out infinite;
+}
+
+@keyframes rowFlash {
+  0%, 100% { background: #FFE9B0; }
+  50% { background: #FFC700; }
+}
+
+.statusbar {
+  background: #217346;
+  color: white;
+  padding: 3px 12px;
+  font-size: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.quotePopup {
+  position: absolute;
+  top: 80px;
+  left: 80px;
+  width: 420px;
+  background: white;
+  border: 2px solid #C9302C;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 30;
+  animation: popupIn 0.3s ease-out;
+}
+
+@keyframes popupIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.popupHeader {
+  background: #C9302C;
+  color: white;
+  padding: 8px 12px;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.popupBody {
+  padding: 14px;
+}
+
+.popupTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #C9302C;
+  margin-bottom: 6px;
+}
+
+.popupSubtitle {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.popupTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.popupTable th,
+.popupTable td {
+  border: 1px solid #DDD;
+  padding: 6px 10px;
+}
+
+.popupTable th {
+  background: #F3F2F1;
+  text-align: center;
+  font-weight: 600;
+}
+
+.popupTable tr.danger td {
+  background: #FFE9B0;
+  font-weight: 700;
+}
+
+.dangerPrice {
+  color: #C9302C;
+  font-size: 14px;
+}
+
+.popupNote {
+  margin-top: 10px;
+  padding: 8px;
+  background: #FFF0F0;
+  border-left: 3px solid #C9302C;
+  font-size: 11px;
+  color: #333;
+  line-height: 1.5;
+}

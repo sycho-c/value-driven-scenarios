@@ -13,7 +13,7 @@ interface StagePhoneWorkspaceProps {
 
 export function StagePhoneWorkspace({ state, cast, actions }: StagePhoneWorkspaceProps) {
   const castById = Object.fromEntries(cast.map((c) => [c.id, c]));
-  const guestScreen = state.phones.guest;
+  const guestScreen = state.phones?.guest;
   const guestMember = state.activeCastId ? castById[state.activeCastId] : null;
 
   return (

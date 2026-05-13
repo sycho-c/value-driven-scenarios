@@ -1,0 +1,95 @@
+.container {
+  position: absolute;
+  bottom: 50px;
+  right: 24px;
+  width: 320px;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.toast {
+  background: #FEE500;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  padding: 12px 14px;
+  cursor: pointer;
+  animation: toastSlideIn 0.4s ease-out;
+  border: 2px solid transparent;
+  transition: transform 0.15s, border-color 0.15s;
+  pointer-events: auto;
+}
+
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast:hover {
+  transform: translateX(-4px);
+  border-color: #C9302C;
+}
+
+.urgent {
+  background: #FFD600;
+  border: 2px solid #C9302C;
+}
+
+.boss {
+  background: #FFA000;
+  color: white;
+}
+
+.pulse {
+  animation: toastSlideIn 0.4s ease-out, toastPulse 1.2s ease-in-out infinite 0.5s;
+}
+
+@keyframes toastPulse {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 6px 30px rgba(254, 229, 0, 1);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.from {
+  font-size: 12px;
+  font-weight: 700;
+  color: #222;
+}
+
+.room {
+  font-size: 9px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.body {
+  font-size: 11px;
+  color: #222;
+  line-height: 1.4;
+}
+
+.boss .from,
+.boss .body {
+  color: white;
+}
+
+.boss .room {
+  color: rgba(255, 255, 255, 0.85);
+}

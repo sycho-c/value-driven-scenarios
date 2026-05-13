@@ -22,6 +22,13 @@ export const CASES = {
     summary: '팀장 가시성 + BR 우선순위 알림 업무 관리',
     accentColor: '#C9302C',
   },
+  'salesbridge-gaon-pc': {
+    label: 'ONE TALK v2',
+    customer: '가온전선 (PC 데스크탑)',
+    industry: 'PC 카톡 + DWorks Cowork+ 통합',
+    summary: 'Ch.1 사고 1시간 ↔ Ch.2 사전 차단 5분',
+    accentColor: '#1E4E6E',
+  },
 } as const;
 
 export type CaseId = keyof typeof CASES;

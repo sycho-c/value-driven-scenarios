@@ -4,6 +4,8 @@ import type { CaseDef, Chapter, PresetChip as PresetChipDef } from '@/cases/_typ
 import { ACT_LABEL } from '@/cases/_types';
 import { StagePhoneWorkspace } from './stages/StagePhoneWorkspace';
 import { StageThreePhones } from './stages/StageThreePhones';
+import { StageDesktopPC } from './stages/StageDesktopPC';
+import { StageSalesBridgeWorkspace } from './stages/StageSalesBridgeWorkspace';
 import { StateBar } from './StateBar';
 import { ChapterMemo } from './ChapterMemo';
 import { PresetChip } from './controls/PresetChip';
@@ -71,6 +73,11 @@ export function ChapterRunner({
         e.preventDefault();
         if (guideOverlayVisible) {
           dismissGuide();
+          return;
+        }
+        const advanceTriggers = node?.advanceOn;
+        if (advanceTriggers && advanceTriggers.length > 0) {
+          setStateIndex(advanceTriggers[0].nextStateIndex);
           return;
         }
         const presets = node?.presets;
@@ -142,6 +149,7 @@ export function ChapterRunner({
 
   const isLast = safeIndex === totalStates - 1;
   const hasPresets = (node.presets?.length ?? 0) > 0;
+  const hasAdvanceTriggers = (node.advanceOn?.length ?? 0) > 0;
 
   const chapterIdx = caseDef.chapters.findIndex((c) => c.id === chapter.id);
   const nextChapter =
@@ -162,6 +170,18 @@ export function ChapterRunner({
       {node.presets!.map((chip) => (
         <PresetChip key={chip.id} chip={chip} onClick={handleChip} />
       ))}
+    </div>
+  ) : hasAdvanceTriggers && !isLast ? (
+    <div className={cn(styles.actionsRow, styles.advance)}>
+      <span className={cn(styles.actionsLabel, styles.advance)}>↓ 화면 안 펄스 클릭 또는 →</span>
+      <button
+        type="button"
+        className={styles.advanceBtn}
+        onClick={() => setStateIndex(node.advanceOn![0].nextStateIndex)}
+      >
+        다음 →
+      </button>
+      <span className={styles.actionsHint}>화살표 키로도 이동</span>
     </div>
   ) : isLast ? (
     <div className={cn(styles.actionsRow, styles.complete)}>
@@ -245,6 +265,10 @@ export function ChapterRunner({
 
       {chapter.stage === 'three-phones' ? (
         <StageThreePhones state={node} cast={caseDef.cast} actions={actions} />
+      ) : chapter.stage === 'desktop-pc' ? (
+        <StageDesktopPC state={node} actions={actions} onAdvance={setStateIndex} />
+      ) : chapter.stage === 'salesbridge-workspace' ? (
+        <StageSalesBridgeWorkspace state={node} actions={actions} onAdvance={setStateIndex} />
       ) : (
         <StagePhoneWorkspace state={node} cast={caseDef.cast} actions={actions} />
       )}

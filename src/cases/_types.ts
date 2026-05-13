@@ -145,14 +145,296 @@ export interface ChapterStateNode {
   index: number;
   activeCastId?: string;
   activeCastIds?: string[];
-  phones: Record<string, PhoneScreen>;
+  phones?: Record<string, PhoneScreen>;
   workspace?: WorkspaceState;
+  desktop?: DesktopState;
+  salesbridge?: SalesBridgeState;
   guide?: string;
   memo?: MemoSection;
   presets?: PresetChip[];
+  advanceOn?: AdvanceTrigger[];
+  guideTooltip?: GuideTooltipDef;
 }
 
-export type StageVariant = 'three-phones' | 'phone-workspace' | 'single-phone';
+export interface AdvanceTrigger {
+  target: string;
+  nextStateIndex: number;
+}
+
+export interface GuideTooltipDef {
+  target: string;
+  arrow?: 'top' | 'bottom' | 'left' | 'right';
+  offsetX?: number;
+  offsetY?: number;
+  text: string;
+}
+
+export type DesktopMessageKind =
+  | 'message'
+  | 'date'
+  | 'system'
+  | 'deleted'
+  | 'file'
+  | 'file-captured';
+
+export interface DesktopMessage {
+  id?: string;
+  kind: DesktopMessageKind;
+  text?: string;
+  sender?: string;
+  senderColor?: string;
+  isMine?: boolean;
+  time?: string;
+  readBy?: string;
+  fileName?: string;
+  fileSize?: string;
+  fileNote?: string;
+  fileType?: 'xls' | 'png' | 'pdf' | 'doc';
+  clickableFileId?: string;
+}
+
+export type KakaoWindowVariant = 'normal' | 'urgent';
+
+export interface KakaoPCWindowState {
+  id: string;
+  title: string;
+  participants?: string;
+  participantsCount?: number;
+  variant?: KakaoWindowVariant;
+  visible?: boolean;
+  position: { top: number; left: number; zIndex?: number };
+  messages: DesktopMessage[];
+  preset?: { text: string; nextStateIndex: number };
+}
+
+export interface ExcelRow {
+  id?: string;
+  label: string;
+  cells: Array<{ text: string; bold?: boolean; price?: boolean }>;
+  tone?: 'miu' | 'daedong' | 'plain';
+  highlight?: boolean;
+}
+
+export interface QuotePopupState {
+  visible: boolean;
+  title: string;
+  subtitle: string;
+  rows: Array<{ code: string; name: string; price: string; quantity: string; danger?: boolean }>;
+  note?: string;
+}
+
+export interface ExcelWindowState {
+  fileName: string;
+  cellRef: string;
+  formula: string;
+  headerTitle: string;
+  rows: ExcelRow[];
+  quotePopup?: QuotePopupState;
+}
+
+export interface ChatListItem {
+  id: string;
+  name: string;
+  preview: string;
+  time: string;
+  badge?: number;
+  avatar: 'daedong' | 'miu' | 'rims' | 'keumho' | 'kang' | 'park' | 'boss';
+  icon: string;
+  active?: boolean;
+  pulse?: boolean;
+}
+
+export interface PCToast {
+  id: string;
+  from: string;
+  room: string;
+  text: string;
+  variant?: 'normal' | 'urgent' | 'boss';
+  pulse?: boolean;
+}
+
+export interface TaskbarApp {
+  id: string;
+  icon: string;
+  label: string;
+  active?: boolean;
+}
+
+export interface DesktopState {
+  clockTime: string;
+  clockDate: string;
+  excel: ExcelWindowState;
+  kakaoWindows: KakaoPCWindowState[];
+  chatList: ChatListItem[];
+  toasts: PCToast[];
+  activeWindowId?: string;
+  taskbarApps: TaskbarApp[];
+}
+
+export interface PartnerListItem {
+  id: string;
+  label: string;
+  sub?: string;
+  badge?: number;
+  pulse?: boolean;
+  status?: 'live' | 'normal' | 'muted';
+}
+
+export type SalesBridgeMainKind = 'empty' | 'live-counter' | 'chat';
+
+export interface SalesBridgeBubbleSender {
+  id: string;
+  label: string;
+  initial: string;
+  color: string;
+  badge?: string;
+}
+
+export interface SBMessageText {
+  kind: 'text';
+  id?: string;
+  sender: SalesBridgeBubbleSender;
+  isMine?: boolean;
+  text: string;
+  time?: string;
+}
+
+export interface SBMessageBizForm {
+  kind: 'bizform';
+  id?: string;
+  sender: SalesBridgeBubbleSender;
+  isMine?: boolean;
+  title?: string;
+  statusLabel?: string;
+  fields: Array<{
+    label: string;
+    value: string;
+    auto?: boolean;
+    highlight?: boolean;
+  }>;
+  time?: string;
+}
+
+export interface SBMessageFileChoices {
+  kind: 'file-choices';
+  id?: string;
+  sender: SalesBridgeBubbleSender;
+  isMine?: boolean;
+  title?: string;
+  caption?: string;
+  choices: Array<{
+    id: string;
+    name: string;
+    note?: string;
+    valid: boolean;
+    pulse?: boolean;
+  }>;
+  time?: string;
+}
+
+export interface SBMessageAttachment {
+  kind: 'attachment';
+  id?: string;
+  sender: SalesBridgeBubbleSender;
+  isMine?: boolean;
+  fileName: string;
+  fileSize?: string;
+  fileType?: 'xls' | 'png' | 'pdf' | 'doc';
+  caption?: string;
+  status?: 'sent' | 'draft';
+  time?: string;
+}
+
+export interface SBMessageSystem {
+  kind: 'system';
+  id?: string;
+  text: string;
+  tone?: 'good' | 'warn' | 'brand';
+}
+
+export interface SBMessageDate {
+  kind: 'date';
+  id?: string;
+  text: string;
+}
+
+export type SalesBridgeChatMessage =
+  | SBMessageText
+  | SBMessageBizForm
+  | SBMessageFileChoices
+  | SBMessageAttachment
+  | SBMessageSystem
+  | SBMessageDate;
+
+export interface SalesBridgeChat {
+  partnerLabel: string;
+  partnerSub?: string;
+  partnerAvatar?: string;
+  partnerAvatarTone?: 'miu' | 'daedong' | 'rims' | 'keumho';
+  guestBadge?: string;
+  messages: SalesBridgeChatMessage[];
+}
+
+export interface SalesBridgeMain {
+  kind: SalesBridgeMainKind;
+  liveCounter?: {
+    current: number;
+    total: number;
+    label: string;
+    sublabel?: string;
+    completedNote?: string;
+  };
+  chat?: SalesBridgeChat;
+}
+
+export interface PartnerInfoPanel {
+  partnerName: string;
+  partnerTone?: 'miu' | 'daedong' | 'rims' | 'keumho';
+  contractPrice: { code: string; value: string };
+  contractDate: string;
+  recentHistory: Array<{ date: string; label: string; tone?: 'good' | 'warn' | 'plain' }>;
+  partnerSize?: string;
+  guestMessage?: string;
+}
+
+export interface BlockedFileModal {
+  title: string;
+  body: string;
+  expectedPartner: string;
+  actualPartner: string;
+  correctFile: string;
+  primaryLabel: string;
+}
+
+export interface ComparisonBox {
+  title: string;
+  subtitle: string;
+  rows: Array<{ label: string; ch1: string; ch2: string }>;
+}
+
+export interface SalesBridgeState {
+  topBanner?: string;
+  topMeta?: string;
+  liveCounter?: { current: number; total: number; label: string };
+  partnerList: PartnerListItem[];
+  partnerListMeta?: string;
+  activePartnerId?: string;
+  mainContent: SalesBridgeMain;
+  rightPanel?: PartnerInfoPanel;
+  toast?: { title: string; body: string; tone?: 'system' | 'warn' };
+  comparisonBox?: ComparisonBox;
+  modal?: BlockedFileModal;
+  clockTime: string;
+  clockDate: string;
+  badgeMessage?: string;
+}
+
+export type StageVariant =
+  | 'three-phones'
+  | 'phone-workspace'
+  | 'single-phone'
+  | 'desktop-pc'
+  | 'salesbridge-workspace';
 
 export type ActId = 1 | 2 | 3 | 4;
 export const ACT_LABEL: Record<ActId, string> = {
