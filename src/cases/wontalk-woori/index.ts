@@ -17,6 +17,7 @@ export const wontalkCase: CaseDef = {
   industry: wontalkMeta.industry,
   brandLine: wontalkMeta.brandLine,
   accentColor: wontalkMeta.accentColor,
+  disableGuideOverlay: true,
   cast: wontalkCast,
   chapters: [
     chapter01SmsAuth,

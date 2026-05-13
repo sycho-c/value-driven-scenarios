@@ -192,6 +192,7 @@ export interface CaseDef {
   industry: string;
   brandLine: string;
   accentColor: string;
+  disableGuideOverlay?: boolean;
   cast: CastMember[];
   chapters: Chapter[];
   roi: RoiCardDef[];

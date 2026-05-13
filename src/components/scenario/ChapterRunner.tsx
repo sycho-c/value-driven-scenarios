@@ -43,7 +43,10 @@ export function ChapterRunner({
 
   const guideKey = `${chapter.id}-${safeIndex}`;
   const guideOverlayVisible =
-    safeIndex === 0 && !!node?.guide && !dismissedGuides.has(guideKey);
+    !caseDef.disableGuideOverlay &&
+    safeIndex === 0 &&
+    !!node?.guide &&
+    !dismissedGuides.has(guideKey);
   const dismissGuide = useCallback(() => {
     setDismissedGuides((prev) => {
       const next = new Set(prev);
