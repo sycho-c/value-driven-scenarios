@@ -6,6 +6,8 @@ import { StagePhoneWorkspace } from './stages/StagePhoneWorkspace';
 import { StageThreePhones } from './stages/StageThreePhones';
 import { StageDesktopPC } from './stages/StageDesktopPC';
 import { StageSalesBridgeWorkspace } from './stages/StageSalesBridgeWorkspace';
+import { StageMobilePCSplit } from './stages/StageMobilePCSplit';
+import { StageExecDashboard } from './stages/StageExecDashboard';
 import { StateBar } from './StateBar';
 import { ChapterMemo } from './ChapterMemo';
 import { PresetChip } from './controls/PresetChip';
@@ -344,6 +346,10 @@ export function ChapterRunner({
         <StageDesktopPC state={node} actions={actions} onAdvance={setStateIndex} />
       ) : chapter.stage === 'salesbridge-workspace' ? (
         <StageSalesBridgeWorkspace state={node} actions={actions} onAdvance={setStateIndex} />
+      ) : chapter.stage === 'mobile-pc-split' ? (
+        <StageMobilePCSplit state={node} actions={actions} onAdvance={setStateIndex} />
+      ) : chapter.stage === 'exec-dashboard' ? (
+        <StageExecDashboard state={node} actions={actions} onAdvance={setStateIndex} />
       ) : (
         <StagePhoneWorkspace
           state={node}

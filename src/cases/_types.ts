@@ -171,7 +171,11 @@ export type MomentKind =
   | 'auto-mapping'
   | 'file-blocked'
   | 'delivery-status'
-  | 'auto-viz';
+  | 'auto-viz'
+  | 'typing-error'
+  | 'flying-particles'
+  | 'dashboard-countup'
+  | 'drilldown-popup';
 
 export interface MomentDef {
   kind: MomentKind;
@@ -214,6 +218,8 @@ export interface ChapterStateNode {
   workspace?: WorkspaceState;
   desktop?: DesktopState;
   salesbridge?: SalesBridgeState;
+  mobilePcSplit?: MobilePCSplitState;
+  execDashboardFull?: ExecDashboardFullState;
   guide?: string;
   memo?: MemoSection;
   presets?: PresetChip[];
@@ -247,7 +253,8 @@ export type DesktopMessageKind =
   | 'system'
   | 'deleted'
   | 'file'
-  | 'file-captured';
+  | 'file-captured'
+  | 'image-capture';
 
 export interface DesktopMessage {
   id?: string;
@@ -270,6 +277,9 @@ export interface DesktopMessage {
   pulseOnReveal?: boolean;
   senderAvatarSrc?: string;
   senderCastId?: string;
+  imageCaption?: string;
+  imageLines?: string[];
+  imageHighlight?: { text: string; tone: 'danger' | 'brand' };
 }
 
 export type KakaoWindowVariant = 'normal' | 'urgent';
@@ -641,7 +651,223 @@ export type StageVariant =
   | 'phone-workspace'
   | 'single-phone'
   | 'desktop-pc'
-  | 'salesbridge-workspace';
+  | 'salesbridge-workspace'
+  | 'mobile-pc-split'
+  | 'exec-dashboard';
+
+export type MobilePCPhase = 'warn' | 'solve';
+
+export interface MobileSplitMessage {
+  id: string;
+  side: 'mine' | 'other' | 'system';
+  text?: string;
+  imageCaption?: string;
+  imageLines?: string[];
+  fileName?: string;
+  fileMeta?: string;
+  fileTone?: 'plain' | 'brand';
+  highlightToken?: { text: string; tone: 'danger' | 'brand' };
+}
+
+export interface MobilePCFormField {
+  id: string;
+  label: string;
+  placeholder?: string;
+  value?: string;
+  state?: 'empty' | 'filled' | 'error';
+}
+
+export interface MobilePCTaskField {
+  id: string;
+  label: string;
+  value: string;
+  revealed: boolean;
+}
+
+export interface MobilePCParticle {
+  id: string;
+  text: string;
+  targetFieldId: string;
+  delayMs?: number;
+}
+
+export interface MobilePCSplitState {
+  phase: MobilePCPhase;
+  masterTitle: string;
+  masterMeta?: string;
+  stateBarSteps: Array<{ id: string; label: string }>;
+  stateBarActiveIndex: number;
+  doneIndices?: number[];
+
+  phoneHeader: string;
+  phoneHeaderVariant?: 'kakao' | 'cowork';
+  phoneMessages: MobileSplitMessage[];
+  phoneActionLabel?: string;
+  phoneActionNextIndex?: number;
+  phoneActionHint?: string;
+
+  pcMode: 'kakao+form' | 'workspace+task';
+  pcHeaderLabel: string;
+  pcStatusLabel?: string;
+
+  pcKakao?: {
+    title: string;
+    sender: string;
+    messages: MobileSplitMessage[];
+  };
+
+  pcSystem?: {
+    title: string;
+    fields: MobilePCFormField[];
+    actionLabel?: string;
+    actionNextIndex?: number;
+    waitText?: string;
+    typingError?: {
+      fieldId: string;
+      correctValue: string;
+      wrongValue: string;
+      intervalMs?: number;
+      onCompleteAdvanceMs?: number;
+      onCompleteAdvanceTo?: number;
+    };
+    autoFillName?: { fieldId: string; value: string };
+    reworkBanner?: {
+      label: string;
+      value: string;
+      sub?: string;
+    };
+  };
+
+  pcDimmed?: boolean;
+
+  pcWorkspace?: {
+    sidebarActiveIndex: number;
+    chatHeader: string;
+    chatSubtitle?: string;
+    messages: MobileSplitMessage[];
+    engineStatus?: string;
+  };
+
+  pcTaskPanel?: {
+    title: string;
+    fields: MobilePCTaskField[];
+    flyingParticles?: MobilePCParticle[];
+    actionLabel?: string;
+    actionNextIndex?: number;
+  };
+
+  warningOverlay?: {
+    title: string;
+    body: string;
+    ctaLabel?: string;
+    ctaNextIndex?: number;
+  };
+
+  resultModal?: {
+    title: string;
+    beforeLabel: string;
+    beforeValue: string;
+    afterLabel: string;
+    afterValue: string;
+    tagline: string;
+    ctaLabel: string;
+    ctaNextIndex?: number;
+  };
+
+  scriptHeading: string;
+  scriptBody: string;
+  scriptHighlight?: string;
+  scriptFootnote?: string;
+}
+
+export interface ExecDashboardWidget {
+  id: string;
+  title: string;
+  value: number;
+  suffix?: string;
+  prefix?: string;
+  sub: string;
+  tone: 'danger' | 'success' | 'info';
+  countUpFrom?: number;
+  durationMs?: number;
+  fractionDigits?: number;
+}
+
+export interface ExecDashboardBar {
+  id: string;
+  label: string;
+  valueText: string;
+  widthPercent: number;
+  clickable?: boolean;
+  clickNextIndex?: number;
+  warnFlag?: boolean;
+  opensDrilldown?: boolean;
+  tone?: 'brand' | 'warn' | 'danger';
+}
+
+export interface ExecDrilldownCauseRow {
+  label: string;
+  percent: number;
+  tone: 'warn' | 'danger' | 'muted';
+}
+
+export interface ExecDrilldownImpact {
+  eyebrow: string;
+  before: string;
+  after: string;
+  sub: string;
+}
+
+export interface ExecDashboardDrilldown {
+  targetBarId: string;
+  title: string;
+  rows?: Array<{ label: string; value: string; highlight?: 'good' | 'rank' | 'warn' }>;
+  ctaLabel: string;
+  ctaNextIndex?: number;
+  causeRows?: ExecDrilldownCauseRow[];
+  warnBox?: string;
+  impact?: ExecDrilldownImpact;
+}
+
+export interface ExecBeforeAfterRow {
+  label: string;
+  before: string;
+  after: string;
+  highlight?: 'good' | 'warn';
+}
+
+export interface ExecBeforeAfterPanel {
+  title: string;
+  beforeTitle: string;
+  afterTitle: string;
+  rows: ExecBeforeAfterRow[];
+  tagline?: string;
+}
+
+export interface ExecDashboardFullState {
+  masterTitle: string;
+  masterMeta?: string;
+  stateBarSteps: Array<{ id: string; label: string }>;
+  stateBarActiveIndex: number;
+  doneIndices?: number[];
+
+  tabs?: Array<{ id: string; label: string; active?: boolean; clickNextIndex?: number; pulse?: boolean }>;
+  mobileVisible?: boolean;
+  mobileFading?: boolean;
+  mobilePhoneHeader?: string;
+  mobilePhoneMessages?: MobileSplitMessage[];
+
+  preDashboardEmpty?: string;
+  widgets?: ExecDashboardWidget[];
+  chartTitle?: string;
+  bars?: ExecDashboardBar[];
+  drilldown?: ExecDashboardDrilldown;
+  beforeAfter?: ExecBeforeAfterPanel;
+
+  scriptHeading: string;
+  scriptBody: string;
+  scriptHighlight?: string;
+}
 
 export type ActId = 1 | 2 | 3 | 4;
 export const ACT_LABEL: Record<ActId, string> = {

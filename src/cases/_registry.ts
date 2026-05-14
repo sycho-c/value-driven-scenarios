@@ -1,10 +1,12 @@
 import type { CaseDef } from './_types';
 import { wontalkCase } from './wontalk-woori';
 import { salesbridgeCase } from './salesbridge-gaon';
+import { coworkHanaCase } from './cowork-hana';
 
 export const caseRegistry: Record<string, CaseDef> = {
   [wontalkCase.id]: wontalkCase,
   [salesbridgeCase.id]: salesbridgeCase,
+  [coworkHanaCase.id]: coworkHanaCase,
 };
 
 export function getCase(id: string): CaseDef | null {

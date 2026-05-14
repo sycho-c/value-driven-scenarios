@@ -22,6 +22,13 @@ export const CASES = {
     summary: '카오스 → 거버넌스 → 통제 확대 → 경영 자산화 (7 SCENE)',
     accentColor: '#1B4F72',
   },
+  'cowork-hana': {
+    label: 'Cowork+',
+    customer: '하나손해보험',
+    industry: '보험 · 외부 영업 데모',
+    summary: '보이지 않는 비용 → 문서가 스스로 읽힌다 → 보이지 않던 현장이 데이터가 된다',
+    accentColor: '#1B4F72',
+  },
 } as const;
 
 export type CaseId = keyof typeof CASES;

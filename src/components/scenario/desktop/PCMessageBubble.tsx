@@ -28,10 +28,33 @@ export function PCMessageBubble({
 
   const isMine = !!message.isMine;
   const isFile = message.kind === 'file' || message.kind === 'file-captured';
+  const isImage = message.kind === 'image-capture';
   const isClickable =
     message.kind === 'file' &&
     !!message.clickableFileId &&
     message.clickableFileId === pulseFileId;
+
+  const renderImageLine = (line: string, idx: number) => {
+    const hl = message.imageHighlight;
+    if (!hl || !line.includes(hl.text)) {
+      return <div key={idx} className={styles.imageCaptureLine}>{line}</div>;
+    }
+    const parts = line.split(hl.text);
+    return (
+      <div key={idx} className={styles.imageCaptureLine}>
+        {parts.map((p, i) => (
+          <span key={i}>
+            {p}
+            {i < parts.length - 1 && (
+              <span className={cn(styles.imageCaptureHighlight, hl.tone === 'danger' ? styles.danger : styles.brandToken)}>
+                {hl.text}
+              </span>
+            )}
+          </span>
+        ))}
+      </div>
+    );
+  };
 
   const fileBlock =
     isFile && message.kind === 'file' ? (
@@ -59,7 +82,16 @@ export function PCMessageBubble({
       </div>
     ) : null;
 
-  const bubbleContent = isFile ? fileBlock : message.text;
+  const imageBlock = isImage ? (
+    <div className={styles.imageCapture}>
+      {message.imageCaption && (
+        <div className={styles.imageCaptureCaption}>{message.imageCaption}</div>
+      )}
+      {(message.imageLines ?? []).map((line, i) => renderImageLine(line, i))}
+    </div>
+  ) : null;
+
+  const bubbleContent = isFile ? fileBlock : isImage ? imageBlock : message.text;
 
   const bubbleNode = (
     <div
@@ -67,7 +99,7 @@ export function PCMessageBubble({
         styles.bubble,
         isMine && styles.mineBubble,
         message.kind === 'deleted' && styles.deleted,
-        isFile && styles.withFile,
+        (isFile || isImage) && styles.withFile,
         isClickable && styles.clickable,
       )}
       onClick={

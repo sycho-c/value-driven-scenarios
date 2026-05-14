@@ -1,0 +1,135 @@
+.form {
+  background: #fff;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  padding: 14px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.title {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.titleBadge {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-soft);
+  color: var(--ink-soft);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  background: var(--bg-soft);
+  color: var(--ink);
+  letter-spacing: 0.05em;
+  min-height: 38px;
+  box-sizing: border-box;
+  transition: all 0.2s var(--easing-out);
+  display: flex;
+  align-items: center;
+}
+
+.input.empty {
+  color: var(--muted);
+  background: var(--bg-soft);
+}
+
+.input.filled {
+  background: #fff;
+  border-color: var(--brand-light);
+  color: var(--ink);
+}
+
+.input.error {
+  color: var(--danger);
+  font-weight: 800;
+  background: rgba(255, 71, 87, 0.08);
+  border-color: var(--danger);
+  animation: errorFlash 0.5s 3;
+}
+
+@keyframes errorFlash {
+  0%,
+  100% {
+    box-shadow: 0 0 0px 0px rgba(255, 71, 87, 0);
+  }
+  50% {
+    box-shadow: 0 0 14px 2px rgba(255, 71, 87, 0.5);
+  }
+}
+
+.actionWrap {
+  margin-top: 4px;
+}
+
+.actionBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #FFFCE0 0%, #FFE69C 100%);
+  color: #6B4F00;
+  border: 1px solid #F4D24A;
+  padding: 11px 14px;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  font-size: 12.5px;
+  cursor: pointer;
+  letter-spacing: -0.01em;
+  animation: pulseBtn 1.5s var(--easing-out) infinite;
+  transition: transform 0.15s var(--easing-out);
+}
+
+.actionBtn:hover {
+  transform: translateY(-1px);
+}
+
+@keyframes pulseBtn {
+  0%,
+  100% {
+    box-shadow: var(--shadow-bubble), 0 0 0 0 rgba(244, 210, 74, 0.55);
+  }
+  50% {
+    box-shadow: var(--shadow-bubble), 0 0 0 8px rgba(244, 210, 74, 0);
+  }
+}
+
+.waitText {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  padding: 6px 0;
+}
