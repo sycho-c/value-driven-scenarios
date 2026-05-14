@@ -1,7 +1,10 @@
 .section {
+  width: 100%;
   max-width: var(--layout-marketing-max);
   margin: 0 auto;
   padding: 48px 24px 32px;
+  align-self: stretch;
+  box-sizing: border-box;
 }
 
 .sectionLabel {
