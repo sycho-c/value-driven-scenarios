@@ -39,12 +39,27 @@
   gap: 12px;
 }
 
+.stage.phoneLeft .workspaceColumn > div:first-child {
+  height: 560px;
+}
+
 
 .phoneColumn {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
+}
+
+.stage.phoneLeft .phoneColumn {
+  justify-content: flex-start;
+  padding-top: 76px;
+}
+
+@media (max-width: 1024px) {
+  .stage.phoneLeft .phoneColumn {
+    padding-top: 100px;
+  }
 }
 
 .guide {
@@ -72,6 +87,11 @@
 }
 
 @media (max-width: 768px) {
+  .stage.phoneLeft .workspaceColumn > div:first-child {
+    height: auto;
+    max-height: 540px;
+  }
+
   .guide {
     max-width: 320px;
   }
