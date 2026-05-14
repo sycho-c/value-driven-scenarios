@@ -6,6 +6,9 @@ export interface CastMember {
   color: string;
   role: CastRole;
   label: string;
+  avatarSrc?: string;
+  shortLabel?: string;
+  org?: string;
 }
 
 export type ChatBubbleSide = 'mine' | 'other' | 'system';
@@ -21,6 +24,8 @@ export type ChatLineKind =
   | 'notice'
   | 'typing';
 
+export type EntranceMotion = 'fade' | 'slide-side' | 'pop';
+
 export interface ChatLine {
   id?: string;
   kind: ChatLineKind;
@@ -30,6 +35,11 @@ export interface ChatLine {
   time?: string;
   isNew?: boolean;
   meta?: Record<string, unknown>;
+  revealDelayMs?: number;
+  typingFor?: number;
+  entranceMotion?: EntranceMotion;
+  persist?: boolean;
+  pulseOnReveal?: boolean;
 }
 
 export interface PushNotification {
@@ -39,6 +49,7 @@ export interface PushNotification {
   preview: string;
   unread?: number;
   urgent?: boolean;
+  revealDelayMs?: number;
 }
 
 export type PhoneScreenType =
@@ -49,7 +60,15 @@ export type PhoneScreenType =
   | 'bizform'
   | 'tasks'
   | 'secret-input'
-  | 'auth-sms';
+  | 'auth-sms'
+  | 'channel-message'
+  | 'share-sheet'
+  | 'context-menu'
+  | 'lock-screen'
+  | 'private-app';
+
+export type PhoneHeaderVariant = 'kakao' | 'consult-yellow' | 'cowork-badge';
+export type ChannelResultTone = 'good' | 'warn' | 'danger' | 'brand';
 
 export interface PhoneScreen {
   type: PhoneScreenType;
@@ -58,6 +77,10 @@ export interface PhoneScreen {
   pushNotifications?: PushNotification[];
   messages?: ChatLine[];
   meta?: Record<string, unknown>;
+  channelLabel?: string;
+  channelProduct?: string;
+  resultBadge?: { tone: ChannelResultTone; text: string };
+  headerVariant?: PhoneHeaderVariant;
 }
 
 export type ChipKind = 'guest' | 'br' | 'admin' | 'system' | 'kakao';
@@ -141,6 +164,48 @@ export interface MemoSection {
   connect: string[];
 }
 
+export type RevealRhythm = 'snappy' | 'natural' | 'cinematic';
+
+export type MomentKind =
+  | 'price-flash'
+  | 'auto-mapping'
+  | 'file-blocked'
+  | 'delivery-status'
+  | 'auto-viz';
+
+export interface MomentDef {
+  kind: MomentKind;
+  payload?: Record<string, unknown>;
+}
+
+export type TakeoverTone = 'danger' | 'warn' | 'brand' | 'good';
+
+export interface TakeoverDef {
+  tone: TakeoverTone;
+  eyebrow: string;
+  headline: string;
+  sub?: string;
+  ctaLabel?: string;
+}
+
+export type PhoneFrameTone = 'neutral' | 'warn' | 'error' | 'success';
+
+export interface PhoneFrameDef {
+  tone: PhoneFrameTone;
+  topBanner?: string;
+}
+
+export interface GalleryCardDef {
+  id: string;
+  icon: string;
+  title: string;
+  limit: string;
+  solution: string;
+  tag: string;
+  tone?: 'self' | 'kakao' | 'progress';
+  pulse?: boolean;
+}
+
 export interface ChapterStateNode {
   index: number;
   activeCastId?: string;
@@ -154,6 +219,13 @@ export interface ChapterStateNode {
   presets?: PresetChip[];
   advanceOn?: AdvanceTrigger[];
   guideTooltip?: GuideTooltipDef;
+  pauseAfterMs?: number;
+  revealRhythm?: RevealRhythm;
+  takeover?: TakeoverDef;
+  moment?: MomentDef;
+  phoneFrame?: PhoneFrameDef;
+  galleryCards?: GalleryCardDef[];
+  galleryFooter?: string;
 }
 
 export interface AdvanceTrigger {
@@ -191,6 +263,13 @@ export interface DesktopMessage {
   fileNote?: string;
   fileType?: 'xls' | 'png' | 'pdf' | 'doc';
   clickableFileId?: string;
+  revealDelayMs?: number;
+  typingFor?: number;
+  entranceMotion?: EntranceMotion;
+  persist?: boolean;
+  pulseOnReveal?: boolean;
+  senderAvatarSrc?: string;
+  senderCastId?: string;
 }
 
 export type KakaoWindowVariant = 'normal' | 'urgent';
@@ -280,7 +359,103 @@ export interface PartnerListItem {
   status?: 'live' | 'normal' | 'muted';
 }
 
-export type SalesBridgeMainKind = 'empty' | 'live-counter' | 'chat';
+export type SalesBridgeMainKind =
+  | 'empty'
+  | 'live-counter'
+  | 'chat'
+  | 'noa-admin'
+  | 'exec-dashboard';
+
+export interface NoaHeatmapCell {
+  partnerId: string;
+  riskId: string;
+  value: number;
+  tone: 'lv1' | 'lv2' | 'lv3' | 'lv4' | 'lv5';
+  pulse?: boolean;
+}
+
+export interface NoaConversationCardDef {
+  partnerLabel: string;
+  convId: string;
+  summary: string;
+  coreInsight: string;
+  riskCause: string;
+  actionTitle: string;
+  actionDesc: string;
+  actionCtaLabel: string;
+  actionApplied?: boolean;
+}
+
+export interface NoaTreemapItem {
+  id: string;
+  label: string;
+  value: number;
+  tone: 'lv3' | 'lv4' | 'lv5';
+}
+
+export interface NoaTop5Item {
+  rank: number;
+  label: string;
+  delta: string;
+  highlight?: boolean;
+}
+
+export interface NoaAdminPanel {
+  title: string;
+  subtitle?: string;
+  partners: Array<{ id: string; label: string }>;
+  risks: Array<{ id: string; label: string }>;
+  cells: NoaHeatmapCell[];
+  treemap: NoaTreemapItem[];
+  top5: NoaTop5Item[];
+  conversationCard?: NoaConversationCardDef;
+  conversationCardVisible?: boolean;
+  successToast?: string;
+}
+
+export interface RadarAxis {
+  id: string;
+  label: string;
+  value: number;
+}
+
+export interface ExecPriorityItem {
+  rank: 1 | 2 | 3;
+  title: string;
+  tagLabel: string;
+  tagTone: 'danger' | 'warn' | 'brand';
+  body: string;
+  highlight?: boolean;
+}
+
+export interface ExecSummaryCard {
+  label: string;
+  value: string;
+  sub?: string;
+  danger?: boolean;
+}
+
+export interface ExecPdfDoc {
+  title: string;
+  subtitle: string;
+  meta: string;
+  insights: Array<{ label: string; quote: string; action: string }>;
+  qaTitle?: string;
+  qaBullets: string[];
+  footer: string;
+}
+
+export interface ExecDashboardPanel {
+  title: string;
+  subtitle?: string;
+  summary: ExecSummaryCard[];
+  radar: RadarAxis[];
+  radarNote?: string;
+  priorities: ExecPriorityItem[];
+  pdfButtonPulse?: boolean;
+  pdfModalVisible?: boolean;
+  pdfDoc: ExecPdfDoc;
+}
 
 export interface SalesBridgeBubbleSender {
   id: string;
@@ -288,6 +463,8 @@ export interface SalesBridgeBubbleSender {
   initial: string;
   color: string;
   badge?: string;
+  avatarSrc?: string;
+  org?: string;
 }
 
 export interface SBMessageText {
@@ -406,15 +583,39 @@ export interface BlockedFileModal {
   primaryLabel: string;
 }
 
+export interface ShareFailureModalDef {
+  title: string;
+  body: string;
+  shareTargets: Array<{ name: string; icon: string; disabled?: boolean }>;
+  note?: string;
+  primaryLabel?: string;
+}
+
+export interface AutoVizModalDef {
+  step?: 1 | 2 | 3;
+  title: string;
+  environmentBox: { title: string; left: string; right: string; warn: string };
+  problemBox: { title: string; body: string };
+  solutionBox: { title: string; body: string[] };
+  ctaLabel?: string;
+}
+
+export interface DeliveryStatusBoxDef {
+  title: string;
+  rows: Array<{ id: string; label: string; status: 'ok' | 'warn' | 'fail' | 'pending'; note?: string }>;
+}
+
 export interface ComparisonBox {
   title: string;
   subtitle: string;
   rows: Array<{ label: string; ch1: string; ch2: string }>;
+  variant?: 'side' | 'top-banner';
 }
 
 export interface SalesBridgeState {
   topBanner?: string;
   topMeta?: string;
+  sosBanner?: { title: string; body: string };
   liveCounter?: { current: number; total: number; label: string };
   partnerList: PartnerListItem[];
   partnerListMeta?: string;
@@ -423,7 +624,13 @@ export interface SalesBridgeState {
   rightPanel?: PartnerInfoPanel;
   toast?: { title: string; body: string; tone?: 'system' | 'warn' };
   comparisonBox?: ComparisonBox;
-  modal?: BlockedFileModal;
+  comparisonBanner?: ComparisonBox;
+  deliveryStatus?: DeliveryStatusBoxDef;
+  blockedFileModal?: BlockedFileModal;
+  shareFailureModal?: ShareFailureModalDef;
+  autoVizModal?: AutoVizModalDef;
+  noaAdmin?: NoaAdminPanel;
+  execDashboard?: ExecDashboardPanel;
   clockTime: string;
   clockDate: string;
   badgeMessage?: string;

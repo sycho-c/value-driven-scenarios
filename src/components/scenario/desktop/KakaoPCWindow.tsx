@@ -4,9 +4,12 @@ import {
   useRef,
   type MouseEvent as ReactMouseEvent,
 } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import type { KakaoPCWindowState } from '@/cases/_types';
 import { cn } from '@/lib/cn';
 import { PCMessageBubble } from './PCMessageBubble';
+import { PCTypingBubble } from './PCTypingBubble';
+import { useMessageReveal } from '../hooks/useMessageReveal';
 import styles from './KakaoPCWindow.module.css';
 
 const MESSAGE_STEP_DELAY = 0.38;
@@ -39,16 +42,52 @@ export function KakaoPCWindow({
   const bodyRef = useRef<HTMLDivElement | null>(null);
   const seenIdsRef = useRef<Set<string>>(new Set());
 
+  const hasRevealMetadata = useMemo(
+    () =>
+      w.messages.some(
+        (m) => typeof m.revealDelayMs === 'number' || typeof m.typingFor === 'number',
+      ),
+    [w.messages],
+  );
+
+  const persistedIds = useMemo(() => new Set(seenIdsRef.current), [w.id]);
+
+  const revealItems = useMemo(
+    () =>
+      w.messages.map((m, i) => {
+        const id = m.id ?? `${w.id}-${m.kind}-${i}`;
+        const isIncoming = m.kind === 'message' && !m.isMine;
+        return {
+          id,
+          text: m.text,
+          senderId: m.sender,
+          senderLabel: m.sender,
+          revealDelayMs: m.revealDelayMs,
+          typingFor: m.typingFor,
+          isIncoming,
+          msg: m,
+        };
+      }),
+    [w.messages, w.id],
+  );
+
+  const { revealed, typingSender } = useMessageReveal({
+    items: revealItems,
+    rhythm: 'natural',
+    resetKey: revealItems.map((r) => r.id).join('|'),
+    persistedIds,
+    disabled: !hasRevealMetadata,
+  });
+
   const rendered = useMemo(() => {
     let newIndex = 0;
-    return w.messages.map((m, i) => {
-      const key = m.id ?? `${w.id}-${m.kind}-${i}`;
-      const isNew = !seenIdsRef.current.has(key);
+    return revealed.map((r, i) => {
+      const isNew = !seenIdsRef.current.has(r.id);
       const delay = isNew ? newIndex * MESSAGE_STEP_DELAY : 0;
       if (isNew) newIndex += 1;
-      return { msg: m, key, isNew, delay };
+      return { msg: r.msg, key: r.id, isNew, delay, idx: i };
     });
-  }, [w.messages, w.id]);
+  }, [revealed]);
 
   useEffect(() => {
     rendered.forEach((r) => seenIdsRef.current.add(r.key));
@@ -64,7 +103,7 @@ export function KakaoPCWindow({
     const ro = new ResizeObserver(() => scrollToBottom());
     Array.from(el.children).forEach((child) => ro.observe(child));
     return () => ro.disconnect();
-  }, [w.messages.length]);
+  }, [revealed.length, typingSender]);
 
   const top = positionOverride?.top ?? w.position.top;
   const left = positionOverride?.left ?? w.position.left;
@@ -109,16 +148,24 @@ export function KakaoPCWindow({
         </div>
       </div>
       <div className={styles.body} ref={bodyRef}>
-        {rendered.map((r) => (
-          <PCMessageBubble
-            key={r.key}
-            message={r.msg}
-            pulseFileId={pulseFileId}
-            isNew={r.isNew}
-            delay={r.delay}
-            onFileClick={onFileClick}
-          />
-        ))}
+        <AnimatePresence initial={false}>
+          {rendered.map((r) => (
+            <PCMessageBubble
+              key={r.key}
+              message={r.msg}
+              pulseFileId={pulseFileId}
+              isNew={r.isNew}
+              delay={r.delay}
+              onFileClick={onFileClick}
+            />
+          ))}
+          {typingSender && (
+            <PCTypingBubble
+              key={`typing-${w.id}-${typingSender.id ?? 'anon'}`}
+              sender={typingSender.label ?? typingSender.id}
+            />
+          )}
+        </AnimatePresence>
       </div>
       {w.preset && (
         <div className={styles.presetArea}>

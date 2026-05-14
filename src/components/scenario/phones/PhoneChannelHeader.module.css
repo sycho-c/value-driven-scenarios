@@ -1,0 +1,52 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.headerKakao {
+  background: #B2C7D9;
+  color: #1A1A2E;
+}
+
+.headerConsult {
+  background: #FEE500;
+  color: #391B1B;
+}
+
+.headerCowork {
+  background: #FEE500;
+  color: #391B1B;
+  border-bottom: 3px solid #5B3FE4;
+}
+
+.lane {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.product {
+  font-size: 10.5px;
+  font-weight: 700;
+  opacity: 0.78;
+}
+
+.coworkBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #5B3FE4;
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-left: 4px;
+}

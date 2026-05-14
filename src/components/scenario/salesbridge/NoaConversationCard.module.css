@@ -1,0 +1,124 @@
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 18, 56, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  width: min(720px, 92%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: #2c2266;
+  color: #fff;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.headerId {
+  font-size: 10px;
+  color: #c8bff0;
+  font-family: 'Consolas', monospace;
+  font-weight: 500;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 18px 20px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sectionLabel {
+  font-size: 10px;
+  color: #8a83a3;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sectionBody {
+  font-size: 12px;
+  color: #2c2266;
+  line-height: 1.55;
+}
+
+.sectionBody.insight {
+  font-weight: 700;
+  color: #c9302c;
+}
+
+.actionBox {
+  background: #fff9d9;
+  border: 1px solid #ffe066;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.actionLabel {
+  font-size: 10px;
+  color: #b08600;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.actionTitle {
+  font-size: 13px;
+  font-weight: 800;
+  color: #2c2266;
+}
+
+.actionDesc {
+  font-size: 11px;
+  color: #5b4796;
+  line-height: 1.5;
+}
+
+.actionBtn {
+  background: #137333;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.2s;
+}
+
+.actionBtn:hover { background: #0e5a28; }
+
+.actionBtn.applied {
+  background: #aaa;
+  cursor: default;
+}

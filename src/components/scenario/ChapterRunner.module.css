@@ -73,7 +73,7 @@
   color: var(--muted);
   line-height: 1.5;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   cursor: pointer;
@@ -100,6 +100,48 @@
   color: var(--ink-soft);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.autoplayToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s var(--easing-out), border-color 0.15s var(--easing-out);
+}
+
+.autoplayToggle:hover {
+  border-color: var(--brand-light);
+}
+
+.autoplayToggle.on {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.autoplayBar {
+  position: relative;
+  width: 120px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(91, 63, 228, 0.16);
+  overflow: hidden;
+}
+
+.autoplayBarFill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #5B3FE4, #8B6FFF);
+  transform-origin: left center;
 }
 
 .caseMeta {

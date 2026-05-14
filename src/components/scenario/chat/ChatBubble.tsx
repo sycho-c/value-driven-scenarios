@@ -1,5 +1,6 @@
 import { cn } from '@/lib/cn';
 import type { CastMember } from '@/cases/_types';
+import { AvatarImage } from './AvatarImage';
 import styles from './ChatBubble.module.css';
 
 interface ChatBubbleProps {
@@ -32,12 +33,8 @@ export function ChatBubble({
       <div className={cn(styles.column, mine && styles.mine)}>
         {showHeader && (
           <div className={styles.header}>
-            {showAvatar && (
-              <div className={styles.avatar} style={{ background: sender!.color }}>
-                {sender!.initial}
-              </div>
-            )}
-            {showSender && <span className={styles.sender}>{sender!.label}</span>}
+            {showAvatar && <AvatarImage sender={sender} size={26} variant="compact" />}
+            {showSender && <span className={styles.sender}>{sender!.shortLabel ?? sender!.label}</span>}
           </div>
         )}
         <div className={cn(styles.bubbleRow, mine && styles.mine)}>

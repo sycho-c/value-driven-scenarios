@@ -1,0 +1,167 @@
+.lock {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 16px;
+  background: linear-gradient(160deg, #0E0A2E 0%, #2A1F5A 100%);
+  color: #fff;
+  height: 100%;
+  min-height: 320px;
+  position: relative;
+}
+
+.time {
+  font-size: 56px;
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.date {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.78;
+  margin-bottom: 10px;
+}
+
+.notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.notif {
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.notifBrand {
+  background: linear-gradient(135deg, rgba(91, 63, 228, 0.42) 0%, rgba(139, 111, 255, 0.22) 100%);
+  border: 1px solid rgba(139, 111, 255, 0.55);
+  box-shadow: 0 6px 18px rgba(91, 63, 228, 0.28);
+}
+
+.notifBrand .notifApp {
+  color: #D9CCFF;
+  opacity: 1;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.notifBrand .notifTitle {
+  color: #fff;
+}
+
+.notifBrand .notifBody {
+  color: rgba(255, 255, 255, 0.94);
+  opacity: 1;
+}
+
+.notifSpark {
+  font-size: 11px;
+}
+
+.notifHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.notifApp {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.notifTime {
+  font-size: 10px;
+  opacity: 0.55;
+}
+
+.notifTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.notifBody {
+  font-size: 11.5px;
+  margin-top: 2px;
+  opacity: 0.82;
+}
+
+.empty {
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 600;
+  opacity: 0.55;
+  padding: 22px 0;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+}
+
+.homeBadge {
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(91, 63, 228, 0.28);
+  border: 1px solid rgba(139, 111, 255, 0.6);
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #D9CCFF;
+}
+
+.appDock {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 14px;
+  padding: 8px 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+}
+
+.appDockItem {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.appBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #FF4D5E;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

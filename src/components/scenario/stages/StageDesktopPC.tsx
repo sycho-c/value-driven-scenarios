@@ -20,6 +20,7 @@ import { KakaoPCWindow } from '../desktop/KakaoPCWindow';
 import { KakaoChatList } from '../desktop/KakaoChatList';
 import { PCToastStack } from '../desktop/PCToastStack';
 import { GuideTooltip } from '../desktop/GuideTooltip';
+import { MomentRenderer } from '../moments/MomentRenderer';
 import styles from './StageDesktopPC.module.css';
 
 interface StageDesktopPCProps {
@@ -203,6 +204,7 @@ export function StageDesktopPC({ state, actions, onAdvance }: StageDesktopPCProp
                 position={resolveTooltipPosition(state.guideTooltip)}
               />
             )}
+            <MomentRenderer moment={state.moment} />
           </>
         }
         taskbar={

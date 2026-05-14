@@ -97,7 +97,13 @@ export function PCMessageBubble({
         isNew ? { duration: 0.28, delay, ease: [0.22, 1, 0.36, 1] } : undefined
       }
     >
-      {!isMine && <div className={styles.avatar} />}
+      {!isMine && (
+        <div className={styles.avatar}>
+          {message.senderAvatarSrc ? (
+            <img src={message.senderAvatarSrc} alt={message.sender ?? ''} />
+          ) : null}
+        </div>
+      )}
       <div className={styles.content}>
         {!isMine && message.sender && (
           <div className={styles.sender}>{message.sender}</div>

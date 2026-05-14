@@ -20,7 +20,8 @@ export function StagePhoneWorkspace({
   phoneSide = 'right',
 }: StagePhoneWorkspaceProps) {
   const castById = Object.fromEntries(cast.map((c) => [c.id, c]));
-  const guestScreen = state.phones?.guest;
+  const phones = state.phones ?? {};
+  const guestScreen = phones.guest;
   const guestMember = state.activeCastId ? castById[state.activeCastId] : null;
 
   const phoneColumn = (

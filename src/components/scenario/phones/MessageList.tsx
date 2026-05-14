@@ -1,17 +1,21 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { ChatLine, CastMember } from '@/cases/_types';
+import type { ChatLine, CastMember, RevealRhythm } from '@/cases/_types';
 import { ChatBubble } from '../chat/ChatBubble';
 import { DateDivider } from '../chat/DateDivider';
 import { SystemNote } from '../chat/SystemNote';
 import { BizFormCard } from '../chat/BizFormCard';
 import { UrlCard } from '../chat/UrlCard';
 import { LockedBubble } from '../chat/LockedBubble';
+import { TypingBubble } from '../chat/TypingBubble';
+import { useMessageReveal } from '../hooks/useMessageReveal';
 
 interface MessageListProps {
   messages: ChatLine[];
   castById: Record<string, CastMember>;
   ownerCastId?: string;
+  rhythm?: RevealRhythm;
+  resetKey?: string;
 }
 
 type SystemTone = 'muted' | 'warn' | 'danger' | 'good' | 'brand';
@@ -31,11 +35,52 @@ function findScrollParent(el: HTMLElement | null): HTMLElement | null {
   return null;
 }
 
-export function MessageList({ messages, castById, ownerCastId }: MessageListProps) {
+export function MessageList({
+  messages,
+  castById,
+  ownerCastId,
+  rhythm,
+  resetKey,
+}: MessageListProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const messageKey = messages
-    .map((m, i) => m.id ?? `i${i}`)
-    .join('|');
+
+  const hasRevealMetadata = useMemo(
+    () =>
+      messages.some(
+        (m) => typeof m.revealDelayMs === 'number' || typeof m.typingFor === 'number',
+      ),
+    [messages],
+  );
+
+  const revealItems = useMemo(
+    () =>
+      messages.map((m, idx) => {
+        const sender = m.senderId ? castById[m.senderId] : null;
+        const isIncoming =
+          m.kind === 'message' &&
+          !(m.side === 'mine' || (!!ownerCastId && m.senderId === ownerCastId));
+        return {
+          id: m.id ?? `mli-${idx}`,
+          text: m.text,
+          senderId: m.senderId,
+          senderLabel: sender?.shortLabel ?? sender?.label,
+          revealDelayMs: m.revealDelayMs,
+          typingFor: m.typingFor,
+          isIncoming,
+          line: m,
+        };
+      }),
+    [messages, castById, ownerCastId],
+  );
+
+  const { revealed, typingSender } = useMessageReveal({
+    items: revealItems,
+    rhythm,
+    resetKey: resetKey ?? messages.map((m, i) => m.id ?? `i${i}`).join('|'),
+    disabled: !hasRevealMetadata,
+  });
+
+  const messageKey = revealed.map((m) => m.id).join('|');
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -43,13 +88,10 @@ export function MessageList({ messages, castById, ownerCastId }: MessageListProp
     const scroller = findScrollParent(wrapper);
     if (!scroller) return;
 
-    // 메시지가 바뀔 때 — 부드럽게 바닥으로
     const raf = requestAnimationFrame(() => {
       scroller.scrollTo({ top: scroller.scrollHeight, behavior: 'smooth' });
     });
 
-    // 스크롤 컨테이너의 클라이언트 높이가 바뀔 때 — 즉시 바닥 유지
-    // (푸시 알림 스택이 위에 등장/제거되면 .body의 가용 높이가 변합니다)
     const ro = new ResizeObserver(() => {
       scroller.scrollTop = scroller.scrollHeight;
     });
@@ -61,10 +103,14 @@ export function MessageList({ messages, castById, ownerCastId }: MessageListProp
     };
   }, [messageKey]);
 
+  const typingCast =
+    typingSender?.id && castById[typingSender.id] ? castById[typingSender.id] : null;
+
   return (
     <div ref={wrapperRef}>
       <AnimatePresence initial={false}>
-        {messages.map((line, idx) => {
+        {revealed.map((item, idx) => {
+          const line = item.line;
           const key = line.id ?? `msg-${idx}`;
           return (
             <motion.div
@@ -77,6 +123,11 @@ export function MessageList({ messages, castById, ownerCastId }: MessageListProp
             </motion.div>
           );
         })}
+        {typingSender && (
+          <motion.div key="typing-indicator">
+            <TypingBubble sender={typingCast} senderLabel={typingSender.label} />
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );

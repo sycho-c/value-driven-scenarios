@@ -5,6 +5,7 @@ import { BizFormScreen } from './BizFormScreen';
 import { AuthSmsScreen } from './AuthSmsScreen';
 import { TasksScreen } from './TasksScreen';
 import { FriendsSearchScreen } from './FriendsSearchScreen';
+import { ChannelPhoneScreen } from './ChannelPhoneScreen';
 
 interface PhoneScreenViewProps {
   screen: PhoneScreen;
@@ -27,6 +28,12 @@ export function PhoneScreenView({ screen, castById, ownerCastId }: PhoneScreenVi
       return <TasksScreen screen={screen} />;
     case 'friends-search':
       return <FriendsSearchScreen screen={screen} />;
+    case 'channel-message':
+    case 'share-sheet':
+    case 'context-menu':
+    case 'lock-screen':
+    case 'private-app':
+      return <ChannelPhoneScreen screen={screen} />;
     default:
       return (
         <div style={{ padding: 24, fontSize: 12, color: '#888' }}>

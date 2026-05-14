@@ -1,0 +1,147 @@
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 25, 45, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  padding: 24px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.doc {
+  background: #fff;
+  width: min(760px, 100%);
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  background: #1b4f72;
+  color: #fff;
+  padding: 18px 24px;
+  position: relative;
+}
+
+.tag {
+  font-size: 10px;
+  color: #ffd166;
+  letter-spacing: 1px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #c8d6e6;
+  margin-top: 4px;
+}
+
+.meta {
+  font-size: 10px;
+  color: #aec0d4;
+  margin-top: 6px;
+}
+
+.close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  width: 26px;
+  height: 26px;
+  border-radius: 13px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.body {
+  padding: 20px 24px;
+  overflow: auto;
+}
+
+.section {
+  margin-bottom: 18px;
+}
+
+.sectionLabel {
+  font-size: 11px;
+  color: #1b4f72;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border-left: 3px solid #1a73e8;
+  padding-left: 8px;
+  margin-bottom: 10px;
+}
+
+.insight {
+  border-left: 3px solid #1a73e8;
+  background: #f5f8fd;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+}
+
+.insightLabel {
+  font-size: 9px;
+  color: #1a73e8;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.insightQuote {
+  font-size: 12px;
+  color: #1b1f29;
+  font-weight: 600;
+  line-height: 1.55;
+  margin-bottom: 6px;
+}
+
+.insightAction {
+  font-size: 11px;
+  color: #137333;
+  line-height: 1.5;
+}
+
+.insightAction::before {
+  content: '✓ ';
+  font-weight: 800;
+}
+
+.qaList {
+  padding-left: 14px;
+  color: #44546a;
+  font-size: 11px;
+  line-height: 1.7;
+  list-style: disc;
+}
+
+.qaList li::marker { color: #1a73e8; }
+
+.footer {
+  text-align: center;
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e3e8f1;
+}

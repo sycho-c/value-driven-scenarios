@@ -89,4 +89,4 @@ export const taskbarAppsBase: TaskbarApp[] = [
   { id: 'outlook', icon: '📧', label: 'Outlook' },
 ];
 
-export const clockDate = '2025-11-18 (화)';
+export const clockDateScene0 = '2025-11-18 (화)';

@@ -3,22 +3,47 @@
   width: 320px;
   height: 680px;
   border-radius: 36px;
-  border: 7px solid #1F1F23;
-  background: #FFFFFF;
-  box-shadow: var(--shadow-phone);
+  padding: 4px;
+  background: linear-gradient(160deg, #1F1F23 0%, #2A2A30 60%, #1A1A1F 100%);
+  box-shadow:
+    0 18px 40px rgba(15, 15, 25, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: filter 0.3s var(--easing-out), opacity 0.3s var(--easing-out),
     transform 0.3s var(--easing-out);
   flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* iPhone-style notch */
+.phone::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 18px;
+  background: #0B0B10;
+  border-radius: 0 0 12px 12px;
+  z-index: 3;
+  pointer-events: none;
 }
 
 .compact {
   width: 244px;
   height: 484px;
   border-radius: 30px;
-  border-width: 6px;
+  padding: 3px;
+}
+
+.compact::before {
+  width: 72px;
+  height: 15px;
+  top: 3px;
+  border-radius: 0 0 9px 9px;
 }
 
 @media (max-width: 1024px) {
@@ -68,4 +93,11 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: #fff;
+  border-radius: 32px;
+  position: relative;
+}
+
+.compact .screen {
+  border-radius: 27px;
 }

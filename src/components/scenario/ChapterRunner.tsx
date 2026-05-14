@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { CaseDef, Chapter, PresetChip as PresetChipDef } from '@/cases/_types';
 import { ACT_LABEL } from '@/cases/_types';
@@ -9,6 +9,8 @@ import { StageSalesBridgeWorkspace } from './stages/StageSalesBridgeWorkspace';
 import { StateBar } from './StateBar';
 import { ChapterMemo } from './ChapterMemo';
 import { PresetChip } from './controls/PresetChip';
+import { TakeoverOverlay } from './moments/TakeoverOverlay';
+import { useAutoAdvance } from './hooks/useAutoAdvance';
 import { cn } from '@/lib/cn';
 import styles from './ChapterRunner.module.css';
 
@@ -31,11 +33,14 @@ export function ChapterRunner({
   const [stateIndex, setStateIndex] = useState(() => clampIndex(initialStateIndex));
   const [expandedNarration, setExpandedNarration] = useState(false);
   const [dismissedGuides, setDismissedGuides] = useState<Set<string>>(new Set());
+  const [autoplayOn, setAutoplayOn] = useState(false);
+  const [dismissedTakeovers, setDismissedTakeovers] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setStateIndex(clampIndex(initialStateIndex));
     setExpandedNarration(false);
     setDismissedGuides(new Set());
+    setDismissedTakeovers(new Set());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapter.id, initialStateIndex]);
 
@@ -44,11 +49,15 @@ export function ChapterRunner({
   const node = chapter.states[safeIndex];
 
   const guideKey = `${chapter.id}-${safeIndex}`;
+  const takeoverKey = `${chapter.id}-${safeIndex}-takeover`;
   const guideOverlayVisible =
     !caseDef.disableGuideOverlay &&
     safeIndex === 0 &&
     !!node?.guide &&
     !dismissedGuides.has(guideKey);
+
+  const takeoverVisible = !!node?.takeover && !dismissedTakeovers.has(takeoverKey);
+
   const dismissGuide = useCallback(() => {
     setDismissedGuides((prev) => {
       const next = new Set(prev);
@@ -56,6 +65,45 @@ export function ChapterRunner({
       return next;
     });
   }, [guideKey]);
+
+  const dismissTakeover = useCallback(() => {
+    setDismissedTakeovers((prev) => {
+      const next = new Set(prev);
+      next.add(takeoverKey);
+      return next;
+    });
+  }, [takeoverKey]);
+
+  const chapterIdx = caseDef.chapters.findIndex((c) => c.id === chapter.id);
+  const nextChapter =
+    chapterIdx >= 0 && chapterIdx < caseDef.chapters.length - 1
+      ? caseDef.chapters[chapterIdx + 1]
+      : null;
+
+  const advanceState = useCallback(() => {
+    setStateIndex((i) => {
+      if (i >= totalStates - 1) {
+        if (nextChapter) onChapterChange?.(nextChapter.id);
+        return i;
+      }
+      const triggers = chapter.states[i]?.advanceOn;
+      if (triggers && triggers.length > 0) return triggers[0].nextStateIndex;
+      return i + 1;
+    });
+  }, [chapter.states, nextChapter, onChapterChange, totalStates]);
+
+  const autoplayPaused = guideOverlayVisible || takeoverVisible;
+  const autoplayResetKey = useMemo(
+    () => `${chapter.id}-${safeIndex}-${autoplayOn ? '1' : '0'}-${autoplayPaused ? 'p' : 'r'}`,
+    [chapter.id, safeIndex, autoplayOn, autoplayPaused],
+  );
+
+  const { progress, cancel: cancelAutoplay } = useAutoAdvance({
+    enabled: autoplayOn && !autoplayPaused,
+    pauseAfterMs: node?.pauseAfterMs,
+    onAdvance: advanceState,
+    resetKey: autoplayResetKey,
+  });
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -71,6 +119,11 @@ export function ChapterRunner({
 
       if (e.key === 'ArrowRight') {
         e.preventDefault();
+        cancelAutoplay();
+        if (takeoverVisible) {
+          dismissTakeover();
+          return;
+        }
         if (guideOverlayVisible) {
           dismissGuide();
           return;
@@ -91,15 +144,13 @@ export function ChapterRunner({
           return;
         }
         if (safeIndex === totalStates - 1) {
-          const idx = caseDef.chapters.findIndex((c) => c.id === chapter.id);
-          if (idx >= 0 && idx < caseDef.chapters.length - 1) {
-            onChapterChange?.(caseDef.chapters[idx + 1].id);
-          }
+          if (nextChapter) onChapterChange?.(nextChapter.id);
           return;
         }
         setStateIndex((i) => Math.min(i + 1, totalStates - 1));
       } else if (e.key === 'ArrowLeft') {
         e.preventDefault();
+        cancelAutoplay();
         if (safeIndex === 0) {
           const idx = caseDef.chapters.findIndex((c) => c.id === chapter.id);
           if (idx > 0) {
@@ -109,6 +160,9 @@ export function ChapterRunner({
         }
         if (guideOverlayVisible) return;
         setStateIndex((i) => Math.max(0, i - 1));
+      } else if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        setAutoplayOn((v) => !v);
       }
     };
     window.addEventListener('keydown', onKey);
@@ -120,8 +174,12 @@ export function ChapterRunner({
     totalStates,
     safeIndex,
     guideOverlayVisible,
+    takeoverVisible,
     dismissGuide,
+    dismissTakeover,
     onChapterChange,
+    nextChapter,
+    cancelAutoplay,
   ]);
 
   if (!node) {
@@ -133,29 +191,25 @@ export function ChapterRunner({
   }
 
   const handleAdvance = useCallback(() => {
+    cancelAutoplay();
     setStateIndex((i) => Math.min(i + 1, totalStates - 1));
-  }, [totalStates]);
+  }, [totalStates, cancelAutoplay]);
 
   const handleChip = useCallback(
     (chip: PresetChipDef) => {
+      cancelAutoplay();
       if (typeof chip.nextStateIndex === 'number') {
         setStateIndex(chip.nextStateIndex);
       } else {
         handleAdvance();
       }
     },
-    [handleAdvance],
+    [handleAdvance, cancelAutoplay],
   );
 
   const isLast = safeIndex === totalStates - 1;
   const hasPresets = (node.presets?.length ?? 0) > 0;
   const hasAdvanceTriggers = (node.advanceOn?.length ?? 0) > 0;
-
-  const chapterIdx = caseDef.chapters.findIndex((c) => c.id === chapter.id);
-  const nextChapter =
-    chapterIdx >= 0 && chapterIdx < caseDef.chapters.length - 1
-      ? caseDef.chapters[chapterIdx + 1]
-      : null;
 
   const activeCast = node.activeCastId
     ? caseDef.cast.find((c) => c.id === node.activeCastId)
@@ -177,7 +231,10 @@ export function ChapterRunner({
       <button
         type="button"
         className={styles.advanceBtn}
-        onClick={() => setStateIndex(node.advanceOn![0].nextStateIndex)}
+        onClick={() => {
+          cancelAutoplay();
+          setStateIndex(node.advanceOn![0].nextStateIndex);
+        }}
       >
         다음 →
       </button>
@@ -236,6 +293,24 @@ export function ChapterRunner({
             진행 {safeIndex + 1} / {totalStates}
           </span>
           <StateBar total={totalStates} current={safeIndex} onJump={setStateIndex} />
+          <button
+            type="button"
+            className={cn(styles.autoplayToggle, autoplayOn && styles.on)}
+            onClick={() => setAutoplayOn((v) => !v)}
+            aria-pressed={autoplayOn}
+            title="Space 키로도 토글"
+          >
+            {autoplayOn ? '❚❚ 자동' : '▶ 자동'}
+          </button>
+          {autoplayOn && node.pauseAfterMs ? (
+            <div className={styles.autoplayBar}>
+              <motion.div
+                className={styles.autoplayBarFill}
+                style={{ scaleX: progress }}
+                initial={false}
+              />
+            </div>
+          ) : null}
           <span className={styles.caseMeta}>
             {caseDef.label} · {caseDef.customer}
           </span>
@@ -319,6 +394,16 @@ export function ChapterRunner({
               </button>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {takeoverVisible && node.takeover && (
+          <TakeoverOverlay
+            key={takeoverKey}
+            takeover={node.takeover}
+            onDismiss={dismissTakeover}
+          />
         )}
       </AnimatePresence>
     </div>

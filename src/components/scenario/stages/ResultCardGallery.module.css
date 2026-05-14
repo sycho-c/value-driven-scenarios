@@ -1,0 +1,101 @@
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #E2E8F0;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(20, 16, 48, 0.06);
+}
+
+.card.pulse {
+  border: 2px solid #FFB020;
+  animation: galleryPulse 2s ease-in-out infinite;
+}
+
+@keyframes galleryPulse {
+  0%, 100% { box-shadow: 0 4px 12px rgba(255, 176, 32, 0.18); }
+  50% { box-shadow: 0 8px 24px rgba(255, 176, 32, 0.45); }
+}
+
+.iconRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon {
+  font-size: 22px;
+}
+
+.tag {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.tag.self {
+  background: #EFEAFF;
+  color: #5B3FE4;
+}
+
+.tag.kakao {
+  background: #FFF4D5;
+  color: #8A6800;
+}
+
+.tag.progress {
+  background: #E2E8F0;
+  color: #424260;
+}
+
+.title {
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #1A1040;
+}
+
+.limit {
+  font-size: 11px;
+  color: #C9302C;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.solution {
+  font-size: 11px;
+  color: #5B3FE4;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.footer {
+  font-size: 11.5px;
+  color: #5A5F7A;
+  font-weight: 600;
+  text-align: center;
+  padding: 8px 0 4px;
+}

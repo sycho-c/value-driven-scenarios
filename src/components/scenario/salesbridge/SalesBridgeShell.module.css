@@ -106,6 +106,10 @@
   position: relative;
 }
 
+.bodyFull {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .statusbar {
   background: #2A2245;
   color: rgba(255, 255, 255, 0.7);
@@ -180,6 +184,167 @@
   z-index: 10;
 }
 
+.comparisonBanner {
+  background: linear-gradient(135deg, #FFFCE0 0%, #FFF1B5 100%);
+  border-bottom: 1px solid #F4D24A;
+  padding: 10px 18px 12px;
+}
+
+.bannerTitle {
+  font-size: 12px;
+  font-weight: 800;
+  color: #5A3D00;
+  margin-bottom: 2px;
+}
+
+.bannerSub {
+  font-size: 10.5px;
+  color: #8A6800;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.bannerRows {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.bannerRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 10.5px;
+}
+
+.bannerRow .rowLabel {
+  font-weight: 700;
+  color: #5A3D00;
+  font-size: 9.5px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.bannerRow .rowCh1 {
+  color: #C9302C;
+  font-weight: 600;
+}
+
+.bannerRow .rowCh2 {
+  color: #1B7A4F;
+  font-weight: 700;
+}
+
+.sosBanner {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  background: #2A0A0E;
+  border: 2px solid #FF4D5E;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 16px 40px rgba(255, 77, 94, 0.35);
+  min-width: 340px;
+  animation: toastIn 0.35s ease-out;
+}
+
+.sosTitle {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FFB0BB;
+}
+
+.sosBody {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.bodyWithLeftPhone {
+  grid-template-columns: 340px 280px minmax(0, 1fr) 300px;
+}
+
+.phoneColumn {
+  background: #f5f7fa;
+  border-right: 1px solid #E5E8F0;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  overflow: auto;
+}
+
+.phoneColumnLabel {
+  font-size: 11px;
+  font-weight: 800;
+  color: #555;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.phoneColumnBanner {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.neutral {
+  background: #EEF1F7;
+  color: #555;
+}
+
+.warn {
+  background: #FFF4D5;
+  color: #8A6800;
+  border: 1px solid #F4C460;
+}
+
+.error {
+  background: #FFE3E5;
+  color: #C9302C;
+  border: 1px solid #FF8090;
+}
+
+.success {
+  background: #E0F7E9;
+  color: #1B7A4F;
+  border: 1px solid #6BC692;
+}
+
+.deliveryWrapper {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  z-index: 15;
+}
+
+.shareFailureWrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.shareFailureWrapper > * {
+  pointer-events: auto;
+}
+
 .empty {
   display: flex;
   align-items: center;
@@ -187,4 +352,51 @@
   color: #8890B0;
   font-size: 13px;
   padding: 80px 24px;
+}
+
+/* External phone next to (not inside) the desktop frame. Used by SCENE 4 etc.
+   Widths sized so that phone + gap + DesktopFrame compact fitter aligns with
+   the chapter intro banner width (--layout-stage-max minus runner padding). */
+.externalPhoneRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.externalPhoneColumn {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 0 0;
+}
+
+.externalDesktopWrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+@media (max-width: 1280px) {
+  .externalPhoneRow {
+    gap: 12px;
+  }
+  .externalPhoneColumn {
+    width: 240px;
+  }
+}
+
+@media (max-width: 1080px) {
+  .externalPhoneRow {
+    flex-direction: column;
+    align-items: center;
+  }
+  .externalPhoneColumn {
+    width: 280px;
+  }
 }

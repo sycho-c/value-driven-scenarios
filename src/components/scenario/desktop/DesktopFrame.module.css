@@ -2,48 +2,151 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 10px 0;
+  padding: 4px 0;
+}
+
+/* The fitter holds the layout box at the scaled size — so flex/grid siblings
+   (like an external phone column) don't fight the transformed visual. Default
+   fitter width is sized to match the chapter intro banner width
+   (--layout-stage-max 1280 minus runner padding 64 = 1216), so the PC right
+   edge aligns with the banner right edge at wide viewports. */
+.fitter {
+  position: relative;
+  width: 1216px;
+  height: 678px;
 }
 
 .scaler {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 1400px;
   height: 780px;
-  transform-origin: top center;
+  transform-origin: top left;
+  transform: scale(0.869);
 }
 
-@media (max-width: 1480px) {
+/* Width OR height threshold — the most restrictive scale is applied when the
+   viewport is narrow OR short. Layout box (fitter) shrinks in lockstep so the
+   transformed visual stays within its parent's available width. */
+@media (max-width: 1480px), (max-height: 980px) {
+  .fitter {
+    width: 1190px;
+    height: 663px;
+  }
   .scaler {
-    transform: scale(0.92);
-    margin-bottom: -64px;
+    transform: scale(0.85);
   }
 }
 
-@media (max-width: 1380px) {
+@media (max-width: 1380px), (max-height: 900px) {
+  .fitter {
+    width: 1050px;
+    height: 585px;
+  }
   .scaler {
-    transform: scale(0.82);
-    margin-bottom: -140px;
+    transform: scale(0.75);
   }
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1180px), (max-height: 840px) {
+  .fitter {
+    width: 924px;
+    height: 515px;
+  }
   .scaler {
-    transform: scale(0.7);
-    margin-bottom: -240px;
+    transform: scale(0.66);
   }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 980px), (max-height: 780px) {
+  .fitter {
+    width: 812px;
+    height: 452px;
+  }
   .scaler {
     transform: scale(0.58);
-    margin-bottom: -340px;
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 860px), (max-height: 720px) {
+  .fitter {
+    width: 700px;
+    height: 390px;
+  }
   .scaler {
-    transform: scale(0.45);
-    margin-bottom: -440px;
+    transform: scale(0.5);
+  }
+}
+
+@media (max-width: 760px), (max-height: 660px) {
+  .fitter {
+    width: 588px;
+    height: 328px;
+  }
+  .scaler {
+    transform: scale(0.42);
+  }
+}
+
+/* External-phone compact mode: PC sits next to a 260px phone column (+ 16px
+   gap). Default fitter sized to fill the remaining width of the chapter
+   intro banner so PC right edge aligns with the banner right edge. */
+.shellCompact .fitter,
+.fitterCompact {
+  width: 938px;
+  height: 523px;
+}
+.shellCompact .scaler,
+.scalerCompact {
+  transform: scale(0.67);
+}
+
+@media (max-width: 1480px), (max-height: 980px) {
+  .shellCompact .fitter,
+  .fitterCompact {
+    width: 868px;
+    height: 484px;
+  }
+  .shellCompact .scaler,
+  .scalerCompact {
+    transform: scale(0.62);
+  }
+}
+
+@media (max-width: 1380px), (max-height: 900px) {
+  .shellCompact .fitter,
+  .fitterCompact {
+    width: 770px;
+    height: 429px;
+  }
+  .shellCompact .scaler,
+  .scalerCompact {
+    transform: scale(0.55);
+  }
+}
+
+@media (max-width: 1180px), (max-height: 840px) {
+  .shellCompact .fitter,
+  .fitterCompact {
+    width: 686px;
+    height: 382px;
+  }
+  .shellCompact .scaler,
+  .scalerCompact {
+    transform: scale(0.49);
+  }
+}
+
+@media (max-width: 980px), (max-height: 780px) {
+  .shellCompact .fitter,
+  .fitterCompact {
+    width: 602px;
+    height: 335px;
+  }
+  .shellCompact .scaler,
+  .scalerCompact {
+    transform: scale(0.43);
   }
 }
 

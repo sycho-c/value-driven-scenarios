@@ -118,3 +118,70 @@
   font-weight: 800;
   letter-spacing: 0.06em;
 }
+
+.channelLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.channelTitle {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.channelProduct {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.resultBadge {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.resultBadge.good {
+  background: #E0F7E9;
+  border-color: #6BC692;
+  color: #1B7A4F;
+}
+
+.resultBadge.warn {
+  background: #FFF4D5;
+  border-color: #F4C460;
+  color: #8A6800;
+}
+
+.resultBadge.danger {
+  background: #FFE3E5;
+  border-color: #FF8090;
+  color: #C9302C;
+}
+
+.resultBadge.brand {
+  background: var(--brand-soft);
+  border-color: var(--brand-light);
+  color: var(--brand);
+}
+
+.stageWhiteBg {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 12px;
+  border: 1px solid #E2E8F0;
+}
