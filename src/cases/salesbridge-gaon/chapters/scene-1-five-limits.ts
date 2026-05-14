@@ -425,7 +425,7 @@ function makeChannelState(
 export const scene1FiveLimits: Chapter = {
   id: 1,
   act: 3,
-  title: 'SCENE 1 — 쓰면서 알게 된 카카오의 5가지 한계',
+  title: '쓰면서 알게 된 카카오의 5가지 한계',
   subtitle: '박대표 폰 3대 · 같은 액션, 다른 결과. 카카오가 못한 5가지 + Cowork+의 해결.',
   narration:
     '카카오톡으로 하는 비즈니스를 공식화하기 위해서는 카카오 상담톡을 이용해야 합니다. 그리고 카카오 상담톡에는 이런 5가지 한계가 있습니다. 이런 한계를 솔직히 인정합니다. 가온전선은 Cowork+로 풀었습니다 — 어떻게 풀었는지 박대표 폰 3대로 확인합니다.',

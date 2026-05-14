@@ -125,7 +125,7 @@ function makeState(index: number, opts: Partial<ChapterStateNode>): ChapterState
 export const scene5NoaAdmin: Chapter = {
   id: 5,
   act: 4,
-  title: 'SCENE 5 — 그럼에도 분석이 곧 개선이 된다',
+  title: '그럼에도 분석이 곧 개선이 된다',
   subtitle: '이윤 팀장 PC · NOA Admin 히트맵 → AI 대화 분석 → Action Item',
   narration:
     '도입 2개월 후, 데이터가 쌓였습니다. 이윤 팀장이 NOA Admin에 접속하면 거래처 × 리스크 유형 히트맵이 펼쳐집니다. 시스템이 한진전기 × 지연 가능성 50건 (+37% ▲)을 1순위로 짚어내고, 클릭하면 단순 통계가 아니라 원인 + 즉시 실행할 Action Item까지 제시합니다. 분석만 하는 SaaS가 아니라 개선까지 가는 컨설팅 파트너.',

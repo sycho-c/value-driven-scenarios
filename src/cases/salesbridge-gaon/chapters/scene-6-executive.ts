@@ -123,7 +123,7 @@ function makeState(index: number, opts: Partial<ChapterStateNode>): ChapterState
 export const scene6Executive: Chapter = {
   id: 6,
   act: 4,
-  title: 'SCENE 6 — 그럼에도 보이지 않던 것이 보인다',
+  title: '그럼에도 보이지 않던 것이 보인다',
   subtitle: '영업 본부장 PC · 5축 레이더 → 우선순위 → PDF 브리핑',
   narration:
     '5월 말. 영업 본부장 PC. 한 달간의 영업 지원 성과가 5축 레이더 차트로 그려집니다. 소통 밀도 · 발주 안정성 · 컴플라이언스 · 비즈폼 활용도 · 클레임 방어. 시스템은 "긴급 발주 시 표준 프로세스 우회 패턴"을 매출 위험 1순위로 짚어내고, 클릭 한 번에 본부장 브리핑 PDF가 생성됩니다. 수만 건의 대화가 휘발되는 비용이 아니라 매출을 지키는 경영 자산이 됩니다.',

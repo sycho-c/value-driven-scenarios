@@ -176,7 +176,7 @@ const CHAT_HEADER_MIU = {
 export const scene3Block: Chapter = {
   id: 3,
   act: 4,
-  title: 'SCENE 3 — 그럼에도 단가 노출 사고가 일어나지 않는다',
+  title: '그럼에도 단가 노출 사고가 일어나지 않는다',
   subtitle: '비즈폼 자동 매핑 + 거래처-파일 검증 사전 차단',
   narration:
     '강승희가 회신 견적서 파일을 첨부하려는 순간 — SCENE 0과 똑같이 폴더에 비슷한 파일이 함께 있습니다. 그러나 이번엔 시스템이 거래처-파일을 자동 검증해 잘못된 파일을 발송 전 차단합니다. 사람의 실수가 사고로 이어지지 않습니다.',

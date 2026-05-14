@@ -282,7 +282,7 @@ function makeStateBody(
 export const scene4IphoneApp: Chapter = {
   id: 4,
   act: 4,
-  title: 'SCENE 4 — 그럼에도 iPhone도, Android도, 사내 전용 앱',
+  title: '그럼에도 iPhone도, Android도, 사내 전용 앱',
   subtitle:
     '4/2 외근 사건 → 4/15 결정 → 5/11 적용. iPhone·Android 섞인 환경을 사내 전용 앱으로 풀다.',
   narration:

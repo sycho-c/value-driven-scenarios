@@ -83,7 +83,7 @@ function miuWindow(): KakaoPCWindowState {
 export const scene0Chaos: Chapter = {
   id: 0,
   act: 1,
-  title: 'SCENE 0 — 이런 사고, 어디서든 터집니다',
+  title: '이런 사고, 어디서든 터집니다',
   subtitle: '영업지원 팀장 PC · 카오스 1분 압축',
   narration:
     '2025년 11월 18일 화요일 오전 9:14. 영업지원 팀장 PC에는 카톡 단톡방 4개와 Excel 단가표가 한꺼번에 떠 있습니다. 박대표가 견적을 재촉합니다. 강승희가 견적서를 첨부하려는데 — 폴더에 비슷한 파일이 너무 많습니다. 카카오톡 단톡방으로 비즈니스 하는 모든 분이 매일 마주하는 카오스, 1분 압축본.',
