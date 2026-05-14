@@ -1,6 +1,6 @@
 export const salesbridgeMeta = {
   id: 'salesbridge-gaon' as const,
-  label: 'Cowork+',
+  label: 'ONE TALK',
   customer: '가온전선',
   industry: '전선·소재 B2B · Cowork+ 도입 사례',
   brandLine:

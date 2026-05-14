@@ -45,29 +45,35 @@ const SLIDES: HeroSlide[] = [
     eyebrow: 'ONE TALK · 가온전선',
     hook: (
       <>
-        고객이 팀장에게 직접 카톡하는 순간,
+        단톡방 4개, Excel 단가표 4개,
         <br />
-        <em>영업의 일관성이 무너집니다.</em>
+        <em>잘못 보낸 한 번이 단가를 노출합니다.</em>
       </>
     ),
-    sub: '팀장은 응답 지연을 먼저 보고, BR은 우선순위 알림으로 응답합니다.',
-    meaningLabel: '이 한 줄이 의미하는 것',
-    meaning: '거래처가 답답해지기 전에, 회사가 먼저 움직입니다. 팀장 가시성 + 시스템 우선순위.',
-    chatLabel: '실제 사례 · 9월의 어느 날',
+    sub: '카카오톡 단톡방은 그대로 두고, 거버넌스와 가시성만 더합니다.',
+    meaningLabel: '이 사례가 보여주는 것',
+    meaning:
+      '카오스 → 거버넌스 → 통제 확대 → 경영 자산화. 7 SCENE으로 풀어낸 가온전선 Cowork+ 도입 흐름.',
+    chatLabel: '실제 사례 · SCENE 0 · 평범한 오전 9:14',
     chatHeader: {
       initial: '박',
       color: '#C9302C',
       name: '박대표 (미우케이블)',
-      sub: '1:1 카톡 · 팀장에게 직접',
+      sub: '미우케이블 단톡방 · 단톡방 4개 중 1개',
     },
     messages: [
       {
         kind: 'message',
-        text: '팀장님, 죄송한데 직접 연락드려요. 강승희님 단톡방에 어제부터 견적 부탁드렸는데 아직 답이 없으세요.',
-        time: '오후 3:12',
+        text: 'CV-A001 견적 부탁드립니다',
+        time: '어제 17:32',
+      },
+      {
+        kind: 'message',
+        text: '오늘 안에 회신 가능하실까요?',
+        time: '오전 9:14',
       },
     ],
-    primaryCta: '9월의 어느 날 보기 →',
+    primaryCta: 'SCENE 0 — 카오스 1분 보기 →',
   },
   {
     caseId: 'wontalk-woori',

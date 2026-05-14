@@ -30,11 +30,11 @@ const TEASER_ROI: RoiCardDef[] = [
   },
   {
     id: 't4',
-    label: '사이드 채널 컴플레인 발생률',
+    label: '잘못된 파일 첨부 사전 차단율',
     caption: 'ONE TALK · 가온전선',
     value: null,
     unit: '%',
-    trend: 'down-good',
+    trend: 'up-good',
   },
   {
     id: 't5',
