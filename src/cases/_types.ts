@@ -836,12 +836,23 @@ export interface ExecBeforeAfterRow {
   highlight?: 'good' | 'warn';
 }
 
+export interface ExecBeforeAfterInsight {
+  eyebrow: string;
+  body: string;
+  highlight?: string;
+}
+
 export interface ExecBeforeAfterPanel {
   title: string;
   beforeTitle: string;
   afterTitle: string;
   rows: ExecBeforeAfterRow[];
   tagline?: string;
+  eyebrow?: string;
+  subtitle?: string;
+  meta?: string;
+  insights?: ExecBeforeAfterInsight[];
+  signature?: string;
 }
 
 export interface ExecDashboardFullState {

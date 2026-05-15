@@ -34,16 +34,22 @@ const SENT_DOCUMENT_MOBILE: MobileSplitMessage = {
   highlightToken: { text: '870512', tone: 'danger' },
 };
 
-const CUSTOMER_DELAY_INTRO: MobileSplitMessage = {
+const CUSTOMER_CHANNEL_INTRO: MobileSplitMessage = {
   id: 'cust-intro',
   side: 'system',
-  text: '— 3일 후, 박민준 고객 채널 —',
+  text: '— 박민준 고객 카톡 채널 —',
 };
 
 const APOLOGY_FROM_AGENT: MobileSplitMessage = {
   id: 'apology-1',
   side: 'mine',
   text: '설계서가 좀 늦어질 것 같습니다. 죄송합니다.',
+};
+
+const TIME_SKIP_3D: MobileSplitMessage = {
+  id: 'time-skip-3d',
+  side: 'system',
+  text: '— 3일 후 —',
 };
 
 const CUSTOMER_FAREWELL: MobileSplitMessage = {
@@ -290,16 +296,16 @@ export const chapter01InvisibleCost: Chapter = {
       pauseAfterMs: 7500,
       revealRhythm: 'cinematic',
       guide:
-        '오타가 발견됐습니다. 재작업까지 3일이 더 필요합니다. 설계사는 박민준 고객에게 직접 지연 안내를 보내야 합니다.',
+        '오타가 발견됐습니다. 재작업까지 3일이 더 필요합니다. 설계사는 박민준 고객 채널을 열고 지연 사과 메시지를 보냅니다.',
       mobilePcSplit: {
         ...baseSplit(),
         stateBarActiveIndex: 2,
         doneIndices: [0, 1],
         phoneHeader: PHONE_HEADER_CUSTOMER,
-        phoneMessages: [CUSTOMER_DELAY_INTRO],
-        phoneActionLabel: '📩 [고객에게 지연 안내]',
+        phoneMessages: [CUSTOMER_CHANNEL_INTRO, APOLOGY_FROM_AGENT],
+        phoneActionLabel: '⏭ [3일 뒤 결과 확인]',
         phoneActionNextIndex: 3,
-        phoneActionHint: '"설계서가 좀 늦어질 것 같습니다. 죄송합니다."',
+        phoneActionHint: '사과 메시지 발송 완료. 답장을 기다리는 동안 3일이 흐릅니다.',
         pcSystem: {
           ...baseSplit().pcSystem!,
           waitText: undefined,
@@ -345,13 +351,18 @@ export const chapter01InvisibleCost: Chapter = {
       pauseAfterMs: 9000,
       revealRhythm: 'cinematic',
       guide:
-        '— 3일 후 —. 화면 다른 요소는 침묵합니다. 좌측 폰에 박민준 고객의 단 한 줄 답장만 도착합니다.',
+        '사과 메시지 위로 "— 3일 후 —" 구분자가 떨어지고, 박민준 고객의 단 한 줄 답장이 도착합니다. 화면 다른 요소는 침묵합니다.',
       mobilePcSplit: {
         ...baseSplit(),
         stateBarActiveIndex: 3,
         doneIndices: [0, 1, 2],
         phoneHeader: PHONE_HEADER_CUSTOMER,
-        phoneMessages: [CUSTOMER_DELAY_INTRO, APOLOGY_FROM_AGENT, CUSTOMER_FAREWELL],
+        phoneMessages: [
+          CUSTOMER_CHANNEL_INTRO,
+          APOLOGY_FROM_AGENT,
+          TIME_SKIP_3D,
+          CUSTOMER_FAREWELL,
+        ],
         pcDimmed: true,
         pcSystem: {
           ...baseSplit().pcSystem!,

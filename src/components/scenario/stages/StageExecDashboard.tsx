@@ -238,10 +238,13 @@ function DashInner({
 
               {dash.preDashboardEmpty ? (
                 <div className={styles.preEmpty}>{dash.preDashboardEmpty}</div>
-              ) : dash.beforeAfter ? (
-                <BeforeAfterPanel panel={dash.beforeAfter} />
               ) : (
-                <div className={styles.dashboard}>
+                <div
+                  className={cn(
+                    styles.dashboard,
+                    dash.beforeAfter && styles.dashboardBehindModal,
+                  )}
+                >
                   {dash.widgets && dash.widgets.length > 0 && (
                     <div className={styles.widgets}>
                       {dash.widgets.map((w) => (
@@ -319,6 +322,14 @@ function DashInner({
             </section>
           </div>
         </div>
+        {dash.beforeAfter && (
+          <div className={styles.briefModalLayer}>
+            <div className={styles.briefModalBackdrop} />
+            <div className={styles.briefModalScroll}>
+              <BeforeAfterPanel panel={dash.beforeAfter} />
+            </div>
+          </div>
+        )}
       </div>
 
       <div className={cn(styles.controlBar, !guide && styles.controlBarCenter)}>
@@ -433,41 +444,87 @@ function DashInner({
 
 function BeforeAfterPanel({ panel }: { panel: ExecBeforeAfterPanel }) {
   return (
-    <div className={styles.beforeAfter}>
-      <div className={styles.beforeAfterHeader}>
-        <span className={styles.beforeAfterEyebrow}>매출 기여 비교</span>
-        <span className={styles.beforeAfterTitle}>{panel.title}</span>
-      </div>
-      <div className={styles.beforeAfterGrid}>
-        <div className={cn(styles.beforeAfterCol, styles.before)}>
-          <div className={styles.beforeAfterColHead}>{panel.beforeTitle}</div>
-          {panel.rows.map((r) => (
-            <div key={`b-${r.label}`} className={styles.beforeAfterRow}>
-              <span className={styles.beforeAfterRowLabel}>{r.label}</span>
-              <span className={styles.beforeAfterRowValue}>{r.before}</span>
-            </div>
-          ))}
+    <div className={styles.briefReport}>
+      <div className={styles.briefHeader}>
+        <div className={styles.briefEyebrow}>
+          {panel.eyebrow ?? 'CONFIDENTIAL · 영업본부장 보고'}
         </div>
-        <div className={cn(styles.beforeAfterCol, styles.after)}>
-          <div className={styles.beforeAfterColHead}>{panel.afterTitle}</div>
-          {panel.rows.map((r) => (
-            <div key={`a-${r.label}`} className={styles.beforeAfterRow}>
-              <span className={styles.beforeAfterRowLabel}>{r.label}</span>
-              <span
-                className={cn(
-                  styles.beforeAfterRowValue,
-                  r.highlight && styles[r.highlight],
+        <div className={styles.briefTitle}>{panel.title}</div>
+        {panel.subtitle && (
+          <div className={styles.briefSubtitle}>{panel.subtitle}</div>
+        )}
+        {panel.meta && <div className={styles.briefMeta}>{panel.meta}</div>}
+      </div>
+
+      <div className={styles.briefBody}>
+        <div className={styles.briefSection}>
+          <div className={styles.briefSectionLabel}>매출 기여 지표 · 도입 전후 비교</div>
+          <div className={styles.briefGrid}>
+            <div className={cn(styles.briefCol, styles.before)}>
+              <div className={styles.briefColHead}>
+                <span className={styles.briefColEyebrow}>BEFORE</span>
+                <span className={styles.briefColTitle}>{panel.beforeTitle}</span>
+              </div>
+              {panel.rows.map((r) => (
+                <div key={`b-${r.label}`} className={styles.briefRow}>
+                  <span className={styles.briefRowLabel}>{r.label}</span>
+                  <span className={styles.briefRowValueBefore}>{r.before}</span>
+                </div>
+              ))}
+            </div>
+            <div className={cn(styles.briefCol, styles.after)}>
+              <div className={styles.briefColHead}>
+                <span className={cn(styles.briefColEyebrow, styles.afterEyebrow)}>
+                  AFTER
+                </span>
+                <span className={styles.briefColTitle}>{panel.afterTitle}</span>
+              </div>
+              {panel.rows.map((r) => (
+                <div key={`a-${r.label}`} className={styles.briefRow}>
+                  <span className={styles.briefRowLabel}>{r.label}</span>
+                  <span
+                    className={cn(
+                      styles.briefRowValueAfter,
+                      r.highlight && styles[r.highlight],
+                    )}
+                  >
+                    {r.after}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {panel.insights && panel.insights.length > 0 && (
+          <div className={styles.briefSection}>
+            <div className={styles.briefSectionLabel}>핵심 통찰</div>
+            {panel.insights.map((ins, i) => (
+              <div key={i} className={styles.briefInsight}>
+                <div className={styles.briefInsightEyebrow}>{ins.eyebrow}</div>
+                <div className={styles.briefInsightBody}>{ins.body}</div>
+                {ins.highlight && (
+                  <div className={styles.briefInsightHighlight}>
+                    {ins.highlight}
+                  </div>
                 )}
-              >
-                {r.after}
-              </span>
-            </div>
-          ))}
-        </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {panel.tagline && (
+          <div className={styles.briefQuote}>
+            <span className={styles.briefQuoteMark}>“</span>
+            {panel.tagline}
+            <span className={styles.briefQuoteMark}>”</span>
+          </div>
+        )}
+
+        {panel.signature && (
+          <div className={styles.briefSignature}>— {panel.signature}</div>
+        )}
       </div>
-      {panel.tagline && (
-        <div className={styles.beforeAfterTagline}>{panel.tagline}</div>
-      )}
     </div>
   );
 }
