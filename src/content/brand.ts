@@ -8,6 +8,13 @@ export const HERO_HOOK = '거래처가 팀장에게 직접 카톡하는 순간, 
 export const HERO_HOOK_QUOTE = '팀장님, 죄송한데 직접 연락드려요.';
 
 export const CASES = {
+  'cowork-hana': {
+    label: '1Q 설계 상담',
+    customer: '하나손해보험',
+    industry: '손해보험 · GA 채널',
+    summary: '보이지 않는 비용 → 문서가 스스로 읽힌다 → 보이지 않던 현장이 데이터가 된다',
+    accentColor: '#1B4F72',
+  },
   'wontalk-woori': {
     label: 'WON TALK',
     customer: '우리금융캐피탈',
@@ -20,13 +27,6 @@ export const CASES = {
     customer: '가온전선',
     industry: '전선 · 소재 B2B',
     summary: '카오스 → 거버넌스 → 통제 확대 → 경영 자산화 (7 SCENE)',
-    accentColor: '#1B4F72',
-  },
-  'cowork-hana': {
-    label: 'Cowork+',
-    customer: '하나손해보험',
-    industry: '보험 · 외부 영업 데모',
-    summary: '보이지 않는 비용 → 문서가 스스로 읽힌다 → 보이지 않던 현장이 데이터가 된다',
     accentColor: '#1B4F72',
   },
 } as const;

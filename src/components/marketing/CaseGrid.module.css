@@ -114,19 +114,34 @@
 }
 
 .footer {
-  margin-top: auto;
-  padding-top: 12px;
-  display: flex;
-  justify-content: space-between;
+  align-self: flex-start;
+  margin-top: 14px;
+  padding: 9px 16px;
+  display: inline-flex;
   align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius-pill);
   font-size: 12.5px;
   font-weight: 700;
-  color: var(--brand);
   letter-spacing: -0.01em;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.18s var(--easing-out), box-shadow 0.2s var(--easing-out);
 }
 
 .footer .arrow {
   font-size: 14px;
+  transition: transform 0.18s var(--easing-out);
+}
+
+.card:hover .footer {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.card:hover .footer .arrow {
+  transform: translateX(3px);
 }
 
 .placeholder {

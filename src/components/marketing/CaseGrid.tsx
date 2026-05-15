@@ -13,7 +13,7 @@ export function CaseGrid() {
       <h2 className={styles.headline}>
         <em>산업이 달라도 통증의 형태는 같습니다.</em>
         <br />
-        하나의 Cowork+가 두 산업을 모두 해결합니다.
+        하나의 Cowork+가 세 산업을 모두 해결합니다.
       </h2>
       <div className={styles.grid}>
         {entries.map(([id, c], i) => {
@@ -52,7 +52,10 @@ export function CaseGrid() {
                     </span>
                   ))}
                 </div>
-                <div className={styles.footer}>
+                <div
+                  className={styles.footer}
+                  style={{ background: caseDef.accentColor }}
+                >
                   <span>시나리오 따라가기</span>
                   <span className={styles.arrow}>→</span>
                 </div>

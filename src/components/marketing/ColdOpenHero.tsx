@@ -38,42 +38,44 @@ interface HeroSlide {
 
 const SLIDES: HeroSlide[] = [
   {
-    caseId: 'salesbridge-gaon',
-    caseLabel: 'ONE TALK',
-    customer: '가온전선',
-    industry: '전선 · 소재 B2B',
-    eyebrow: 'ONE TALK · 가온전선',
+    caseId: 'cowork-hana',
+    caseLabel: '1Q 설계 상담',
+    customer: '하나손해보험',
+    industry: '손해보험 · GA 채널',
+    eyebrow: '1Q 설계 상담 · 하나손해보험',
     hook: (
       <>
-        단톡방 4개, Excel 단가표 4개,
+        단톡으로 받은 가입 정보가 3일을 잡아먹고,
         <br />
-        <em>잘못 보낸 한 번이 단가를 노출합니다.</em>
+        <em>고객은 다른 보험사로 갑니다.</em>
       </>
     ),
-    sub: '카카오톡 단톡방은 그대로 두고, 거버넌스와 가시성만 더합니다.',
+    sub: '보이지 않는 비용이 결국 GA 채널을 가져갑니다. 응답이 빠른 보험사가 이깁니다.',
     meaningLabel: '이 사례가 보여주는 것',
     meaning:
-      '카오스 → 거버넌스 → 통제 확대 → 경영 자산화. 7 SCENE으로 풀어낸 가온전선 Cowork+ 도입 흐름.',
-    chatLabel: '실제 사례 · SCENE 0 · 평범한 오전 9:14',
+      '보이지 않는 비용 → 문서가 스스로 읽힌다 → GA 채널을 가져오는 무기. 7분 압축 영업 데모.',
+    chatLabel: '실제 사례 · Ch.1 · 보이지 않는 비용',
     chatHeader: {
       initial: '박',
-      color: '#C9302C',
-      name: '박대표 (미우케이블)',
-      sub: '미우케이블 단톡방 · 단톡방 4개 중 1개',
+      color: '#1B4F72',
+      name: '박민준 고객',
+      sub: '하나손보 카톡 채널 · 가입 문의',
     },
     messages: [
       {
         kind: 'message',
-        text: 'CV-A001 견적 부탁드립니다',
-        time: '어제 17:32',
+        text: '안녕하세요, 운전자보험 가입 신청드릴게요. 신분증 사진 보내드립니다.',
+        time: '월 14:02',
       },
       {
         kind: 'message',
-        text: '오늘 안에 회신 가능하실까요?',
-        time: '오전 9:14',
+        text: '3일 지났는데 연락이 없어서, 다른 보험사로 갔어요.',
+        mine: true,
+        danger: true,
+        time: '목 09:18',
       },
     ],
-    primaryCta: 'SCENE 0 — 카오스 1분 보기 →',
+    primaryCta: '보이지 않는 비용 보기 →',
   },
   {
     caseId: 'wontalk-woori',
@@ -112,6 +114,44 @@ const SLIDES: HeroSlide[] = [
       },
     ],
     primaryCta: '개인정보 차단 보기 →',
+  },
+  {
+    caseId: 'salesbridge-gaon',
+    caseLabel: 'ONE TALK',
+    customer: '가온전선',
+    industry: '전선 · 소재 B2B',
+    eyebrow: 'ONE TALK · 가온전선',
+    hook: (
+      <>
+        단톡방 4개, Excel 단가표 4개,
+        <br />
+        <em>잘못 보낸 한 번이 단가를 노출합니다.</em>
+      </>
+    ),
+    sub: '카카오톡 단톡방은 그대로 두고, 거버넌스와 가시성만 더합니다.',
+    meaningLabel: '이 사례가 보여주는 것',
+    meaning:
+      '카오스 → 거버넌스 → 통제 확대 → 경영 자산화. 7 SCENE으로 풀어낸 가온전선 Cowork+ 도입 흐름.',
+    chatLabel: '실제 사례 · SCENE 0 · 평범한 오전 9:14',
+    chatHeader: {
+      initial: '박',
+      color: '#C9302C',
+      name: '박대표 (미우케이블)',
+      sub: '미우케이블 단톡방 · 단톡방 4개 중 1개',
+    },
+    messages: [
+      {
+        kind: 'message',
+        text: 'CV-A001 견적 부탁드립니다',
+        time: '어제 17:32',
+      },
+      {
+        kind: 'message',
+        text: '오늘 안에 회신 가능하실까요?',
+        time: '오전 9:14',
+      },
+    ],
+    primaryCta: '카오스 1분 보기 →',
   },
 ];
 
@@ -168,7 +208,7 @@ export function ColdOpenHero() {
         {/* 슬라이드와 독립된 사례 인디케이터 — 항상 표시 */}
         <div className={styles.indicator}>
           <div className={styles.indicatorLabel}>
-            <span>2가지 도입 사례 · {idx + 1} / {SLIDES.length}</span>
+            <span>{SLIDES.length}가지 도입 사례 · {idx + 1} / {SLIDES.length}</span>
             <span className={styles.pauseHint}>
               {paused ? '⏸ 일시정지' : '▶ 자동 재생 (호버 시 정지)'}
             </span>
