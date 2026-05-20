@@ -16,7 +16,7 @@ export const chapter03TrackingUrl: Chapter = {
       phones: {
         guest: {
           type: 'wontalk-group',
-          headerTitle: '에이원오토 영업팀',
+          headerTitle: '지엔에이 영업팀',
           headerSubtitle: '참여자 11명',
           messages: [
             {
@@ -42,7 +42,7 @@ export const chapter03TrackingUrl: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {
@@ -114,7 +114,7 @@ export const chapter03TrackingUrl: Chapter = {
       phones: {
         guest: {
           type: 'wontalk-group',
-          headerTitle: '에이원오토 영업팀',
+          headerTitle: '지엔에이 영업팀',
           headerSubtitle: '참여자 11명',
           messages: [
             {
@@ -142,7 +142,7 @@ export const chapter03TrackingUrl: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {

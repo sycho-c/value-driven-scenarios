@@ -16,7 +16,7 @@ export const chapter02BlockPii: Chapter = {
       phones: {
         guest: {
           type: 'wontalk-group',
-          headerTitle: '에이원오토 영업팀',
+          headerTitle: '지엔에이 영업팀',
           headerSubtitle: '참여자 11명 · 9 읽음',
           messages: [
             {
@@ -33,7 +33,7 @@ export const chapter02BlockPii: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {
@@ -58,7 +58,7 @@ export const chapter02BlockPii: Chapter = {
             id: 'p-todays',
             kind: 'new-task',
             title: '오늘의 채널 활동',
-            body: '에이원오토 영업팀 · 신규 접수 12건 / 처리 완료 9건',
+            body: '지엔에이 영업팀 · 신규 접수 12건 / 처리 완료 9건',
             meta: '2026.07.08 14:00 기준',
             tone: 'muted',
           },
@@ -96,7 +96,7 @@ export const chapter02BlockPii: Chapter = {
       phones: {
         guest: {
           type: 'wontalk-group',
-          headerTitle: '에이원오토 영업팀',
+          headerTitle: '지엔에이 영업팀',
           headerSubtitle: '참여자 11명',
           messages: [
             {
@@ -129,7 +129,7 @@ export const chapter02BlockPii: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {
@@ -158,7 +158,7 @@ export const chapter02BlockPii: Chapter = {
             id: 'p-block-event',
             kind: 'compliance',
             title: '메시지 차단 이벤트',
-            body: '주민번호 뒷자리 7자리 패턴 감지 — 강민호 / 에이원오토 영업팀',
+            body: '주민번호 뒷자리 7자리 패턴 감지 — 강민호 / 지엔에이 영업팀',
             highlight: 'RULE · pii-rrn-back7',
             meta: '2026-07-08 14:15:02 KST',
             tone: 'danger',
@@ -206,7 +206,7 @@ export const chapter02BlockPii: Chapter = {
       phones: {
         guest: {
           type: 'wontalk-group',
-          headerTitle: '에이원오토 영업팀',
+          headerTitle: '지엔에이 영업팀',
           headerSubtitle: '참여자 11명',
           messages: [
             {
@@ -248,7 +248,7 @@ export const chapter02BlockPii: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {
@@ -327,7 +327,7 @@ export const chapter02BlockPii: Chapter = {
         guest: {
           type: 'bizform',
           headerTitle: '신규 대출 접수',
-          headerSubtitle: '에이원오토 영업팀 → 우리금융캐피탈',
+          headerSubtitle: '지엔에이 영업팀 → 우리금융캐피탈',
           meta: {
             fields: [
               { label: '고객명', value: '홍길동', auto: true },
@@ -342,7 +342,7 @@ export const chapter02BlockPii: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {

@@ -47,7 +47,7 @@ export const chapter05MyTasks: Chapter = {
       phones: {
         guest: {
           type: 'wontalk-group',
-          headerTitle: '에이원오토 영업팀',
+          headerTitle: '지엔에이 영업팀',
           headerSubtitle: '참여자 11명',
           messages: [
             {
@@ -65,7 +65,7 @@ export const chapter05MyTasks: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {
@@ -81,7 +81,7 @@ export const chapter05MyTasks: Chapter = {
             id: 'p-ask-volume',
             kind: 'audit-log',
             title: '"어떻게 됐어요?" 메시지 빈도',
-            body: '에이원오토 영업팀 · 지난 분기 일평균 23회. BR 응대 시간의 11% 차지.',
+            body: '지엔에이 영업팀 · 지난 분기 일평균 23회. BR 응대 시간의 11% 차지.',
             highlight: 'NOISE · 11% of BR time',
             tone: 'warn',
           },
@@ -126,7 +126,7 @@ export const chapter05MyTasks: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {
@@ -206,7 +206,7 @@ export const chapter05MyTasks: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {

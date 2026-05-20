@@ -97,8 +97,8 @@ const SLIDES: HeroSlide[] = [
     chatHeader: {
       initial: '강',
       color: '#5B3FE4',
-      name: '강민호 (에이원오토 AG 모집인)',
-      sub: '에이원오토 영업팀 · 단톡방',
+      name: '강민호 (지엔에이 AG 모집인)',
+      sub: '지엔에이 영업팀 · 단톡방',
     },
     messages: [
       {

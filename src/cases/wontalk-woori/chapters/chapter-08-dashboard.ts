@@ -1,100 +1,82 @@
-import type { Chapter, DashboardRow, DashboardState } from '../../_types';
+import type { Chapter, WonTalkConsoleState } from '../../_types';
 
-const AG_ROWS: DashboardRow[] = [
-  { id: 'a1', name: '에이원오토',   sub: '서울 강남 · 영업 11명', value: 320, unit: '건', percent: 100, color: '#5B3FE4' },
-  { id: 'bk', name: '비케이오토',   sub: '경기 분당 · 영업 8명',  value: 264, unit: '건', percent: 82,  color: '#8B6FFF' },
-  { id: 'jn', name: '제니오토',     sub: '부산 해운대 · 영업 6명', value: 198, unit: '건', percent: 62,  color: '#00C896' },
-  { id: 'rm', name: '림스카',       sub: '대구 수성 · 영업 5명',   value: 152, unit: '건', percent: 47,  color: '#FFB800' },
-  { id: 'sm', name: '스마트오토',   sub: '인천 송도 · 영업 4명',   value: 118, unit: '건', percent: 37,  color: '#FF7B7B' },
-];
-
-const BR_ROWS: DashboardRow[] = [
-  { id: 'kkh', name: '김경화', sub: '금리·대출 담당 · AG 5개', value: 412, unit: '건', percent: 100, color: '#5B3FE4' },
-  { id: 'lpm', name: '이과장', sub: '금리·대출 담당 · AG 4개', value: 358, unit: '건', percent: 87,  color: '#8B6FFF' },
-  { id: 'pj',  name: '박효성', sub: '서류·심사 담당 · AG 3개', value: 286, unit: '건', percent: 69,  color: '#00C896' },
-  { id: 'kjh', name: '강주현', sub: '리스 전담 · AG 2개',     value: 192, unit: '건', percent: 47,  color: '#FFB800' },
-];
-
-const dashboardAg: DashboardState = {
+const baseAg: WonTalkConsoleState = {
   activeTab: 'ag',
-  tabs: [
-    { id: 'ag', label: 'AG사별' },
-    { id: 'br', label: 'BR별' },
-  ],
-  summary: [
-    { label: '이번 분기 신청건', value: '1,052건', sub: '전 분기 대비 +18.4%', trend: 'up' },
-    { label: '평균 처리시간',     value: '2h 11m',  sub: '전 분기 대비 -34%',    trend: 'down' },
-    { label: '응답 SLA 준수율',    value: '96.8%',   sub: '전 분기 대비 +12%p',  trend: 'up' },
-  ],
-  rows: AG_ROWS,
-  rowsTitle: 'AG사별 신청건 분포',
-  rowsMeta: '2026 Q3 · 7월 8일 14:00 기준',
+  dateRangeLabel: '2026.02.15 ~ 05.13',
+  topbarTag: 'AG사별',
 };
 
-const dashboardBr: DashboardState = {
+const baseAgWithDrill: WonTalkConsoleState = {
+  ...baseAg,
+  expandedAgId: 'gnea',
+};
+
+const baseAgWithSecModal: WonTalkConsoleState = {
+  ...baseAg,
+  openModalId: 'sec',
+};
+
+const baseBr: WonTalkConsoleState = {
   activeTab: 'br',
-  tabs: [
-    { id: 'ag', label: 'AG사별' },
-    { id: 'br', label: 'BR별' },
-  ],
-  summary: [
-    { label: 'BR별 평균 부하',   value: '64%',   sub: '전 분기 대비 -8%p',  trend: 'down' },
-    { label: '최단 응답 BR',     value: '김경화', sub: '응답 평균 1.4분',     trend: 'up' },
-    { label: '인센티브 후보',     value: '3명',   sub: 'AG 만족도 + 처리율 기준', trend: 'neutral' },
-  ],
-  rows: BR_ROWS,
-  rowsTitle: 'BR별 처리건 + 부하',
-  rowsMeta: '인센티브 산정 근거 자료 · 자동 집계',
+  dateRangeLabel: '2026.02.15 ~ 05.13',
+  topbarTag: 'BR별',
+};
+
+const baseBrWithModal: WonTalkConsoleState = {
+  ...baseBr,
+  openModalId: 'br-kkh',
 };
 
 export const chapter08Dashboard: Chapter = {
   id: 8,
   act: 4,
   title: '이번 달 누가 제일 잘했는지, 데이터로',
-  subtitle: 'AG별/BR별 성과 — 인센티브 근거가 클릭 한 번에',
+  subtitle:
+    '센터장의 채널 운영 대시보드 — KPI · 생산성 · 인사이트 · 추이가 한 화면에',
   narration:
-    '센터장은 분기마다 AG사와 BR의 성과를 정량 비교해야 합니다. Cowork+의 채널 대시보드는 모든 데이터를 운영자에게 돌려줍니다.',
+    '센터장은 분기마다 AG사와 BR 성과를 정량 비교해야 합니다. WON TALK Console은 운영 중에 발생한 모든 데이터를 한 화면의 결재 자료로 응축해서 보여줍니다.',
   stage: 'phone-workspace',
   states: [
     {
       index: 0,
       activeCastId: 'choi-cm',
-      guide: '센터장이 AG사별 대시보드를 엽니다.',
+      guide:
+        '센터장이 WON TALK 채널 운영 대시보드를 엽니다 — KPI 3종 + 생산성 배너 + 인사이트 3종 + 추이 4차트.',
       phones: {
         guest: {
           type: 'wontalk-group',
-          headerTitle: '에이원오토 영업팀',
+          headerTitle: '지엔에이 영업팀',
           headerSubtitle: '참여자 11명',
           messages: [
             {
               id: 'sys-dash-open',
               kind: 'system',
-              text: '📊 센터장이 채널 대시보드를 조회 중입니다.',
+              text: '📊 센터장이 채널 운영 대시보드를 조회 중입니다.',
               meta: { tone: 'muted' },
             },
           ],
         },
       },
       workspace: {
-        mode: 'dashboard',
-        dashboard: dashboardAg,
+        mode: 'console',
+        console: baseAg,
       },
       presets: [
         {
-          id: 'admin-switch-br',
-          text: 'BR별 탭으로 전환 — 누가 잘했는지 본다',
+          id: 'admin-drill-ag',
+          text: '지엔에이 AG사 클릭 — 드릴다운',
           kind: 'admin',
           nextStateIndex: 1,
         },
       ],
       memo: {
-        title: 'STATE 0 — AG사 성과 한눈에',
+        title: 'STATE 0 — 채널 운영 대시보드 전체 뷰',
         meta: '최센터장 · 관리자 시점',
         situation:
-          '47개 AG사 중 상위 5개를 정렬 + 분기 대비 변화율 자동 표시. 인사이트 발굴 시간이 분기 1주에서 5분으로.',
-        interact: '센터장은 탭만 클릭. 데이터는 Cowork+ 운영 데이터에서 자동 적재.',
+          'KPI 3종(메시지 129,511 / 응답 1h 42m / SLA 94.3%) + 생산성 배너(1인 담당 AG 190→261) + 인사이트(민감거래 9,799 / 문서 14,717 / 채널 전환 3,658) + 추이 4차트가 한 화면.',
+        interact: '청중에게 "엑셀 취합 시대 종료"를 시각적으로 전달.',
         feel: [
-          '"엑셀 취합 시대 종료"',
+          '"이 한 화면이 분기 운영 회의의 표준 자료"',
           '청중: "이게 진짜 운영 데이터다"',
         ],
         connect: ['Ch.5의 셀프 조회 + Ch.7의 읽음 추적 데이터가 모두 여기에 합류'],
@@ -103,78 +85,169 @@ export const chapter08Dashboard: Chapter = {
     {
       index: 1,
       activeCastId: 'choi-cm',
-      guide: 'BR별 탭으로 전환 — 인센티브 후보 자동 도출.',
+      guide:
+        '지엔에이 AG사 카드 클릭 — 비밀/파일/SLA/담당 BR + 최근 14일 추이까지 그 자리에서 드릴다운.',
       phones: {
         guest: {
           type: 'wontalk-group',
-          headerTitle: '에이원오토 영업팀',
+          headerTitle: '지엔에이 영업팀',
           headerSubtitle: '참여자 11명',
           messages: [
             {
-              id: 'sys-incentive',
+              id: 'sys-drill',
               kind: 'system',
-              text: '🏆 인센티브 후보 3명 자동 도출 — 김경화, 이과장, 박효성',
-              meta: { tone: 'good' },
+              text: '🔍 지엔에이 AG사 상세 — 비밀 198 · 파일 189 · SLA 96.2% · BR 4명',
+              meta: { tone: 'muted' },
             },
           ],
         },
       },
       workspace: {
-        mode: 'dashboard',
-        dashboard: dashboardBr,
+        mode: 'console',
+        console: baseAgWithDrill,
       },
       presets: [
         {
-          id: 'admin-export',
-          text: '인센티브 산정 자료 PDF 자동 생성',
+          id: 'admin-open-sec',
+          text: '비밀 메시지 인사이트 카드 클릭 → 상세',
           kind: 'admin',
           nextStateIndex: 2,
         },
       ],
       memo: {
-        title: 'STATE 1 — 인센티브의 근거',
-        meta: 'Cowork+ · BR 성과',
+        title: 'STATE 1 — AG 드릴다운',
+        meta: '지엔에이 AG사 (2,624건)',
         situation:
-          '"누구한테 인센티브 줄지 어떻게 정하시나요?" → "Cowork+ BR 대시보드 보세요"라고 한 줄로 답변.',
-        interact: '센터장이 BR 탭 클릭. 자동으로 산정 근거 카드 등장.',
+          '클릭 한 번에 AG사 단위 운영 상태(비밀/파일/SLA/BR 수 + 14일 추이) 가시화. 별도 시트·BI 도구 없음.',
+        interact: '청중에게 "엑셀 합치는 한 주가 한 번의 클릭으로"를 시연.',
         feel: [
-          '"인센티브에 시비 없을 정량 근거"',
-          '청중: BR 본인도 자기 데이터를 본다',
-          '"본부장님께 보고 자료 5분 만에 완성"',
+          '"AG사별 협상 자료 즉시 준비"',
+          '"BR 4명 누가 응대하는지도 즉시 확인"',
         ],
-        connect: ['이 정량 데이터가 분기 운영 회의의 표준 자료가 됨'],
+        connect: ['Ch.6의 비밀 메시지 흐름이 이 카드에 합쳐 보여짐'],
       },
     },
     {
       index: 2,
       activeCastId: 'choi-cm',
-      guide: '챕터 마감 — 분기 정산 보고가 5분 만에 완료.',
+      guide:
+        '비밀 메시지 인사이트 카드 → 모달. 9,799건의 민감 거래가 안전하게 보호 중인 규모.',
       phones: {
         guest: {
           type: 'wontalk-group',
-          headerTitle: '에이원오토 영업팀',
+          headerTitle: '지엔에이 영업팀',
           headerSubtitle: '참여자 11명',
           messages: [
             {
-              id: 'sys-done',
+              id: 'sys-sec-open',
               kind: 'system',
-              text: '✅ 분기 BR 성과 보고서 PDF 자동 생성 완료 (08-Q3-perf.pdf)',
+              text: '🔒 민감 거래 보호 규모 — 수수료율·특판 조건 협의 통합',
               meta: { tone: 'good' },
             },
           ],
         },
       },
       workspace: {
-        mode: 'dashboard',
-        dashboard: dashboardBr,
+        mode: 'console',
+        console: baseAgWithSecModal,
+      },
+      presets: [
+        {
+          id: 'admin-switch-br',
+          text: 'BR별 탭으로 전환 — 누가 잘했는지 본다',
+          kind: 'admin',
+          nextStateIndex: 3,
+        },
+      ],
+      memo: {
+        title: 'STATE 2 — 민감 거래 보호 규모',
+        meta: '비밀 메시지 9,799건 (전체 7.6%)',
+        situation:
+          '카카오 단톡에서는 새어나가던 수수료율·특판 조건 협의가 WON TALK 비밀 채널로 안전하게 처리. 매출 직결 거래 14,717건 중 핵심 9,799건.',
+        interact: '청중: "이 정도 거래가 안 보였다는 거네?"',
+        feel: [
+          '"보이지 않던 협상 통제권 회복"',
+          'B2B 임원의 결제 트리거 — 보안 + 정량 증거',
+        ],
+        connect: ['Ch.6 비밀 메시지의 운영적 가치가 여기서 정량화됨'],
+      },
+    },
+    {
+      index: 3,
+      activeCastId: 'choi-cm',
+      guide:
+        'BR별 탭으로 전환 — 인센티브 후보가 SLA·메시지량·담당 AG 기반으로 자동 도출.',
+      phones: {
+        guest: {
+          type: 'wontalk-group',
+          headerTitle: '지엔에이 영업팀',
+          headerSubtitle: '참여자 11명',
+          messages: [
+            {
+              id: 'sys-incentive',
+              kind: 'system',
+              text: '🏆 BR 6명 자동 정렬 — SLA·메시지량·담당 AG 기준',
+              meta: { tone: 'good' },
+            },
+          ],
+        },
+      },
+      workspace: {
+        mode: 'console',
+        console: baseBr,
+      },
+      presets: [
+        {
+          id: 'admin-open-br',
+          text: '김경화 BR 클릭 → 상세',
+          kind: 'admin',
+          nextStateIndex: 4,
+        },
+      ],
+      memo: {
+        title: 'STATE 3 — BR 성과 격자',
+        meta: 'BR 14명 · 1인당 평균 4,551 msg/일',
+        situation:
+          '"누구한테 인센티브 줄지 어떻게 정하시나요?" → "WON TALK BR 격자 보세요"로 한 줄 답변.',
+        interact: '센터장이 BR 탭 클릭. 자동 산정 근거 카드 6장.',
+        feel: [
+          '"인센티브에 시비 없을 정량 근거"',
+          'BR 본인도 자기 데이터를 본다',
+        ],
+        connect: ['이 정량 데이터가 분기 운영 회의의 표준 자료가 됨'],
+      },
+    },
+    {
+      index: 4,
+      activeCastId: 'choi-cm',
+      guide:
+        '김경화 BR 상세 — 총 메시지 18,420 · 비밀 1,482 · SLA 97.2%. 본부장 보고에 그대로 사용.',
+      phones: {
+        guest: {
+          type: 'wontalk-group',
+          headerTitle: '지엔에이 영업팀',
+          headerSubtitle: '참여자 11명',
+          messages: [
+            {
+              id: 'sys-done',
+              kind: 'system',
+              text: '✅ BR 성과 보고 자료 — SLA 97.2% · 비밀 메시지 비율 8.0%',
+              meta: { tone: 'good' },
+            },
+          ],
+        },
+      },
+      workspace: {
+        mode: 'console',
+        console: baseBrWithModal,
       },
       presets: [],
       memo: {
-        title: 'STATE 2 — 4막 결제 모먼트',
+        title: 'STATE 4 — 4막 결제 모먼트',
         meta: 'Cowork+ · 운영자에게 데이터를 돌려준다',
         situation:
           'Ch.1~Ch.7에서 발생한 모든 운영 데이터가 한 화면의 정량 자료로 응축. B2B 임원의 결제 버튼이 눌리는 지점.',
-        interact: '대시보드 → PDF 자동 생성 → 본부장 보고. 5분 안에 끝남.',
+        interact: '대시보드 → BR 상세 → PDF/엑셀 추출 → 본부장 보고. 5분 이내.',
         feel: [
           '운영자: "내가 본부장님께 숫자로 보고할 수 있다"',
           '청중: "이게 우리가 사야 하는 이유"',

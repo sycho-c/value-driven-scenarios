@@ -35,7 +35,7 @@ export const chapter01SmsAuth: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {
@@ -59,7 +59,7 @@ export const chapter01SmsAuth: Chapter = {
             id: 'p-invite',
             kind: 'new-task',
             title: '미인증 게스트 접속 시도',
-            body: '강민호 · 에이원오토 영업팀 채널 · 인증 미완료 상태',
+            body: '강민호 · 지엔에이 영업팀 채널 · 인증 미완료 상태',
             meta: '2026-07-08 13:58',
             tone: 'warn',
           },
@@ -94,18 +94,18 @@ export const chapter01SmsAuth: Chapter = {
         guest: {
           type: 'auth-sms',
           headerTitle: 'Cowork+ 채널 입장 인증',
-          headerSubtitle: '에이원오토 영업팀 (우리금융캐피탈)',
+          headerSubtitle: '지엔에이 영업팀 (우리금융캐피탈)',
           meta: {
             phone: '010-****-3829',
             code: '482',
-            organization: '에이원오토 · 영업3팀',
+            organization: '지엔에이 · 영업3팀',
           },
         },
       },
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 11,
           messages: [
             {
@@ -117,7 +117,7 @@ export const chapter01SmsAuth: Chapter = {
             {
               id: 'ws-dir',
               kind: 'system',
-              text: '🔎 기간계 조직도 조회 중 — 에이원오토 · 영업3팀 매칭 시도',
+              text: '🔎 기간계 조직도 조회 중 — 지엔에이 · 영업3팀 매칭 시도',
               meta: { tone: 'muted' },
             },
           ],
@@ -135,7 +135,7 @@ export const chapter01SmsAuth: Chapter = {
             id: 'p-dir',
             kind: 'audit-log',
             title: '기간계 조직도 동기',
-            body: '우리금융캐피탈 IDM 연동 — 강민호 → 에이원오토 영업3팀 매칭 확인',
+            body: '우리금융캐피탈 IDM 연동 — 강민호 → 지엔에이 영업3팀 매칭 확인',
             highlight: 'IDM · LOOKUP OK',
             tone: 'good',
           },
@@ -169,13 +169,13 @@ export const chapter01SmsAuth: Chapter = {
       phones: {
         guest: {
           type: 'wontalk-group',
-          headerTitle: '에이원오토 영업팀',
+          headerTitle: '지엔에이 영업팀',
           headerSubtitle: '참여자 11명 → 12명',
           messages: [
             {
               id: 'sys-joined',
               kind: 'system',
-              text: '✅ 강민호 (에이원오토 영업3팀) 채널 입장',
+              text: '✅ 강민호 (지엔에이 영업3팀) 채널 입장',
               meta: { tone: 'good' },
             },
             {
@@ -193,13 +193,13 @@ export const chapter01SmsAuth: Chapter = {
       workspace: {
         mode: 'chat',
         chat: {
-          title: '에이원오토 영업팀',
+          title: '지엔에이 영업팀',
           participants: 12,
           messages: [
             {
               id: 'ws-joined',
               kind: 'system',
-              text: '✅ 강민호 (에이원오토 영업3팀) 채널 입장 — 권한: 게스트(파트너)',
+              text: '✅ 강민호 (지엔에이 영업3팀) 채널 입장 — 권한: 게스트(파트너)',
               meta: { tone: 'good' },
             },
           ],
@@ -209,7 +209,7 @@ export const chapter01SmsAuth: Chapter = {
             id: 'p-role',
             kind: 'auto-assign',
             title: '권한 자동 부여',
-            body: '에이원오토 영업3팀 → 게스트(파트너) 권한 매핑 · 비즈폼/내 대화 보기 사용 가능',
+            body: '지엔에이 영업3팀 → 게스트(파트너) 권한 매핑 · 비즈폼/내 대화 보기 사용 가능',
             highlight: 'ROLE · partner-guest',
             tone: 'good',
           },

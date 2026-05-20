@@ -4,6 +4,7 @@ import { cn } from '@/lib/cn';
 import { MessageList } from '../phones/MessageList';
 import { OperatorPanel } from './OperatorPanel';
 import { Dashboard } from './Dashboard';
+import { WonTalkConsole } from './WonTalkConsole';
 import styles from './Workspace.module.css';
 
 interface WorkspaceProps {
@@ -17,6 +18,11 @@ export function Workspace({
   castById,
   operatorLabel = 'BR Workspace',
 }: WorkspaceProps) {
+  // Console mode renders as a full takeover (sidebar/header included in the
+  // console component itself, matching the WON TALK Console wireframe).
+  if (state.mode === 'console' && state.console) {
+    return <WonTalkConsole state={state.console} />;
+  }
   const workspaceOwnerId = useMemo(
     () => Object.values(castById).find((m) => m.role === 'br')?.id,
     [castById],
@@ -27,9 +33,9 @@ export function Workspace({
     (r) => r.id === state.sidebar?.activeRoom,
   );
   const titleBarLabel =
-    state.chat?.title ?? activeRoomFromSidebar?.label ?? '에이원오토 영업팀';
+    state.chat?.title ?? activeRoomFromSidebar?.label ?? '지엔에이 영업팀';
   const rooms = state.sidebar?.rooms ?? [
-    { id: 'a1-auto', label: '에이원오토 영업팀', unread: 2 },
+    { id: 'a1-auto', label: '지엔에이 영업팀', unread: 2 },
     { id: 'team-finance', label: '금융사업본부', unread: 0 },
     { id: 'partner-mgmt', label: '파트너 관리', unread: 0 },
     { id: 'compliance', label: '컴플라이언스', unread: 1 },
@@ -67,7 +73,7 @@ export function Workspace({
             <span className={styles.mainTitleText}>
               {state.mode === 'dashboard'
                 ? '채널 운영 대시보드'
-                : state.chat?.title ?? '에이원오토 영업팀'}
+                : state.chat?.title ?? '지엔에이 영업팀'}
             </span>
             <span className={styles.mainTitleMeta}>
               {state.mode === 'dashboard'

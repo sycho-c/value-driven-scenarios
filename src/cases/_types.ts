@@ -94,7 +94,7 @@ export interface PresetChip {
   disabled?: boolean;
 }
 
-export type WorkspaceMode = 'chat' | 'dashboard' | 'tasks';
+export type WorkspaceMode = 'chat' | 'dashboard' | 'tasks' | 'console';
 
 export type OperatorPanelKind =
   | 'auto-assign'
@@ -126,7 +126,20 @@ export interface WorkspaceState {
     notice?: { text: string; readCount?: number; totalCount?: number };
   };
   dashboard?: DashboardState;
+  console?: WonTalkConsoleState;
   operatorPanel?: OperatorPanelCard[];
+}
+
+export interface WonTalkConsoleState {
+  activeTab: 'ag' | 'br';
+  /** Drilldown panel: AG ID to auto-expand */
+  expandedAgId?: string;
+  /** Modal overlay id to show (msg/time/sla/sec/file/ag/br/<brId>) */
+  openModalId?: string;
+  /** Optional override for date range label in topbar */
+  dateRangeLabel?: string;
+  /** Optional badge in topbar title (e.g. AG별/BR별) */
+  topbarTag?: string;
 }
 
 export interface DashboardSummaryCard {
