@@ -18,6 +18,14 @@ export const wontalkCase: CaseDef = {
   brandLine: wontalkMeta.brandLine,
   accentColor: wontalkMeta.accentColor,
   disableGuideOverlay: true,
+  introVideo: {
+    src: 'intro/woori-auto-finance-opening.mp4',
+    eyebrow: '우리금융캐피탈 · 자동차금융',
+    title: '4,000명의 AG 파트너망, 하나의 채널로',
+    subtitle: '오프닝 영상이 끝나면 시나리오가 시작됩니다.',
+    skipLabel: '시나리오 바로 보기 →',
+    continueLabel: '시나리오 시작 →',
+  },
   cast: wontalkCast,
   chapters: [
     chapter01SmsAuth,

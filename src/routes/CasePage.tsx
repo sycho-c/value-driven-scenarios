@@ -1,22 +1,26 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { getCase } from '@/cases/_registry';
 import { CaseShell } from '@/components/shells/CaseShell';
 import { ChapterRunner } from '@/components/scenario/ChapterRunner';
+import { CaseIntroVideo } from '@/components/scenario/CaseIntroVideo';
 
 export default function CasePage() {
   const { caseId } = useParams<{ caseId: string }>();
+  const navigate = useNavigate();
   const caseDef = caseId ? getCase(caseId) : null;
 
   const [currentChapterId, setCurrentChapterId] = useState<number | null>(
     caseDef?.chapters[0]?.id ?? null,
   );
   const [pendingStartIndex, setPendingStartIndex] = useState<number>(0);
+  const [introDismissed, setIntroDismissed] = useState<boolean>(!caseDef?.introVideo);
 
   useEffect(() => {
     setCurrentChapterId(caseDef?.chapters[0]?.id ?? null);
     setPendingStartIndex(0);
-  }, [caseDef?.id]);
+    setIntroDismissed(!caseDef?.introVideo);
+  }, [caseDef?.id, caseDef?.introVideo]);
 
   const handleChapterChange = useCallback(
     (id: number, opts?: { atEnd?: boolean }) => {
@@ -52,14 +56,26 @@ export default function CasePage() {
   }
 
   return (
-    <CaseShell caseDef={caseDef}>
-      <ChapterRunner
-        key={`${caseDef.id}-${currentChapter.id}-${pendingStartIndex}`}
-        caseDef={caseDef}
-        chapter={currentChapter}
-        onChapterChange={handleChapterChange}
-        initialStateIndex={pendingStartIndex}
-      />
-    </CaseShell>
+    <>
+      <CaseShell caseDef={caseDef}>
+        <ChapterRunner
+          key={`${caseDef.id}-${currentChapter.id}-${pendingStartIndex}`}
+          caseDef={caseDef}
+          chapter={currentChapter}
+          onChapterChange={handleChapterChange}
+          initialStateIndex={pendingStartIndex}
+        />
+      </CaseShell>
+      {caseDef.introVideo && !introDismissed && (
+        <CaseIntroVideo
+          intro={caseDef.introVideo}
+          onDismiss={() => setIntroDismissed(true)}
+          onClose={() => {
+            if (window.history.length > 1) navigate(-1);
+            else navigate('/');
+          }}
+        />
+      )}
+    </>
   );
 }

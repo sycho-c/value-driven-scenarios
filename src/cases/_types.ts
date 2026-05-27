@@ -924,6 +924,20 @@ export interface RoiCardDef {
   trend?: RoiTrend;
 }
 
+export interface CaseIntroVideoDef {
+  /** Path relative to Vite's BASE_URL (e.g. "intro/woori-auto-finance-opening.mp4"). */
+  src: string;
+  /** Optional poster image, also relative to BASE_URL. */
+  poster?: string;
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  /** Skip button label. Defaults to "시나리오 바로 보기 →". */
+  skipLabel?: string;
+  /** Label shown when the video reaches the end. Defaults to "시나리오 시작 →". */
+  continueLabel?: string;
+}
+
 export interface CaseDef {
   id: string;
   label: string;
@@ -932,6 +946,7 @@ export interface CaseDef {
   brandLine: string;
   accentColor: string;
   disableGuideOverlay?: boolean;
+  introVideo?: CaseIntroVideoDef;
   cast: CastMember[];
   chapters: Chapter[];
   roi: RoiCardDef[];
