@@ -1,4 +1,3 @@
-export const COMPANY = 'DWorks';
 export const PRODUCT = 'Cowork+';
 
 export const TAGLINE = '흩어진 채널을 하나로 묶고, 운영자에게 데이터를 돌려준다';

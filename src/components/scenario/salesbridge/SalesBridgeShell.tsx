@@ -49,9 +49,9 @@ export function SalesBridgeShell({
     <div className={styles.window}>
       <div className={styles.titlebar}>
         <div className={styles.titleLeft}>
-          <div className={styles.brandMark}>DW</div>
+          <div className={styles.brandMark}>C+</div>
           <div>
-            <div>DWorks Cowork+</div>
+            <div>Cowork+</div>
             <div className={styles.titleSub}>가온전선 영업지원팀</div>
           </div>
         </div>
@@ -171,7 +171,7 @@ export function SalesBridgeShell({
         )}
       </div>
       <div className={styles.statusbar}>
-        <span>DWorks Cowork+ · {state.badgeMessage ?? '연결됨'}</span>
+        <span>Cowork+ · {state.badgeMessage ?? '연결됨'}</span>
         <span>
           {state.clockTime} · {state.clockDate}
         </span>

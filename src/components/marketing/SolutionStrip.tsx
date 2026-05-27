@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { COMPANY, PRODUCT, TAGLINE } from '@/content/brand';
+import { PRODUCT, TAGLINE } from '@/content/brand';
 import { cn } from '@/lib/cn';
 import styles from './SolutionStrip.module.css';
 
@@ -35,7 +35,7 @@ export function SolutionStrip() {
     <section className={styles.section} id="solution">
       <div className={styles.sectionLabel}>해결의 형태</div>
       <h2 className={styles.headline}>
-        {COMPANY}의 <em>{PRODUCT}</em> — {TAGLINE}.
+        <em>{PRODUCT}</em> — {TAGLINE}.
       </h2>
       <p className={styles.sub}>
         산업과 맥락에 따라 'WON TALK', 'ONE TALK'이라는 사례명으로 도입되었습니다.

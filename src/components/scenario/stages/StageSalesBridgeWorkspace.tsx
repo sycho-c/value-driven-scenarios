@@ -84,7 +84,7 @@ export function StageSalesBridgeWorkspace({
   };
 
   const taskbarApps = [
-    { id: 'cowork', icon: '🟣', label: 'DWorks Cowork+', active: true },
+    { id: 'cowork', icon: '🟣', label: 'Cowork+', active: true },
     { id: 'browser', icon: '🌐', label: 'Edge' },
     { id: 'mail', icon: '📧', label: 'Outlook' },
   ];

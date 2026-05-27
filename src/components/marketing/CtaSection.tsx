@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { COMPANY, PRODUCT } from '@/content/brand';
+import { PRODUCT } from '@/content/brand';
 import styles from './CtaSection.module.css';
 
 export function CtaSection() {
@@ -29,7 +29,7 @@ export function CtaSection() {
         </div>
       </section>
       <footer className={styles.footer}>
-        © {new Date().getFullYear()} {COMPANY} · {PRODUCT}는 실제 도입 사례에 기반한
+        © {new Date().getFullYear()} {PRODUCT}는 실제 도입 사례에 기반한
         시나리오로 소개됩니다.
       </footer>
     </>

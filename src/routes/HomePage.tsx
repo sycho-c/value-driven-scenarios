@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { COMPANY, PRODUCT } from '@/content/brand';
+import { PRODUCT } from '@/content/brand';
 import { ColdOpenHero } from '@/components/marketing/ColdOpenHero';
 import { ProblemCards } from '@/components/marketing/ProblemCards';
 import { SolutionStrip } from '@/components/marketing/SolutionStrip';
@@ -14,7 +14,7 @@ export default function HomePage() {
       <nav className={styles.nav}>
         <div className={styles.navInner}>
           <Link to="/" className={styles.brand}>
-            {COMPANY} <span className={styles.productMark}>· {PRODUCT}</span>
+            <span className={styles.productMark}>{PRODUCT}</span>
           </Link>
           <div className={styles.navLinks}>
             <a href="#problem">문제</a>

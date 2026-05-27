@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import type { CaseDef } from '@/cases/_types';
-import { COMPANY, PRODUCT } from '@/content/brand';
+import { PRODUCT } from '@/content/brand';
 import styles from './CaseShell.module.css';
 
 interface CaseShellProps {
@@ -15,7 +15,7 @@ export function CaseShell({ caseDef, children }: CaseShellProps) {
       <nav className={styles.nav}>
         <div className={styles.navInner}>
           <Link to="/" className={styles.brandLink}>
-            {COMPANY} <span className={styles.productMark}>· {PRODUCT}</span>
+            <span className={styles.productMark}>{PRODUCT}</span>
           </Link>
           <span className={styles.crumb}>›</span>
           <span className={styles.crumbCurrent}>

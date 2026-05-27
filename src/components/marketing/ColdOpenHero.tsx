@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { COMPANY, PRODUCT } from '@/content/brand';
+import { PRODUCT } from '@/content/brand';
 import { cn } from '@/lib/cn';
 import styles from './ColdOpenHero.module.css';
 
@@ -189,7 +189,7 @@ export function ColdOpenHero() {
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             >
               <span className={styles.eyebrow}>
-                {COMPANY} · {PRODUCT} — {slide.eyebrow}
+                {PRODUCT} — {slide.eyebrow}
               </span>
               <h1 className={styles.hook}>{slide.hook}</h1>
               <p className={styles.sub}>{slide.sub}</p>
