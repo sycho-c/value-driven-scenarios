@@ -1,0 +1,713 @@
+/* ─── Root ─────────────────────────────────────────────────────────────────── */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  font-family: var(--font-sans, sans-serif);
+}
+
+/* ─── Toggle ───────────────────────────────────────────────────────────────── */
+.toggleBar {
+  display: flex;
+  gap: .375rem;
+  background: var(--bg-soft);
+  padding: 3px;
+  border-radius: var(--radius-md);
+  border: 0.5px solid var(--border);
+}
+
+.togBtn {
+  flex: 1;
+  padding: .35rem;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink-soft);
+  transition: all .2s;
+}
+
+.togActiveBefore {
+  background: #4A4A4A;
+  color: #fff;
+}
+
+.togActiveAfter {
+  background: #1B3A6B;
+  color: #fff;
+}
+
+/* ─── Desc box ─────────────────────────────────────────────────────────────── */
+.descBox {
+  font-size: 11px;
+  color: var(--ink-soft);
+  background: var(--bg-soft);
+  border-radius: var(--radius-md);
+  padding: .3rem .625rem;
+  border-left: 3px solid #4A4A4A;
+  line-height: 1.5;
+}
+
+.descBox[data-mode='after'] {
+  border-left-color: #1B3A6B;
+}
+
+/* ─── Step controls ─────────────────────────────────────────────────────────── */
+.stepRow {
+  display: flex;
+  gap: .375rem;
+}
+
+.stepBtn {
+  flex: 2;
+  padding: .45rem;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  transition: opacity .15s;
+}
+
+.stepBtn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.stepBtnBefore {
+  background: #4A4A4A;
+  color: #fff;
+}
+
+.stepBtnAfter {
+  background: #1B3A6B;
+  color: #fff;
+}
+
+.resetBtn {
+  flex: 1;
+  padding: .45rem;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--bg-soft);
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .375rem;
+  transition: background .15s;
+}
+
+.resetBtn:hover {
+  background: var(--border);
+}
+
+/* ─── Split ────────────────────────────────────────────────────────────────── */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 880px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Phone frame ──────────────────────────────────────────────────────────── */
+.phoneFrame {
+  /* fixed 244×484, matches PhoneFrame.module.css compact variant */
+  width: 244px;
+  height: 484px;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 5px solid #2a2a2a;
+  box-shadow: 0 0 0 1px #444, var(--shadow-phone);
+  background: #1a1a1a;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* ─── Status bar ─────────────────────────────────────────────────────────────── */
+.phoneStatus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 14px 3px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.phoneStatusR {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 10px;
+}
+
+.battBadge {
+  background: #555;
+  border-radius: 99px;
+  padding: 1px 4px;
+}
+
+/* ─── Call screen ──────────────────────────────────────────────────────────── */
+.callScreen {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 10px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: background .6s;
+}
+
+.idle {
+  background: linear-gradient(160deg, #1a2a3a 0%, #0d1a2a 100%);
+}
+
+.calling {
+  background: linear-gradient(160deg, #1a3a2a 0%, #0d2a1a 100%);
+}
+
+.ended {
+  background: linear-gradient(160deg, #2a2a2a 0%, #1a1a1a 100%);
+}
+
+/* ─── Timer ─────────────────────────────────────────────────────────────────── */
+.callTimer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, .7);
+  font-size: 12px;
+  margin-bottom: 12px;
+  align-self: stretch;
+  justify-content: space-between;
+}
+
+.timerLeft {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, .5);
+}
+
+.timerIcon {
+  font-size: 11px;
+}
+
+.timerDots {
+  color: rgba(255, 255, 255, .3);
+  font-size: 14px;
+}
+
+/* ─── Caller area ───────────────────────────────────────────────────────────── */
+.callerArea {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.callerBadge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 9px;
+  border-radius: 99px;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: rgba(255, 255, 255, .1);
+  color: rgba(255, 255, 255, .4);
+}
+
+.callerBadge[data-state='calling'] {
+  background: rgba(100, 255, 140, .2);
+  color: #6BFF8E;
+}
+
+.callerBadge[data-state='ended'] {
+  background: rgba(255, 255, 255, .08);
+  color: rgba(255, 255, 255, .4);
+}
+
+.callerName {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -.3px;
+  margin-bottom: 3px;
+}
+
+.callerRole {
+  color: rgba(255, 255, 255, .5);
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.callerNumber {
+  color: rgba(255, 255, 255, .5);
+  font-size: 11px;
+}
+
+/* ─── Avatar ─────────────────────────────────────────────────────────────────── */
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+  background: rgba(255, 255, 255, .08);
+  transition: background .3s;
+}
+
+.avatar[data-state='calling'] {
+  background: rgba(100, 200, 120, .2);
+}
+
+.avatarInitial {
+  color: #6BFF8E;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.avatarIcon {
+  color: rgba(255, 255, 255, .3);
+  font-size: 20px;
+}
+
+/* ─── Bubble ─────────────────────────────────────────────────────────────────── */
+.bubble {
+  background: rgba(255, 255, 255, .12);
+  border-radius: 12px;
+  padding: 7px 11px;
+  margin: 6px 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, .85);
+  line-height: 1.4;
+  text-align: center;
+  border: 0.5px solid rgba(255, 255, 255, .15);
+  animation: fadeIn .3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Assist / controls ─────────────────────────────────────────────────────── */
+.assistRow {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin: 6px 0;
+}
+
+.assistBtn {
+  background: rgba(255, 255, 255, .15);
+  border: none;
+  border-radius: 99px;
+  padding: 5px 14px;
+  color: rgba(255, 255, 255, .8);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.controlPanel {
+  background: rgba(255, 255, 255, .1);
+  border-radius: 18px;
+  padding: 10px;
+  width: 100%;
+  margin-top: 4px;
+  backdrop-filter: blur(10px);
+}
+
+.ctrlGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ctrlItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ctrlIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, .8);
+}
+
+.ctrlLabel {
+  font-size: 9px;
+  color: rgba(255, 255, 255, .6);
+}
+
+.endBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #E24B4A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* ─── Phone home bar ─────────────────────────────────────────────────────────── */
+.phoneHome {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 6px 24px 8px;
+  background: #1a1a1a;
+  flex-shrink: 0;
+}
+
+.homeCircle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, .4);
+}
+
+.homeBtn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, .5);
+  font-size: 12px;
+}
+
+/* ─── Phone note ─────────────────────────────────────────────────────────────── */
+.phoneNote {
+  font-size: 11px;
+  color: var(--ink-soft);
+  background: var(--bg-soft);
+  border-radius: var(--radius-md);
+  padding: .4rem .625rem;
+  line-height: 1.5;
+  margin-top: .375rem;
+}
+
+/* ─── Workspace panel ────────────────────────────────────────────────────────── */
+.wsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+/* ─── WS Header card ─────────────────────────────────────────────────────────── */
+.wsHeader {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: .625rem .875rem;
+}
+
+.wsTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  margin-bottom: .2rem;
+}
+
+.wsTitleIcon {
+  color: #1B3A6B;
+}
+
+.wsSub {
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+/* ─── Deact banner card ──────────────────────────────────────────────────────── */
+.deactBanner {
+  background: #FDECEC;
+  border: 1px solid #F3B4B4;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: .5rem .875rem;
+  animation: fadeIn .25s ease;
+}
+
+.deactTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #C0392B;
+  margin-bottom: .15rem;
+}
+
+.deactSub {
+  font-size: 11px;
+  color: #C0392B;
+}
+
+/* ─── Profile box card ───────────────────────────────────────────────────────── */
+.profileBox {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: .75rem .875rem;
+}
+
+.profileTop {
+  display: flex;
+  align-items: flex-start;
+  gap: .625rem;
+  margin-bottom: .625rem;
+  padding-bottom: .625rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.profileAvatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #E6F1FB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1B3A6B;
+  flex-shrink: 0;
+}
+
+.profileInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.profileName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.profileMeta {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: 1px;
+}
+
+/* ─── COSS tags ──────────────────────────────────────────────────────────────── */
+.cossRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem;
+  align-items: center;
+  margin-top: .3rem;
+}
+
+.cossTagNeutral {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 99px;
+  border: 0.5px solid var(--border);
+  font-weight: 500;
+  background: var(--bg-soft);
+  color: var(--ink-soft);
+}
+
+.cossTagDanger {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 99px;
+  border: 0.5px solid #F3B4B4;
+  font-weight: 500;
+  background: #FDECEC;
+  color: #C0392B;
+}
+
+.cossTagGood {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 99px;
+  border: 0.5px solid #9BE3C9;
+  font-weight: 500;
+  background: #E7F7F0;
+  color: #1F9D6B;
+}
+
+/* ─── History section ────────────────────────────────────────────────────────── */
+.histSection {
+  /* allow internal scroll if items overflow */
+}
+
+.histLabel {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-bottom: .3rem;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+}
+
+.histPlaceholder {
+  text-align: center;
+  padding: .5rem 0;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.histEmpty {
+  background: #FDECEC;
+  border: 1px solid #F3B4B4;
+  border-radius: var(--radius-md);
+  padding: .625rem;
+  text-align: center;
+  animation: fadeIn .25s ease;
+}
+
+.histEmptyVal {
+  font-size: 20px;
+  font-weight: 600;
+  color: #C0392B;
+}
+
+.histEmptyMsg {
+  font-size: 11px;
+  color: #C0392B;
+  margin-top: 2px;
+}
+
+.histList {
+  max-height: 160px;
+  overflow-y: auto;
+  animation: fadeIn .25s ease;
+}
+
+.histItem {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  padding: .375rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.histItem:last-child {
+  border-bottom: none;
+}
+
+.histIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.histIcon_phone {
+  background: #E6F1FB;
+  color: #1B3A6B;
+}
+
+.histIcon_kakao {
+  background: #E7F7F0;
+  color: #1F9D6B;
+}
+
+.histIcon_sms {
+  background: #FFF5E6;
+  color: #BA7517;
+}
+
+.histContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.histTitle {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.histDetail {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: 1px;
+  line-height: 1.4;
+}
+
+.histDate {
+  font-size: 10px;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ─── Reaction boxes ─────────────────────────────────────────────────────────── */
+.reactionBad {
+  background: #FDECEC;
+  border: 1px solid #F3B4B4;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: .625rem .875rem;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #C0392B;
+  animation: fadeIn .25s ease;
+}
+
+.reactionGood {
+  background: #E7F7F0;
+  border: 1px solid #9BE3C9;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: .625rem .875rem;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #1F9D6B;
+  animation: fadeIn .25s ease;
+}
+
+/* ─── Actions ────────────────────────────────────────────────────────────────── */
+.controlActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  margin-top: .25rem;
+}
