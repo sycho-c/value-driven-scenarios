@@ -28,6 +28,13 @@ export const CASES = {
     summary: '카오스 → 거버넌스 → 통제 확대 → 경영 자산화 (7 SCENE)',
     accentColor: '#1B4F72',
   },
+  'salesbridge-sk': {
+    label: 'SalesBridge',
+    customer: 'SK렌터카',
+    industry: '장기 렌터카 · 자동차금융',
+    summary: '결론 먼저 → 역질문 → 체험 → 다시 첫 화면으로 (외부 영업 데모 4챕터)',
+    accentColor: '#1B3A6B',
+  },
 } as const;
 
 export type CaseId = keyof typeof CASES;

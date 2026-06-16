@@ -1,0 +1,958 @@
+/* ── Root ──────────────────────────────────────────────────────────────────── */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-family: var(--font-sans, system-ui, sans-serif);
+}
+
+.fallback {
+  padding: 2rem;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+/* ── Toggle bar ────────────────────────────────────────────────────────────── */
+.toggleBar {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--bg-soft, #F0F3FA);
+  padding: 3px;
+  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--border, #E2E8F0);
+}
+
+.tbtn {
+  flex: 1;
+  padding: 0.35rem;
+  font-size: 11.5px;
+  font-weight: 500;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink-soft, #5A5F7A);
+  transition: all 0.2s;
+}
+
+.tbtnActive.tbtnBefore {
+  background: #4A4A4A;
+  color: #fff;
+  box-shadow: var(--shadow-bubble);
+}
+
+.tbtnActive.tbtnAfter {
+  background: #1B3A6B;
+  color: #fff;
+  box-shadow: var(--shadow-bubble);
+}
+
+/* ── Desc box ──────────────────────────────────────────────────────────────── */
+.descBox {
+  font-size: 11px;
+  color: var(--ink-soft, #5A5F7A);
+  background: var(--bg-soft, #F0F3FA);
+  border-radius: var(--radius-md, 10px);
+  padding: 0.35rem 0.75rem;
+  border-left: 3px solid #4A4A4A;
+  line-height: 1.55;
+  transition: border-left-color 0.2s;
+}
+
+/* ── Split grid ────────────────────────────────────────────────────────────── */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 880px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Phone outer + frame ───────────────────────────────────────────────────── */
+.phoneOuter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.phoneFrame {
+  /* 고정 크기: 244×484, radius 30px */
+  width: 244px;
+  height: 484px;
+  flex-shrink: 0;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 5px solid #2a2a2a;
+  box-shadow: 0 0 0 1px #444, var(--shadow-phone, 0 22px 48px rgba(15,22,60,0.18));
+  background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  /* 내용이 늘어나도 절대 커지지 않게 */
+  box-sizing: border-box;
+}
+
+.phoneStatus {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px 3px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.phoneStatusRight {
+  font-size: 9px;
+  color: #fff;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* ── Before phone screen ───────────────────────────────────────────────────── */
+.befScreen {
+  background: linear-gradient(160deg, #1a1a2a 0%, #0d0d1a 100%);
+  padding: 14px 12px 16px;
+  /* 남은 높이를 모두 채우고 내부 스크롤 */
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.appRowLabel {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.appGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.appIcon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.appImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  position: relative;
+}
+
+.appEmoji {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.appBadge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: #FF3B30;
+  color: #fff;
+  border-radius: 99px;
+  font-size: 7px;
+  font-weight: 700;
+  padding: 1px 4px;
+  min-width: 14px;
+  text-align: center;
+  border: 1.5px solid #1a1a2a;
+}
+
+.appLabel {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+}
+
+.lastMsgCard {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.lmHead {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+
+.lmIcon {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.lmApp {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.lmTime {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-left: auto;
+}
+
+.lmName {
+  font-size: 9px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 2px;
+}
+
+.lmText {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.4;
+}
+
+.lmTextMuted {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.befTag {
+  background: rgba(255, 60, 60, 0.2);
+  border: 0.5px solid rgba(255, 60, 60, 0.3);
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin-top: auto;
+  font-size: 9px;
+  color: rgba(255, 120, 120, 0.85);
+  text-align: center;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
+/* ── After phone screen ────────────────────────────────────────────────────── */
+.aftScreen {
+  /* 남은 높이를 모두 차지, 내부 스크롤 */
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  background: #111;
+}
+
+.appHeaderBar {
+  background: #1B3A6B;
+  padding: 10px 14px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.appBack {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.appLogoText {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.profileMini {
+  background: linear-gradient(160deg, #1B3A6B 0%, #243f6e 100%);
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.pmAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.pmName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.pmPhone {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.pmStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.pmStat {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+  padding: 5px 3px;
+  text-align: center;
+}
+
+.pmVal {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.pmValGood {
+  color: #6BFF8E;
+}
+
+.pmLabel {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 1px;
+}
+
+.chChipsPhone {
+  display: flex;
+  gap: 4px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.ccp {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 7px;
+  border-radius: 99px;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.ccpPhone {
+  background: rgba(59, 110, 216, 0.25);
+  color: #6EA8FF;
+}
+
+.ccpKakao {
+  background: rgba(254, 229, 0, 0.2);
+  color: #EFD070;
+}
+
+.ccpSms {
+  background: rgba(186, 117, 23, 0.25);
+  color: #F0A84A;
+}
+
+/* miniTl은 남은 공간 채우고 내부 스크롤 */
+.miniTl {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.mtlItem {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+}
+
+.mtlItem:last-child {
+  border-bottom: none;
+}
+
+.mtlDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mtlText {
+  flex: 1;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mtlDate {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+/* ── Phone home bar ────────────────────────────────────────────────────────── */
+.phoneHome {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 26px 10px;
+  background: #1a1a1a;
+  flex-shrink: 0;
+}
+
+.homeCircle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+
+.homeBtn {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+}
+
+.noteBox {
+  font-size: 11px;
+  color: var(--ink-soft, #5A5F7A);
+  background: var(--bg-soft, #F0F3FA);
+  border-radius: var(--radius-md, 10px);
+  padding: 0.4rem 0.75rem;
+  line-height: 1.6;
+  border: 1px solid var(--border, #E2E8F0);
+}
+
+/* ── Channel color helpers ──────────────────────────────────────────────────── */
+.chPhone {
+  background: #1B3A6B;
+  color: #fff;
+}
+
+.chKakao {
+  background: #FEE500;
+  color: #3A1D1D;
+}
+
+.chSms {
+  background: #FBF1DC;
+  color: #BA7517;
+}
+
+/* mtlDot dot colors */
+.mtlDot.chPhone {
+  background: #6EA8FF;
+}
+.mtlDot.chKakao {
+  background: #EFD070;
+}
+.mtlDot.chSms {
+  background: #F0A84A;
+}
+
+/* ── Workspace ─────────────────────────────────────────────────────────────── */
+.wsWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  /* 우측 전체 max-height: 폰 높이와 맞추고 내부 스크롤 */
+  max-height: 484px;
+  overflow-y: auto;
+}
+
+.wsHeader {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-card);
+  padding: 0.625rem 0.875rem;
+  flex-shrink: 0;
+}
+
+.wsTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink, #1A1A2E);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.wsTitleIcon {
+  font-size: 13px;
+}
+
+.wsSub {
+  font-size: 10.5px;
+  color: var(--ink-soft, #5A5F7A);
+  line-height: 1.5;
+}
+
+/* ── Before Workspace: Silos ────────────────────────────────────────────────── */
+.siloGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.silo {
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: var(--radius-md, 10px);
+  overflow: hidden;
+  background: var(--surface, #fff);
+  box-shadow: var(--shadow-card);
+}
+
+.siloHead {
+  padding: 0.4rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.siloBody {
+  background: #fff;
+  padding: 0.4rem 0.75rem;
+  font-size: 10.5px;
+  color: var(--ink-soft, #5A5F7A);
+  line-height: 1.55;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.siloBodyDark {
+  background: #0d1a2a;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.noLink {
+  background: #FDECEC;
+  border: 1px solid #F5C6C6;
+  border-radius: var(--radius-md, 10px);
+  padding: 0.5rem 0.75rem;
+  font-size: 10.5px;
+  color: #C0392B;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+
+.beforeNoteInline {
+  margin-top: 0.375rem;
+  color: var(--ink-soft, #5A5F7A);
+  font-size: 10px;
+}
+
+/* ── After Workspace: Profile + Filter + Timeline ─────────────────────────── */
+.profileWs {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-card);
+  padding: 0.625rem 0.875rem;
+  flex-shrink: 0;
+}
+
+.pwTop {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border, #E2E8F0);
+}
+
+.pwAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #E6F1FB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1B3A6B;
+  flex-shrink: 0;
+}
+
+.pwInfo {
+  flex: 1;
+}
+
+.pwName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink, #1A1A2E);
+}
+
+.pwMeta {
+  font-size: 10.5px;
+  color: var(--ink-soft, #5A5F7A);
+  margin-top: 1px;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat {
+  background: var(--bg-soft, #F0F3FA);
+  border-radius: var(--radius-md, 10px);
+  padding: 0.375rem 0.25rem;
+  text-align: center;
+  border: 1px solid var(--border, #E2E8F0);
+}
+
+.statVal {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink, #1A1A2E);
+}
+
+.statValGood {
+  color: #1F9D6B;
+}
+
+.statLabel {
+  font-size: 9px;
+  color: var(--ink-soft, #5A5F7A);
+  margin-top: 1px;
+}
+
+.filterRow {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.fl {
+  font-size: 10.5px;
+  color: var(--ink-soft, #5A5F7A);
+  font-weight: 500;
+}
+
+.fchip {
+  padding: 2px 9px;
+  border-radius: 99px;
+  font-size: 10.5px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  line-height: 1.6;
+}
+
+.fchipAll {
+  background: var(--bg-soft, #F0F3FA);
+  color: var(--ink-soft, #5A5F7A);
+  border-color: var(--border, #E2E8F0);
+}
+
+.fchipAllOn {
+  background: #1B3A6B;
+  color: #fff;
+  border-color: #1B3A6B;
+}
+
+.fchipPhone {
+  background: #E6F1FB;
+  color: #1B3A6B;
+  border-color: #B5D4F4;
+}
+
+.fchipPhoneOn {
+  background: #1B3A6B;
+  color: #fff;
+  border-color: #1B3A6B;
+}
+
+.fchipKakao {
+  background: #FEF9C3;
+  color: #854F0B;
+  border-color: #EFD070;
+}
+
+.fchipKakaoOn {
+  background: #EFD070;
+  color: #4A2E05;
+  border-color: #CA9E00;
+}
+
+.fchipSms {
+  background: #FBF1DC;
+  color: #BA7517;
+  border-color: #E4C170;
+}
+
+.fchipSmsOn {
+  background: #BA7517;
+  color: #fff;
+  border-color: #BA7517;
+}
+
+/* ── Timeline box ───────────────────────────────────────────────────────────── */
+.tlBox {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #E2E8F0);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.tlEmpty {
+  padding: 1.25rem;
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--ink-soft, #5A5F7A);
+}
+
+.tlItem {
+  display: flex;
+  gap: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--border, #E2E8F0);
+  cursor: pointer;
+  transition: background 0.12s;
+  position: relative;
+}
+
+.tlItem:last-child {
+  border-bottom: none;
+}
+
+.tlItem:hover,
+.tlItemExp {
+  background: var(--bg-soft, #F0F3FA);
+}
+
+.vline {
+  position: absolute;
+  left: 26px;
+  top: 42px;
+  bottom: -1px;
+  width: 1.5px;
+  background: var(--border, #E2E8F0);
+}
+
+.chIconWs {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+/* chIconWs channel colors */
+.chIconWs.chPhone {
+  background: #E6F1FB;
+  color: #1B3A6B;
+}
+
+.chIconWs.chKakao {
+  background: #FEF9C3;
+  color: #854F0B;
+}
+
+.chIconWs.chSms {
+  background: #FBF1DC;
+  color: #BA7517;
+}
+
+.tlBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.tlTop {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.1rem;
+  flex-wrap: wrap;
+}
+
+.cbadge {
+  font-size: 9.5px;
+  padding: 1px 6px;
+  border-radius: 99px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.badgePhone {
+  background: #E6F1FB;
+  color: #1B3A6B;
+}
+
+.badgeKakao {
+  background: #FEF9C3;
+  color: #854F0B;
+}
+
+.badgeSms {
+  background: #FBF1DC;
+  color: #BA7517;
+}
+
+.tlTitle {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink, #1A1A2E);
+}
+
+.tlPrev {
+  font-size: 10.5px;
+  color: var(--ink-soft, #5A5F7A);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.tlRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.tlDate {
+  font-size: 9.5px;
+  color: var(--ink-soft, #5A5F7A);
+}
+
+.chev {
+  font-size: 15px;
+  color: var(--ink-soft, #5A5F7A);
+  transition: transform 0.2s;
+  line-height: 1;
+  display: inline-block;
+  transform: rotate(90deg);
+}
+
+.chevOpen {
+  transform: rotate(270deg);
+}
+
+/* ── Expand inner ───────────────────────────────────────────────────────────── */
+.expandInner {
+  margin: 0.3rem 0 0.1rem;
+  padding: 0.5rem 0.625rem;
+  background: var(--surface, #fff);
+  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--border, #E2E8F0);
+  font-size: 10.5px;
+  line-height: 1.7;
+  color: var(--ink, #1A1A2E);
+  box-shadow: var(--shadow-bubble);
+}
+
+.sttLabel {
+  font-size: 9.5px;
+  color: var(--ink-soft, #5A5F7A);
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.sttText {
+  background: #E6F1FB;
+  color: #1B3A6B;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 10.5px;
+  line-height: 1.6;
+}
+
+.cbbl {
+  padding: 5px 9px;
+  border-radius: 8px;
+  font-size: 10.5px;
+  margin-bottom: 3px;
+  display: inline-block;
+  line-height: 1.4;
+  max-width: 90%;
+}
+
+.cbblOut {
+  background: #E6F1FB;
+  color: #1B3A6B;
+  margin-left: auto;
+  display: block;
+  text-align: right;
+}
+
+.cbblIn {
+  background: var(--bg-soft, #F0F3FA);
+  color: var(--ink, #1A1A2E);
+}
+
+/* ── Controls ───────────────────────────────────────────────────────────────── */
+.controlActions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}

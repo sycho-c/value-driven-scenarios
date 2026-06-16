@@ -223,6 +223,192 @@ export interface GalleryCardDef {
   pulse?: boolean;
 }
 
+// ───────────────────────── SK렌터카 (rentacar · Cowork+) ─────────────────────────
+
+export type RcChannel = 'phone' | 'kakao' | 'sms';
+
+/** Ch.0 / Ch.3 — SK렌터카 Cowork+ 관리자 대시보드 */
+export type RcKpiTone = 'ok' | 'warn' | 'danger';
+export interface RcKpiCard {
+  label: string;
+  value: string;
+  sub: string;
+  tone: RcKpiTone;
+}
+export interface RcDonutSeg {
+  label: string;
+  percent: number;
+  color: string;
+}
+export interface RcBarRow {
+  label: string;
+  percent: number;
+  valueText: string;
+  tone: 'brand' | 'warn' | 'danger' | 'muted' | 'good';
+}
+export interface RcLinePoint {
+  label: string;
+  valueText: string;
+  /** 0~1 height ratio */
+  ratio: number;
+}
+export interface RcRiskCard {
+  value: string;
+  desc: string;
+  tone: 'hot' | 'warm' | 'ok';
+  drillLabel?: string;
+}
+export interface RcHandoffRow {
+  name: string;
+  clients: string;
+  date: string;
+  status: 'done' | 'progress' | 'pending';
+}
+export type RcDashTabId = 'talk' | 'asset' | 'revenue' | 'risk';
+export interface RentacarDashboardState {
+  title: string;
+  meta: string;
+  realtimeLabel?: string;
+  /** Ch.3 S3 — 'SK렌터카' 라벨을 '[귀사명]' 으로 전환 */
+  companyPlaceholder?: string;
+  kpis: RcKpiCard[];
+  activeTab: RcDashTabId;
+  tabs: Array<{ id: RcDashTabId; label: string }>;
+  /** talk 탭 */
+  donut?: { total: string; segs: RcDonutSeg[] };
+  zeroContact?: { value: string; sub: string; bars: RcBarRow[]; note?: string };
+  /** asset 탭 */
+  assetGap?: {
+    donePercent: number;
+    doneLabel: string;
+    gapLabel: string;
+    note?: string;
+    causeTitle?: string;
+    causes?: RcBarRow[];
+    actionNote?: string;
+    highlight?: boolean;
+  };
+  /** revenue 탭 */
+  convTitle?: string;
+  convBars?: RcBarRow[];
+  convNote?: string;
+  convLine?: { points: RcLinePoint[]; note?: string };
+  coachingNote?: string;
+  /** risk 탭 */
+  risks?: RcRiskCard[];
+  handoffTitle?: string;
+  handoff?: RcHandoffRow[];
+  handoffNote?: string;
+}
+
+/** Ch.2 S2~S4 — STT 통화 split */
+export interface SttScriptLine {
+  atMs: number;
+  text: string;
+}
+export interface SttMappingTag {
+  atMs: number;
+  label: string;
+}
+export interface RcCossStep {
+  id: string;
+  label: string;
+}
+export interface RentacarSttState {
+  callerName: string;
+  callerPhone: string;
+  agentLabel: string;
+  customerLabel: string;
+  autoEndMs: number;
+  script: SttScriptLine[];
+  highlights: string[];
+  mappingTags: SttMappingTag[];
+  cossSteps: RcCossStep[];
+  cossSummary: string;
+  startLabel?: string;
+}
+
+/** Ch.2 S1 — 채널 통합 타임라인 (Before/After) */
+export interface RcTimelineDetailLine {
+  side: 'in' | 'out' | 'stt';
+  text: string;
+}
+export interface RcTimelineEntry {
+  channel: RcChannel;
+  title: string;
+  preview: string;
+  date: string;
+  detailLines?: RcTimelineDetailLine[];
+}
+export interface RcTimelineSilo {
+  channel: RcChannel;
+  title: string;
+  body: string[];
+  dark?: boolean;
+}
+export interface RentacarTimelineState {
+  mode: 'before' | 'after';
+  desc?: string;
+  customerName: string;
+  customerPhone: string;
+  customerMeta?: string;
+  stats?: Array<{ value: string; label: string; good?: boolean }>;
+  silos?: RcTimelineSilo[];
+  beforeNote?: string;
+  entries?: RcTimelineEntry[];
+}
+
+/** Ch.1 S2 — 퇴사 시뮬레이션 (Before/After) */
+export interface RcHistItem {
+  channel: RcChannel;
+  title: string;
+  detail: string;
+  date: string;
+}
+export interface RentacarAttritionState {
+  mode: 'before' | 'after';
+  desc?: string;
+  customerName: string;
+  customerPhone: string;
+  deactName: string;
+  deactClients: string;
+  deactDate: string;
+  histItems: RcHistItem[];
+  cossTags: string[];
+  bubble: string;
+  reaction: string;
+}
+
+/** Ch.1 S0/S1/S3 — 단일 패널 화면 */
+export interface RcQuestionChoice {
+  id: string;
+  label: string;
+  hint?: string;
+}
+export interface RcRiskSummaryItem {
+  icon: string;
+  title: string;
+  value: string;
+  desc: string;
+  tone: 'danger' | 'warn' | 'brand';
+}
+export interface RentacarPanelState {
+  view: 'question' | 'empty-coss' | 'risk-summary';
+  /** question */
+  question?: string;
+  questionSub?: string;
+  choices?: RcQuestionChoice[];
+  /** empty-coss */
+  cossTitle?: string;
+  cossMeta?: string;
+  cossHint?: string;
+  searchName?: string;
+  /** risk-summary */
+  riskTitle?: string;
+  riskItems?: RcRiskSummaryItem[];
+  riskRootCause?: string;
+}
+
 export interface ChapterStateNode {
   index: number;
   activeCastId?: string;
@@ -233,6 +419,11 @@ export interface ChapterStateNode {
   salesbridge?: SalesBridgeState;
   mobilePcSplit?: MobilePCSplitState;
   execDashboardFull?: ExecDashboardFullState;
+  rentacarDashboard?: RentacarDashboardState;
+  rentacarStt?: RentacarSttState;
+  rentacarTimeline?: RentacarTimelineState;
+  rentacarAttrition?: RentacarAttritionState;
+  rentacarPanel?: RentacarPanelState;
   guide?: string;
   memo?: MemoSection;
   presets?: PresetChip[];
@@ -666,7 +857,8 @@ export type StageVariant =
   | 'desktop-pc'
   | 'salesbridge-workspace'
   | 'mobile-pc-split'
-  | 'exec-dashboard';
+  | 'exec-dashboard'
+  | 'rentacar';
 
 export type MobilePCPhase = 'warn' | 'solve';
 

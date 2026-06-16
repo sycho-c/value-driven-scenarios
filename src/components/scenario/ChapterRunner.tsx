@@ -8,6 +8,7 @@ import { StageDesktopPC } from './stages/StageDesktopPC';
 import { StageSalesBridgeWorkspace } from './stages/StageSalesBridgeWorkspace';
 import { StageMobilePCSplit } from './stages/StageMobilePCSplit';
 import { StageExecDashboard } from './stages/StageExecDashboard';
+import { StageRentacar } from './rentacar/StageRentacar';
 import { StateBar } from './StateBar';
 import { ChapterMemo } from './ChapterMemo';
 import { PresetChip } from './controls/PresetChip';
@@ -350,6 +351,8 @@ export function ChapterRunner({
         <StageMobilePCSplit state={node} actions={actions} onAdvance={setStateIndex} />
       ) : chapter.stage === 'exec-dashboard' ? (
         <StageExecDashboard state={node} actions={actions} onAdvance={setStateIndex} />
+      ) : chapter.stage === 'rentacar' ? (
+        <StageRentacar state={node} actions={actions} onAdvance={setStateIndex} />
       ) : (
         <StagePhoneWorkspace
           state={node}
