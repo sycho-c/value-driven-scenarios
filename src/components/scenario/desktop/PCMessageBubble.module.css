@@ -67,7 +67,7 @@
 }
 
 .mineBubble {
-  background: #FFE500;
+  background: #FEE500;
   border-top-left-radius: 10px;
   border-top-right-radius: 2px;
 }
@@ -203,7 +203,7 @@
 
 .imageCaptureLine {
   font-size: 11.5px;
-  color: #1A1A2E;
+  color: #1A1C1E;
   font-family: var(--font-mono);
   letter-spacing: 0.01em;
   line-height: 1.5;

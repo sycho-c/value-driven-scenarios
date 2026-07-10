@@ -186,14 +186,6 @@ export function ChapterRunner({
     cancelAutoplay,
   ]);
 
-  if (!node) {
-    return (
-      <div style={{ padding: 48, textAlign: 'center', color: 'var(--muted)' }}>
-        이 챕터의 STATE 데이터가 비어 있습니다.
-      </div>
-    );
-  }
-
   const handleAdvance = useCallback(() => {
     cancelAutoplay();
     setStateIndex((i) => Math.min(i + 1, totalStates - 1));
@@ -210,6 +202,14 @@ export function ChapterRunner({
     },
     [handleAdvance, cancelAutoplay],
   );
+
+  if (!node) {
+    return (
+      <div style={{ padding: 48, textAlign: 'center', color: 'var(--muted)' }}>
+        이 챕터의 STATE 데이터가 비어 있습니다.
+      </div>
+    );
+  }
 
   const isLast = safeIndex === totalStates - 1;
   const hasPresets = (node.presets?.length ?? 0) > 0;

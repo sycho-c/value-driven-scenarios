@@ -4,7 +4,7 @@
   left: 16px;
   width: calc(100% - 32px);
   height: calc(100% - 32px);
-  background: #FAFBFD;
+  background: #F7F7F8;
   border: 1px solid #555;
   border-radius: 8px;
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35);
@@ -102,7 +102,7 @@
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr) 300px;
   min-height: 0;
-  background: #FAFBFD;
+  background: #F7F7F8;
   position: relative;
 }
 
@@ -127,19 +127,19 @@
   width: 360px;
   max-width: calc(100% - 64px);
   background: #fff;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #E0E2E4;
   border-left: 4px solid #5B3FE4;
   border-radius: 8px;
   padding: 12px 18px;
   box-shadow: 0 10px 30px rgba(20, 16, 48, 0.22);
   z-index: 20;
   font-size: 12px;
-  color: #1A1A2E;
+  color: #1A1C1E;
   animation: toastIn 0.35s ease-out;
 }
 
 .toast.warn {
-  border-left-color: #FFB800;
+  border-left-color: #FF9A3C;
 }
 
 @keyframes toastIn {
@@ -162,7 +162,7 @@
 
 .toastBody {
   font-size: 11px;
-  color: #5A5F7A;
+  color: #4A4D52;
   line-height: 1.5;
 }
 
@@ -349,7 +349,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8890B0;
+  color: #6C7075;
   font-size: 13px;
   padding: 80px 24px;
 }

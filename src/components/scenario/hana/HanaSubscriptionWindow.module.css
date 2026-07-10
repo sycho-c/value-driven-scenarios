@@ -80,7 +80,7 @@
 
 .body {
   flex: 1;
-  background: #FAFBFD;
+  background: #F7F7F8;
   padding: 22px 24px;
   overflow-y: auto;
   display: flex;
@@ -117,7 +117,7 @@
   font-size: 14px;
   font-family: var(--font-mono);
   background: #fff;
-  color: #1A1A2E;
+  color: #1A1C1E;
   letter-spacing: 0.05em;
   min-height: 44px;
   box-sizing: border-box;

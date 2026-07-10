@@ -19,9 +19,9 @@ export function StateBar({ total, current, onJump }: StateBarProps) {
               type="button"
               className={cn(styles.dot, isActive && styles.active, isDone && styles.done)}
               onClick={() => onJump?.(i)}
-              aria-label={`State ${i}`}
+              aria-label={`State ${i + 1}`}
             >
-              {isDone ? '✓' : i}
+              {isDone ? '✓' : i + 1}
             </button>
             {i < total - 1 && (
               <span className={cn(styles.connector, isDone && styles.done)} />

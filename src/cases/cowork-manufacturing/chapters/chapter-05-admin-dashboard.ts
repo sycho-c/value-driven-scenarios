@@ -31,7 +31,7 @@ function dashboard(partial: Partial<MfgDashboardState>): MfgDashboardState {
       note: '※ 민감 문서 유출 시 수신자·시점 추적으로 책임 소재 확인. 금융·제조 컴플라이언스 대응. [추정]',
     },
     fileTypes: [
-      { icon: '📄', iconBg: '#EDE9FF', iconColor: '#5B3FE4', name: '견적서', count: 96 },
+      { icon: '📄', iconBg: '#F0EBFF', iconColor: '#5B3FE4', name: '견적서', count: 96 },
       { icon: '📊', iconBg: '#FFF3E0', iconColor: '#E67E22', name: '발주서', count: 112 },
       { icon: '🖼️', iconBg: '#E8F5E9', iconColor: '#27AE60', name: '현장 사진', count: 74 },
       { icon: '📋', iconBg: '#E3F2FD', iconColor: '#1E88E5', name: '납기리스트', count: 46 },

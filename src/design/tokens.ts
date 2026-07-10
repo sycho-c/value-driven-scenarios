@@ -3,24 +3,25 @@ export const color = {
   brandLight: '#8B6FFF',
   brandSoft: '#F0EBFF',
   brandInk: '#1A1040',
+  info: '#199EFF',
 
-  good: '#00C896',
-  warn: '#FFB800',
-  danger: '#FF4757',
+  good: '#22C55E',
+  warn: '#FF9A3C',
+  danger: '#D72638',
 
-  ink: '#1A1A2E',
-  inkSoft: '#5A5F7A',
-  muted: '#8890B0',
+  ink: '#1A1C1E',
+  inkSoft: '#4A4D52',
+  muted: '#6C7075',
 
-  bg: '#FAFBFD',
-  bgSoft: '#F0F3FA',
-  border: '#E2E8F0',
+  bg: '#F7F7F8',
+  bgSoft: '#EFEFF0',
+  border: '#E0E2E4',
   surface: '#FFFFFF',
 
   kakao: {
     groupBg: '#B2C7DB',
     chatBg: '#ABC1D1',
-    selfBubble: '#FFE500',
+    selfBubble: '#FEE500',
     otherBubble: '#FFFFFF',
     header: '#2C2C2C',
     notice: '#2D7DD2',
@@ -43,7 +44,7 @@ export const space = {
 
 export const radius = {
   sm: '6px',
-  md: '10px',
+  md: '8px',
   lg: '14px',
   xl: '20px',
   pill: '999px',

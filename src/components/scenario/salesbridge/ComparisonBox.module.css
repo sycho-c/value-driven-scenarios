@@ -59,9 +59,9 @@
   gap: 4px;
   align-items: center;
   font-size: 10px;
-  color: #1A1A2E;
+  color: #1A1C1E;
   padding: 5px 0;
-  border-bottom: 1px solid #F0F3FA;
+  border-bottom: 1px solid #EFEFF0;
 }
 
 .row:last-child {
@@ -69,7 +69,7 @@
 }
 
 .rowLabel {
-  color: #5A5F7A;
+  color: #4A4D52;
   font-weight: 700;
   font-size: 10px;
 }
@@ -100,7 +100,7 @@
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #8890B0;
+  color: #6C7075;
   padding: 4px 0 6px;
 }
 

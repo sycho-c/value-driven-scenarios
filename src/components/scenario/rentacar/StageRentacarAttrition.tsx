@@ -32,7 +32,7 @@ function PhonePanel({
   return (
     <div className={styles.phoneFrame}>
       <div className={styles.phoneStatus}>
-        <span>KT 6:21</span>
+        <span>KT 10:14</span>
         <div className={styles.phoneStatusR}>
           <span>LTE</span>
           <span className={styles.battBadge}>74</span>

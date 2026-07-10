@@ -58,15 +58,15 @@
 }
 
 .tab.on {
-  background: #fafbfd;
-  color: #5b3fe4;
+  background: #F7F7F8;
+  color: #5B3FE4;
   border-color: #eef1f6;
 }
 
 .slotTag {
   font-size: 8px;
   background: #ede9ff;
-  color: #5b3fe4;
+  color: #5B3FE4;
   padding: 1px 5px;
   border-radius: 5px;
   margin-left: 5px;
@@ -77,7 +77,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 16px 18px;
-  background: #fafbfd;
+  background: #F7F7F8;
   min-height: 0;
 }
 
@@ -100,7 +100,7 @@
 .kpiV {
   font-size: 19px;
   font-weight: 800;
-  color: #5b3fe4;
+  color: #5B3FE4;
 }
 
 .kpiV.good {
@@ -108,7 +108,7 @@
 }
 
 .kpiV.mutedV {
-  color: #5a5f7a;
+  color: #4A4D52;
 }
 
 .kpiL {
@@ -287,7 +287,7 @@
 .typeC {
   font-size: 14px;
   font-weight: 800;
-  color: #5b3fe4;
+  color: #5B3FE4;
 }
 
 /* 버전 추적 / 랭킹 공용 패널 */
@@ -316,7 +316,7 @@
   height: 30px;
   border-radius: 8px;
   background: #ede9ff;
-  color: #5b3fe4;
+  color: #5B3FE4;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -389,7 +389,7 @@
   height: 22px;
   border-radius: 7px;
   background: #ede9ff;
-  color: #5b3fe4;
+  color: #5B3FE4;
   font-size: 11px;
   font-weight: 800;
   display: flex;
@@ -399,7 +399,7 @@
 }
 
 .rankNo.top {
-  background: #5b3fe4;
+  background: #5B3FE4;
   color: #fff;
 }
 
@@ -423,7 +423,7 @@
 .rankStatV {
   font-size: 12px;
   font-weight: 800;
-  color: #5b3fe4;
+  color: #5B3FE4;
 }
 
 .rankStatL {
@@ -452,7 +452,7 @@
 
 .barName.click {
   cursor: pointer;
-  color: #5b3fe4;
+  color: #5B3FE4;
   font-weight: 700;
 }
 
@@ -492,7 +492,7 @@
 }
 
 .drillInner {
-  background: #fafbfd;
+  background: #F7F7F8;
   border: 1px solid #eef1f6;
   border-radius: 10px;
   padding: 12px 14px;
@@ -517,7 +517,7 @@
 .drillKpiV {
   font-size: 15px;
   font-weight: 800;
-  color: #5b3fe4;
+  color: #5B3FE4;
 }
 
 .drillKpiL {
@@ -552,7 +552,7 @@
 .aiSlotHd {
   font-size: 12px;
   font-weight: 800;
-  color: #5b3fe4;
+  color: #5B3FE4;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -587,7 +587,7 @@
 .aiTag {
   font-size: 8px;
   background: #ede9ff;
-  color: #5b3fe4;
+  color: #5B3FE4;
   padding: 1px 6px;
   border-radius: 5px;
   font-weight: 700;

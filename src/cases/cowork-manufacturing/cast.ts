@@ -47,6 +47,15 @@ export const coworkManufacturingCast: CastMember[] = [
     org: '△△전선',
   },
   {
+    id: 'choi',
+    initial: '최',
+    color: '#27AE60',
+    role: 'guest',
+    label: '최구매 차장',
+    shortLabel: '최구매',
+    org: '△△전선',
+  },
+  {
     id: 'us',
     initial: 'U',
     color: '#075E54',

@@ -18,8 +18,16 @@ export function CtaSection() {
             </p>
           </div>
           <div className={styles.actions}>
-            <Link to="/case/wontalk-woori" className={styles.primaryBtn}>
-              WON TALK 사례 보기 →
+            <a
+              href="https://www.spectra.co.kr"
+              target="_blank"
+              rel="noreferrer"
+              className={styles.primaryBtn}
+            >
+              PoC 도입 문의하기 →
+            </a>
+            <Link to="/case/wontalk-woori" className={styles.secondaryBtn}>
+              WON TALK 사례 보기
             </Link>
             <Link to="/case/salesbridge-gaon" className={styles.secondaryBtn}>
               ONE TALK 사례 보기

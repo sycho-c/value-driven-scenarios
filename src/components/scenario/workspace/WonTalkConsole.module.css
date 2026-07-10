@@ -22,7 +22,7 @@
   display: flex;
   background: var(--c-bg);
   color: var(--c-text);
-  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   height: 100%;
   width: 100%;

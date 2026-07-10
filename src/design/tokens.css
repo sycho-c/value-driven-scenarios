@@ -3,29 +3,30 @@
   --brand-light: #8B6FFF;
   --brand-soft: #F0EBFF;
   --brand-ink: #1A1040;
+  --info: #199EFF;
 
-  --good: #00C896;
-  --warn: #FFB800;
-  --danger: #FF4757;
+  --good: #22C55E;
+  --warn: #FF9A3C;
+  --danger: #D72638;
 
-  --ink: #1A1A2E;
-  --ink-soft: #5A5F7A;
-  --muted: #8890B0;
+  --ink: #1A1C1E;
+  --ink-soft: #4A4D52;
+  --muted: #6C7075;
 
-  --bg: #FAFBFD;
-  --bg-soft: #F0F3FA;
-  --border: #E2E8F0;
+  --bg: #F7F7F8;
+  --bg-soft: #EFEFF0;
+  --border: #E0E2E4;
   --surface: #FFFFFF;
 
   --kakao-group-bg: #B2C7DB;
   --kakao-chat-bg: #ABC1D1;
-  --kakao-self: #FFE500;
+  --kakao-self: #FEE500;
   --kakao-other: #FFFFFF;
   --kakao-header: #2C2C2C;
   --kakao-notice: #2D7DD2;
 
   --radius-sm: 6px;
-  --radius-md: 10px;
+  --radius-md: 8px;
   --radius-lg: 14px;
   --radius-xl: 20px;
   --radius-pill: 999px;
@@ -40,10 +41,10 @@
   --layout-stage-max: 1280px;
   --layout-prose-max: 880px;
 
-  --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont,
-    system-ui, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  --font-kakao: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Pretendard Variable',
-    system-ui, sans-serif;
+  /* 웹폰트 미사용 — 시스템 폰트 고정으로 새로고침 시 폰트 스왑(자간 변화·레이아웃 흔들림)이 없다 */
+  --font-sans: -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo',
+    'Malgun Gothic', sans-serif;
+  --font-kakao: 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
   --easing-out: cubic-bezier(0.22, 1, 0.36, 1);

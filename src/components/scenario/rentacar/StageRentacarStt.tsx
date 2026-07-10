@@ -185,7 +185,7 @@ export function StageRentacarStt({ state, actions }: Props) {
           <div className={styles.phoneFrame}>
             {/* Status bar */}
             <div className={styles.phoneStatus}>
-              <span>KT 10:28</span>
+              <span>KT 10:14</span>
               <div className={styles.phoneStatusR}>
                 <span>LTE</span>
                 <span>📶</span>

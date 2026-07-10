@@ -3,12 +3,12 @@
   flex-direction: column;
   gap: 4px;
   padding: 10px 12px;
-  border-bottom: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E0E2E4;
 }
 
 .headerKakao {
   background: #B2C7D9;
-  color: #1A1A2E;
+  color: #1A1C1E;
 }
 
 .headerConsult {
