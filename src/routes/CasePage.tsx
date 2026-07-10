@@ -48,7 +48,7 @@ export default function CasePage() {
   if (!currentChapter) {
     return (
       <CaseShell caseDef={caseDef}>
-        <div style={{ padding: 64, textAlign: 'center', color: '#5A5F7A' }}>
+        <div style={{ padding: 64, textAlign: 'center', color: '#4A4D52' }}>
           챕터 데이터가 아직 등록되지 않았습니다.
         </div>
       </CaseShell>

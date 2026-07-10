@@ -13,16 +13,11 @@ interface Props {
 /**
  * 제조/유통 공통 골격(cowork-manufacturing) 단일 디스패처 stage.
  * 노드에 들어있는 mfg* 필드를 보고 알맞은 화면(아레나/해외 멀티 메신저/대시보드)을 고르고,
- * 3대 요건 스트립(mfgValueStrip)을 무대와 액션 사이에 상시 노출한다.
+ * 3대 요건 스트립(mfgValueStrip)을 무대 아래 상시 노출한다.
+ * 진행은 화살표 키·상단 도트로만 — 하단 '다음 STATE' 액션 바는 렌더하지 않는다.
  */
-export function StageManufacturing({ state, actions }: Props) {
-  const strip = state.mfgValueStrip ? <MfgValueStrip value={state.mfgValueStrip} /> : null;
-  const tail = (
-    <>
-      {strip}
-      {actions}
-    </>
-  );
+export function StageManufacturing({ state }: Props) {
+  const tail = state.mfgValueStrip ? <MfgValueStrip value={state.mfgValueStrip} /> : null;
 
   if (state.mfgArena) {
     return <MfgArena state={state.mfgArena} actions={tail} />;

@@ -62,7 +62,7 @@ export function RoiTeaserPanel() {
         <em>수치를 채울 준비가 되셨다면</em>, 함께 측정해 드립니다.
       </h2>
       <p className={styles.sub}>
-        도입 후 6주 안에 다음 지표들이 정량화됩니다. 자리는 미리 잡혀 있고, 측정 기준은 도입 사 협의 후 확정됩니다.
+        도입 후 6주 안에 다음 지표들이 정량화됩니다. 자리는 미리 잡혀 있고, 측정 기준은 도입사 협의 후 확정됩니다.
       </p>
       <div className={styles.grid}>
         {TEASER_ROI.map((def, i) => (
@@ -82,7 +82,12 @@ export function RoiTeaserPanel() {
           <strong>측정 기준 확정 + 베이스라인 수집</strong>까지 평균 2주.
           PoC 첫 1주차부터 위 6개 지표를 함께 정의합니다.
         </div>
-        <a href="#cta" className={styles.footerCta}>
+        <a
+          href="https://www.spectra.co.kr"
+          target="_blank"
+          rel="noreferrer"
+          className={styles.footerCta}
+        >
           PoC 미팅 잡기 →
         </a>
       </div>

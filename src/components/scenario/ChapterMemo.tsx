@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { MemoSection } from '@/cases/_types';
 import { cn } from '@/lib/cn';
 import styles from './ChapterMemo.module.css';
@@ -9,9 +9,40 @@ interface ChapterMemoProps {
 
 export function ChapterMemo({ memo }: ChapterMemoProps) {
   const [open, setOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
 
   const toggle = useCallback(() => setOpen((o) => !o), []);
   const close = useCallback(() => setOpen(false), []);
+
+  // 핀치 줌(비주얼 뷰포트 확대) 시 fixed가 레이아웃 뷰포트에 남아 버튼이 화면 밖으로
+  // 사라지므로, 확대 중에는 보이는 뷰포트의 우측 하단 모서리를 따라가도록 보정한다.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const sync = () => {
+      const el = toggleRef.current;
+      if (!el) return;
+      if (vv.scale <= 1.01) {
+        el.style.left = '';
+        el.style.top = '';
+        el.style.right = '';
+        el.style.bottom = '';
+        return;
+      }
+      const rightGap = open ? 336 : 18;
+      el.style.left = `${vv.offsetLeft + vv.width - rightGap - el.offsetWidth}px`;
+      el.style.top = `${vv.offsetTop + vv.height - 22 - el.offsetHeight}px`;
+      el.style.right = 'auto';
+      el.style.bottom = 'auto';
+    };
+    sync();
+    vv.addEventListener('resize', sync);
+    vv.addEventListener('scroll', sync);
+    return () => {
+      vv.removeEventListener('resize', sync);
+      vv.removeEventListener('scroll', sync);
+    };
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -25,14 +56,16 @@ export function ChapterMemo({ memo }: ChapterMemoProps) {
   return (
     <>
       <button
+        ref={toggleRef}
         type="button"
         className={cn(styles.toggle, open && styles.open)}
         onClick={toggle}
         aria-expanded={open}
         aria-controls="chapter-memo-drawer"
+        aria-label={open ? '연출 메모 닫기' : '연출 메모'}
+        title={open ? '연출 메모 닫기' : '연출 메모'}
       >
         <span className={styles.toggleIcon}>{open ? '×' : '📓'}</span>
-        <span className={styles.toggleLabel}>{open ? '닫기' : '연출 메모'}</span>
       </button>
 
       <div className={cn(styles.backdrop, open && styles.open)} onClick={close} />

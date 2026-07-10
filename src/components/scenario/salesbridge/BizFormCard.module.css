@@ -9,7 +9,7 @@
 .chatHeader {
   background: white;
   padding: 12px 22px;
-  border-bottom: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E0E2E4;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -42,7 +42,7 @@
 .partnerLabel {
   font-size: 14px;
   font-weight: 800;
-  color: #1A1A2E;
+  color: #1A1C1E;
   letter-spacing: -0.02em;
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@
 
 .partnerSub {
   font-size: 11px;
-  color: #8890B0;
+  color: #6C7075;
   margin-top: 2px;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -142,7 +142,7 @@
 
 .senderName {
   font-size: 11.5px;
-  color: #1A1A2E;
+  color: #1A1C1E;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
@@ -172,7 +172,7 @@
   padding: 10px 14px;
   border-radius: 14px;
   border-top-left-radius: 4px;
-  color: #1A1A2E;
+  color: #1A1C1E;
   font-size: 13px;
   line-height: 1.55;
   letter-spacing: -0.01em;
@@ -191,7 +191,7 @@
 
 .time {
   font-size: 10px;
-  color: #8890B0;
+  color: #6C7075;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
   margin-bottom: 1px;
@@ -234,7 +234,7 @@
 .date {
   align-self: center;
   font-size: 10.5px;
-  color: #8890B0;
+  color: #6C7075;
   font-weight: 600;
   padding: 4px 12px;
   background: rgba(255, 255, 255, 0.7);
@@ -291,7 +291,7 @@
 }
 
 .bizFieldLabel {
-  color: #5A5F7A;
+  color: #4A4D52;
   font-weight: 700;
   font-size: 11px;
   letter-spacing: -0.01em;
@@ -299,7 +299,7 @@
 }
 
 .bizFieldValue {
-  color: #1A1A2E;
+  color: #1A1C1E;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -335,7 +335,7 @@
   background: white;
   border-radius: 14px;
   border-top-left-radius: 4px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #E0E2E4;
   box-shadow: 0 1px 2px rgba(15, 22, 60, 0.05);
   overflow: hidden;
   min-width: 320px;
@@ -348,19 +348,19 @@
 
 .choicesHeader {
   padding: 10px 14px 8px;
-  border-bottom: 1px solid #F0F3FA;
+  border-bottom: 1px solid #EFEFF0;
 }
 
 .choicesTitle {
   font-size: 12.5px;
   font-weight: 700;
-  color: #1A1A2E;
+  color: #1A1C1E;
   letter-spacing: -0.01em;
 }
 
 .choicesCaption {
   font-size: 11px;
-  color: #8890B0;
+  color: #6C7075;
   margin-top: 2px;
 }
 
@@ -376,16 +376,16 @@
   align-items: center;
   gap: 10px;
   padding: 9px 12px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #E0E2E4;
   border-radius: 10px;
   font-size: 12px;
-  background: #FAFBFD;
+  background: #F7F7F8;
   transition: background 0.15s, border-color 0.15s;
   cursor: pointer;
 }
 
 .choice:hover {
-  background: #F0F3FA;
+  background: #EFEFF0;
 }
 
 .choice.valid {
@@ -394,7 +394,7 @@
 }
 
 .choice.invalid {
-  border-color: #FFB800;
+  border-color: #FF9A3C;
   background: #FFFCEA;
 }
 
@@ -405,7 +405,7 @@
 @keyframes choicePulse {
   0%, 100% {
     background: #FFFCEA;
-    border-color: #FFB800;
+    border-color: #FF9A3C;
     box-shadow: 0 0 0 0 rgba(255, 184, 0, 0);
   }
   50% {
@@ -436,7 +436,7 @@
 
 .choiceName {
   font-weight: 700;
-  color: #1A1A2E;
+  color: #1A1C1E;
   letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
@@ -445,7 +445,7 @@
 
 .choiceNote {
   font-size: 10.5px;
-  color: #5A5F7A;
+  color: #4A4D52;
   margin-top: 1px;
 }
 
@@ -468,7 +468,7 @@
   background: white;
   border-radius: 14px;
   border-top-left-radius: 4px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #E0E2E4;
   box-shadow: 0 1px 2px rgba(15, 22, 60, 0.05);
   overflow: hidden;
   min-width: 280px;
@@ -509,7 +509,7 @@
 .attachmentName {
   font-weight: 700;
   font-size: 12.5px;
-  color: #1A1A2E;
+  color: #1A1C1E;
   letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
@@ -517,12 +517,12 @@
 }
 
 .rowMine .attachmentName {
-  color: #1A1A2E;
+  color: #1A1C1E;
 }
 
 .attachmentMeta {
   font-size: 10.5px;
-  color: #8890B0;
+  color: #6C7075;
   margin-top: 1px;
 }
 
@@ -540,7 +540,7 @@
 .empty {
   margin: 60px auto;
   text-align: center;
-  color: #8890B0;
+  color: #6C7075;
   font-size: 12.5px;
   max-width: 360px;
   line-height: 1.6;
@@ -571,7 +571,7 @@
 
 .liveCounterLabel {
   font-size: 13px;
-  color: #5A5F7A;
+  color: #4A4D52;
   font-weight: 700;
   letter-spacing: 0.02em;
 }
@@ -580,7 +580,7 @@
   font-size: 72px;
   font-weight: 800;
   letter-spacing: -0.05em;
-  background: linear-gradient(135deg, #5B3FE4 0%, #00C896 100%);
+  background: linear-gradient(135deg, #5B3FE4 0%, #22C55E 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -589,13 +589,13 @@
 
 .liveCounterSlash {
   font-size: 36px;
-  color: #8890B0;
+  color: #6C7075;
   font-weight: 600;
 }
 
 .liveCounterTotal {
   font-size: 32px;
-  color: #5A5F7A;
+  color: #4A4D52;
   font-weight: 600;
 }
 
@@ -607,7 +607,7 @@
 
 .liveCounterSub {
   font-size: 13px;
-  color: #5A5F7A;
+  color: #4A4D52;
   line-height: 1.6;
 }
 

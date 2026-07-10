@@ -100,9 +100,11 @@ export function CaseIntroVideo({ intro, onDismiss, onClose }: CaseIntroVideoProp
           poster={intro.poster ? withBase(intro.poster) : undefined}
           controls
           autoPlay
+          muted
           playsInline
           preload="auto"
           onEnded={() => setEnded(true)}
+          onError={() => setEnded(true)}
         />
       </div>
 

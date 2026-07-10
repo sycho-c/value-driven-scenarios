@@ -405,7 +405,7 @@
 .formPane {
   overflow-y: auto;
   padding: 14px 16px;
-  background: #FAFBFD;
+  background: #F7F7F8;
   display: flex;
   flex-direction: column;
   gap: 12px;

@@ -20,7 +20,7 @@
 .card {
   background: #fff;
   border-radius: 14px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #E0E2E4;
   padding: 14px;
   display: flex;
   flex-direction: column;
@@ -67,7 +67,7 @@
 }
 
 .tag.progress {
-  background: #E2E8F0;
+  background: #E0E2E4;
   color: #424260;
 }
 
@@ -94,7 +94,7 @@
 
 .footer {
   font-size: 11.5px;
-  color: #5A5F7A;
+  color: #4A4D52;
   font-weight: 600;
   text-align: center;
   padding: 8px 0 4px;

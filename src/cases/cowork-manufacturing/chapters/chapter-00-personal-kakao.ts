@@ -86,7 +86,7 @@ function arenaState(feedCount: number, withPain = false) {
 const VALUE: MfgValueStripDef = {
   sell: '거래처가 쓰던 방식(카카오톡 단톡방) 그대로, 회사는 대화를 자산으로.',
   pain: '담당자 개인 카톡 단톡방 = 관리자 확인 불가 · 퇴사 시 대화·파일 증발 · 발주 건수 집계 불가',
-  roi: '통제 밖 대화량 = 회사 리스크. 계량 근거는 전환 후 확보 [확인필요]',
+  roi: '통제 밖 대화량 = 회사 리스크. 계량 근거는 전환 후 확보',
 };
 
 export const chapter00PersonalKakao: Chapter = {

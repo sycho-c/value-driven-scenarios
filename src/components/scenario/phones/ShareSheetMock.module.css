@@ -15,7 +15,7 @@
 .title {
   font-size: 12px;
   font-weight: 700;
-  color: #1A1A2E;
+  color: #1A1C1E;
   margin-bottom: 10px;
   text-align: center;
 }
@@ -38,7 +38,7 @@
   height: 42px;
   border-radius: 12px;
   background: #fff;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #E0E2E4;
   display: flex;
   align-items: center;
   justify-content: center;

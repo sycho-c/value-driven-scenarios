@@ -13,7 +13,7 @@
 .title {
   font-size: 16px;
   font-weight: 800;
-  color: #1A1A2E;
+  color: #1A1C1E;
   letter-spacing: -0.01em;
 }
 
@@ -48,7 +48,7 @@
   height: 38px;
   border-radius: 10px;
   background: #fff;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #E0E2E4;
   display: flex;
   align-items: center;
   justify-content: center;

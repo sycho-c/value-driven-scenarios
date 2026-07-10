@@ -23,7 +23,12 @@ export default function HomePage() {
             <a href="#roi">ROI</a>
           </div>
           <div className={styles.navSpacer} />
-          <a href="#cta" className={styles.navCta}>
+          <a
+            href="https://www.spectra.co.kr"
+            target="_blank"
+            rel="noreferrer"
+            className={styles.navCta}
+          >
             PoC 미팅 잡기 →
           </a>
         </div>

@@ -341,7 +341,7 @@ function DesktopBoard({
   const kakaoWindow = desktop.kakaoWindows[0];
   return (
     <DesktopFrame
-      compact
+      fluid
       content={
         <>
           {/* 청약 시스템 창 (좌측 큰 창) */}
@@ -530,7 +530,7 @@ function PhoneScreen({ split }: { split: MobilePCSplitState }) {
         style={{
           padding: '22px 12px 9px',
           background: isCowork ? '#1B4F72' : '#A9BDCE',
-          color: isCowork ? '#fff' : '#1A1A2E',
+          color: isCowork ? '#fff' : '#1A1C1E',
           fontSize: 11.5,
           fontWeight: 800,
           textAlign: 'center',
