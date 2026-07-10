@@ -9,6 +9,7 @@ import { StageSalesBridgeWorkspace } from './stages/StageSalesBridgeWorkspace';
 import { StageMobilePCSplit } from './stages/StageMobilePCSplit';
 import { StageExecDashboard } from './stages/StageExecDashboard';
 import { StageRentacar } from './rentacar/StageRentacar';
+import { StageManufacturing } from './manufacturing/StageManufacturing';
 import { StateBar } from './StateBar';
 import { ChapterMemo } from './ChapterMemo';
 import { PresetChip } from './controls/PresetChip';
@@ -270,6 +271,27 @@ export function ChapterRunner({
 
   return (
     <div className={styles.runner}>
+      {caseDef.chapters.length > 1 && (
+        <div className={styles.chapterTabs} role="tablist" aria-label="챕터 선택">
+          {caseDef.chapters.map((c) => {
+            const active = c.id === chapter.id;
+            return (
+              <button
+                key={c.id}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                className={cn(styles.chapterTab, active && styles.chapterTabActive)}
+                onClick={() => onChapterChange?.(c.id)}
+              >
+                <span className={styles.chapterTabNum}>Ch.{c.id}</span>
+                <span className={styles.chapterTabTitle}>{c.title.split('—')[0].trim()}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       <header className={styles.intro}>
         <div className={styles.introLeft}>
           <div className={styles.introHeader}>
@@ -320,26 +342,6 @@ export function ChapterRunner({
         </div>
       </header>
 
-      {caseDef.chapters.length > 1 && (
-        <div className={styles.chapterTabs} role="tablist" aria-label="챕터 선택">
-          {caseDef.chapters.map((c) => {
-            const active = c.id === chapter.id;
-            return (
-              <button
-                key={c.id}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                className={cn(styles.chapterTab, active && styles.chapterTabActive)}
-                onClick={() => onChapterChange?.(c.id)}
-              >
-                <span className={styles.chapterTabNum}>Ch.{c.id}</span>
-                <span className={styles.chapterTabTitle}>{c.title}</span>
-              </button>
-            );
-          })}
-        </div>
-      )}
 
       {chapter.stage === 'three-phones' ? (
         <StageThreePhones state={node} cast={caseDef.cast} actions={actions} />
@@ -353,6 +355,8 @@ export function ChapterRunner({
         <StageExecDashboard state={node} actions={actions} onAdvance={setStateIndex} />
       ) : chapter.stage === 'rentacar' ? (
         <StageRentacar state={node} actions={actions} onAdvance={setStateIndex} />
+      ) : chapter.stage === 'manufacturing' ? (
+        <StageManufacturing state={node} actions={actions} />
       ) : (
         <StagePhoneWorkspace
           state={node}

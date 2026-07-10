@@ -1,0 +1,61 @@
+/* 하단 3대 요건 스트립 — 셀링포인트 · 페인포인트 · ROI */
+
+.strip {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.card {
+  flex: 1;
+  border-radius: 10px;
+  padding: 8px 12px;
+  border: 1px solid #eef1f6;
+}
+
+.sell {
+  background: #f0ebff;
+  border-color: #ddd5ff;
+}
+
+.pain {
+  background: #fff0f3;
+  border-color: #ffd4dd;
+}
+
+.roi {
+  background: #f0fff8;
+  border-color: #b3e5d4;
+}
+
+.label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+}
+
+.sell .label {
+  color: #5b3fe4;
+}
+
+.pain .label {
+  color: var(--danger);
+}
+
+.roi .label {
+  color: #00976f;
+}
+
+.body {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+@media (max-width: 900px) {
+  .strip {
+    flex-direction: column;
+  }
+}

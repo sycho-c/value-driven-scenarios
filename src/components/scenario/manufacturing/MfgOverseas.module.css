@@ -1,0 +1,782 @@
+/* 제조/유통 신3 해외 — 멀티 메신저(WhatsApp/WeChat) + M365 인증 + AI 번역 */
+
+.stage {
+  display: flex;
+  gap: 14px;
+  padding: 16px 20px;
+  /* 고정 높이 — 메시지가 쌓여도 폰·워크스페이스 내부 스크롤 */
+  height: 620px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 10px 32px rgba(20, 24, 60, 0.08);
+}
+
+.banner {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f62a8;
+  background: linear-gradient(90deg, #eef4ff, #f4f9ff);
+  border: 1px solid #cfe0f5;
+  border-radius: 10px;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+}
+
+/* ── 폰 존 ── */
+.phoneZone {
+  width: 430px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.phoneZoneHd {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.phoneRow {
+  flex: 1;
+  display: flex;
+  gap: 12px;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.phoneSlot {
+  flex: 1 1 0;
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.phoneLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.phoneSub {
+  font-size: 9px;
+  color: var(--muted);
+  width: 100%;
+  font-weight: 400;
+}
+
+.phoneTag {
+  font-size: 8px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 7px;
+}
+
+.tagWa {
+  background: #dcf8c6;
+  color: #075e54;
+}
+
+.tagWc {
+  background: #d8f5df;
+  color: #07c160;
+}
+
+.phone {
+  /* 실기기 비율 고정 */
+  flex: none;
+  width: 100%;
+  aspect-ratio: 9 / 18.6;
+  max-height: 100%;
+  border-radius: 26px;
+  border: 7px solid #101014;
+  box-shadow: 0 0 0 2px #2a2a30, 0 8px 22px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  background: #000;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: 0.25s;
+}
+
+.phone.highlight {
+  box-shadow: 0 0 0 3px #0f62a8, 0 8px 22px rgba(15, 98, 168, 0.4);
+}
+
+.notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 16px;
+  background: #101014;
+  border-radius: 0 0 11px 11px;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.phoneScreen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-top: 16px;
+}
+
+.phHdr {
+  padding: 6px 9px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.phHdr .grow {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.phBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 0;
+}
+
+.dateCap {
+  align-self: center;
+  font-size: 8px;
+  color: #555;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 9px;
+  border-radius: 10px;
+  margin: 2px 0;
+}
+
+.msg {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.msg.me {
+  flex-direction: row-reverse;
+}
+
+.msg.isNew {
+  animation: fadeUp 0.28s ease;
+}
+
+.msgAv {
+  width: 22px;
+  height: 22px;
+  border-radius: 9px;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.msgCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-width: 82%;
+}
+
+.msgWho {
+  font-size: 8.5px;
+  color: #3a3a3a;
+  margin-bottom: 1px;
+}
+
+.msgBbl {
+  background: #fff;
+  padding: 5px 8px;
+  border-radius: 2px 11px 11px 11px;
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: #1a1a1a;
+  word-break: break-word;
+}
+
+.msg.me .msgBbl {
+  border-radius: 11px 2px 11px 11px;
+}
+
+.msgFile {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.msgTime {
+  font-size: 7.5px;
+  color: #7a8a99;
+  margin-top: 1px;
+}
+
+.msg.me .msgTime {
+  text-align: right;
+}
+
+.phFoot {
+  background: #fff;
+  padding: 6px 9px;
+  flex-shrink: 0;
+  border-top: 1px solid #eee;
+}
+
+.phFootIn {
+  background: #f2f2f2;
+  border-radius: 14px;
+  padding: 5px 9px;
+  font-size: 9px;
+  color: #aaa;
+}
+
+/* Authenticator 푸시 */
+.authPush {
+  margin: 14px 8px;
+  background: #fff;
+  border: 1px solid #d0dbe8;
+  border-radius: 14px;
+  padding: 15px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeUp 0.3s ease;
+}
+
+.authT {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f62a8;
+  margin-bottom: 3px;
+}
+
+.authApp {
+  font-size: 9px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.authNum {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f62a8;
+  letter-spacing: 2px;
+  margin: 6px 0;
+}
+
+.authD {
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 11px;
+}
+
+.authBtns {
+  display: flex;
+  gap: 7px;
+}
+
+.authBtns button {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: inherit;
+  border: none;
+}
+
+.authNo {
+  background: #f0f2f5;
+  color: var(--muted);
+}
+
+.authYes {
+  background: #0f62a8;
+  color: #fff;
+}
+
+/* ── 워크스페이스 ── */
+.ws {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.wsHd {
+  padding: 11px 16px;
+  border-bottom: 1px solid #eef1f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.wsHdT {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.wsHdS {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.wsHdBadge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #0f62a8;
+  background: #eef4ff;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+/* 채널 탭 */
+.ovsTabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ovsTab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  border: 1.5px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  background: #fff;
+  transition: 0.15s;
+}
+
+.ovsTab.on {
+  border-color: #0f62a8;
+  background: #eef4ff;
+  box-shadow: 0 2px 8px rgba(15, 98, 168, 0.1);
+}
+
+.ovsTabIc {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #fff;
+}
+
+.ovsTabN {
+  font-weight: 800;
+}
+
+.ovsTabApp {
+  font-size: 9px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.wsBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+.wsCenterMsg {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
+  color: var(--ink);
+}
+
+.mfaIco {
+  font-size: 34px;
+  margin-bottom: 6px;
+}
+
+.mfaT {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.mfaD {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 420px;
+}
+
+.mfaBtn {
+  margin-top: 12px;
+  background: #0f62a8;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 20px;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: inherit;
+}
+
+.mfaMatch {
+  font-size: 40px;
+  font-weight: 800;
+  color: #0f62a8;
+  letter-spacing: 3px;
+  margin: 10px 0 4px;
+}
+
+.mfaWait {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.mfaOk {
+  align-self: center;
+  margin: auto;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #00976f;
+  background: #e7fbf3;
+  border: 1px solid #b3e5d4;
+  border-radius: 12px;
+  padding: 12px 22px;
+  animation: fadeUp 0.3s ease;
+}
+
+/* 채팅 뷰 */
+.wsMsg {
+  display: flex;
+  gap: 8px;
+}
+
+.wsMsg.me {
+  flex-direction: row-reverse;
+}
+
+.wsMsg.isNew {
+  animation: fadeUp 0.28s ease;
+}
+
+.wsAv {
+  width: 29px;
+  height: 29px;
+  border-radius: 9px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wsMc {
+  max-width: 72%;
+}
+
+.wsMsg.me .wsMc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.wsWho {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+
+.wsWhoSrc {
+  font-weight: 400;
+  color: #b0b8cc;
+}
+
+.wsBbl {
+  background: #fff;
+  border: 1px solid #eef1f6;
+  padding: 8px 12px;
+  border-radius: 3px 12px 12px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  word-break: break-word;
+}
+
+.wsMsg.me .wsBbl {
+  background: #eef4ff;
+  border-color: #cfe0f5;
+  border-radius: 12px 3px 12px 12px;
+}
+
+.transTag {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed #cfe0f5;
+  font-size: 10px;
+  color: #0f62a8;
+  line-height: 1.5;
+}
+
+.wsMeta {
+  font-size: 9px;
+  color: #b0b8cc;
+  margin-top: 3px;
+}
+
+.wsCard {
+  margin-top: 7px;
+  border: 1px solid #cfe0f5;
+  border-radius: 10px;
+  padding: 9px 11px;
+  background: #f4f9ff;
+}
+
+.wsCardT {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #0f62a8;
+  margin-bottom: 5px;
+}
+
+.wsCardRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 10px;
+  padding: 2px 0;
+  color: #555;
+}
+
+.wsCardRow b {
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.wsFile {
+  margin-top: 7px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 9px 11px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.wsFileIc {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #eef4ff;
+  color: #0f62a8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.wsFileN {
+  font-size: 11px;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.wsFileS {
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.wsFileDl {
+  font-size: 12px;
+  font-weight: 700;
+  color: #00976f;
+  flex-shrink: 0;
+}
+
+/* 하단 AI 번역 입력 바 */
+.transBar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  background: #fff;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.transIn {
+  flex: 1;
+  background: #f0f2f5;
+  border-radius: 12px;
+  padding: 9px 13px;
+  font-size: 11px;
+  min-height: 18px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.transPh {
+  color: #b0b8cc;
+}
+
+.transTranslating {
+  color: #0f62a8;
+  font-weight: 700;
+}
+
+.caret {
+  color: #0f62a8;
+  animation: caretBlink 0.8s step-end infinite;
+}
+
+@keyframes caretBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.transSend {
+  background: #0f62a8;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 9px 16px;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.doneNote {
+  margin: 10px 16px 14px;
+  background: #e7fbf3;
+  border: 1px solid #b3e5d4;
+  color: #00976f;
+  border-radius: 10px;
+  padding: 9px 13px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.5;
+  flex-shrink: 0;
+  animation: fadeUp 0.3s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .stage {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .phoneZone {
+    width: 100%;
+  }
+
+  .ws {
+    height: 480px;
+  }
+}
+
+/* ── 얇은 스크롤바 ── */
+.phBody {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
+}
+
+.phBody::-webkit-scrollbar {
+  width: 3px;
+}
+
+.phBody::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 3px;
+}
+
+.phBody::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wsBody {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 95, 122, 0.28) transparent;
+}
+
+.wsBody::-webkit-scrollbar {
+  width: 5px;
+}
+
+.wsBody::-webkit-scrollbar-thumb {
+  background: rgba(90, 95, 122, 0.28);
+  border-radius: 4px;
+}
+
+.wsBody::-webkit-scrollbar-track {
+  background: transparent;
+}

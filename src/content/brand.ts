@@ -35,6 +35,13 @@ export const CASES = {
     summary: '결론 먼저 → 역질문 → 체험 → 다시 첫 화면으로 (외부 영업 데모 4챕터)',
     accentColor: '#1B3A6B',
   },
+  'cowork-manufacturing': {
+    label: '파트너 협업',
+    customer: '제조·유통',
+    industry: '제조 · 유통 B2B',
+    summary: '개인 카톡 사각지대 → 상담톡 전환 → 제약 해결 → 산업 슬롯(국내/해외) → AI 대시보드',
+    accentColor: '#2C4A6E',
+  },
 } as const;
 
 export type CaseId = keyof typeof CASES;

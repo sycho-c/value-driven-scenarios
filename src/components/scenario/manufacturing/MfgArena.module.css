@@ -1,0 +1,1363 @@
+/* 제조/유통 공통 골격 — 폰(카톡풍) + 워크스페이스 아레나 */
+
+.arena {
+  display: flex;
+  gap: 14px;
+  padding: 16px 20px;
+  /* 고정 높이 — 메시지가 쌓여도 컨테이너가 늘어나지 않고 폰·워크스페이스 내부가 스크롤된다 */
+  height: 620px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 10px 32px rgba(20, 24, 60, 0.08);
+}
+
+.banner {
+  font-size: 12px;
+  font-weight: 700;
+  color: #5b3fe4;
+  background: linear-gradient(90deg, #f0ebff, #f8f5ff);
+  border: 1px solid #ddd5ff;
+  border-radius: 10px;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+}
+
+/* ── 좌측: 폰 컬럼 ── */
+.leftCol {
+  width: 460px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  position: relative;
+}
+
+.arena.phonesOnly .leftCol {
+  width: 100%;
+  flex: 1;
+}
+
+.colLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.nBadge {
+  background: #fff3cd;
+  color: #856404;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.phones {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.arena.phonesOnly .phones {
+  gap: 40px;
+}
+
+.phoneUnit {
+  flex: 1 1 0;
+  max-width: 200px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  min-width: 0;
+}
+
+.arena.phonesOnly .phoneUnit {
+  flex: 0 0 250px;
+  max-width: 250px;
+}
+
+.pOwner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  padding: 0 2px;
+  gap: 4px;
+}
+
+.pOwnerL {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pOwnerN {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pOwnerT {
+  font-size: 9.5px;
+  color: var(--muted);
+}
+
+.pBadge {
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 8px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.pBadge.company {
+  background: #5b3fe4;
+  color: #fff;
+}
+
+.pBadge.vendor {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.pBadge.channel {
+  background: #ede9ff;
+  color: #5b3fe4;
+}
+
+/* 스마트폰 프레임 */
+.phone {
+  /* 실기기 비율 고정 — 컨테이너가 높아도 폰이 세로로 늘어나지 않는다 */
+  flex: none;
+  width: 100%;
+  aspect-ratio: 9 / 18.6;
+  max-height: 100%;
+  border-radius: 26px;
+  border: 7px solid #101014;
+  box-shadow: 0 0 0 2px #2a2a30, 0 8px 22px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  background: #000;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: 0.25s;
+}
+
+.phoneUnit.companyFrame .pOwnerN {
+  color: #5b3fe4;
+}
+
+.phoneUnit.companyFrame .phone {
+  border-color: #3a2d7a;
+  box-shadow: 0 0 0 2px #5b3fe4, 0 8px 22px rgba(91, 63, 228, 0.3);
+}
+
+.companyRibbon {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 58;
+  background: #5b3fe4;
+  color: #fff;
+  font-size: 8.5px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 8px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.phone.highlight {
+  box-shadow: 0 0 0 3px #5b3fe4, 0 8px 22px rgba(91, 63, 228, 0.4);
+}
+
+.phone.dimmed {
+  filter: grayscale(1) brightness(0.82);
+  transition: filter 0.4s;
+}
+
+.phoneUnit.dimmedUnit .pOwner {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 16px;
+  background: #101014;
+  border-radius: 0 0 11px 11px;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.notch::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 3px;
+  background: #26262c;
+  border-radius: 3px;
+}
+
+.statusbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px 0;
+  font-size: 8px;
+  font-weight: 600;
+  color: #1a1a1a;
+  pointer-events: none;
+}
+
+/* 카톡풍 화면 */
+.kakaoScreen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #9db2ce;
+  padding-top: 22px;
+  min-height: 0;
+}
+
+.kakaoScreen.alertList {
+  background: #ebebeb;
+}
+
+.kakaoScreen.channelTheme {
+  background: #e8e4f5;
+}
+
+.kHdr {
+  background: #a5c0d6;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.channelTheme .kHdr {
+  background: #ede9ff;
+}
+
+.kBack {
+  color: #3a3a3a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.kHdrMid {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  min-width: 0;
+}
+
+.kHdrN {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.channelTheme .kHdrN {
+  color: #5b3fe4;
+}
+
+.kHdrC {
+  font-size: 8px;
+  color: #4a5568;
+}
+
+.kMenu {
+  color: #3a3a3a;
+  font-size: 13px;
+}
+
+.kMsgs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+}
+
+.kDate {
+  align-self: center;
+  font-size: 8px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.18);
+  padding: 2px 9px;
+  border-radius: 10px;
+  margin: 2px 0;
+}
+
+.kmr {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.kmr.self {
+  flex-direction: row-reverse;
+}
+
+.kmr.isNew {
+  animation: fadeUp 0.28s ease;
+}
+
+.kavt {
+  width: 22px;
+  height: 22px;
+  border-radius: 9px;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.kcol {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-width: 78%;
+}
+
+.kSender {
+  font-size: 8.5px;
+  color: #3a3a3a;
+  padding-left: 1px;
+  margin-bottom: 1px;
+}
+
+.kBubbleRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.kmr.self .kBubbleRow {
+  flex-direction: row-reverse;
+}
+
+.kbbl {
+  background: #fff;
+  padding: 5px 8px;
+  border-radius: 2px 11px 11px 11px;
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: #1a1a1a;
+  word-break: break-word;
+}
+
+.kmr.self .kbbl {
+  background: #fee500;
+  border-radius: 11px 2px 11px 11px;
+}
+
+.kTime {
+  font-size: 7.5px;
+  color: #5b6b7f;
+  flex-shrink: 0;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+.kInput {
+  background: #fff;
+  padding: 6px 9px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border-top: 1px solid #eee;
+}
+
+.kInputPlus {
+  font-size: 14px;
+  color: #888;
+}
+
+.kInputField {
+  flex: 1;
+  background: #f2f2f2;
+  border-radius: 14px;
+  padding: 5px 9px;
+  font-size: 10px;
+  color: #aaa;
+}
+
+/* 알림톡 초대 카드 */
+.alimCard {
+  margin: 8px 6px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  animation: fadeUp 0.3s ease;
+}
+
+.alimHd {
+  background: #fee500;
+  padding: 7px 9px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.alimIc {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: #3c1e1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: #fee500;
+}
+
+.alimT {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #3c1e1e;
+}
+
+.alimTag {
+  margin-left: auto;
+  font-size: 7.5px;
+  background: rgba(60, 30, 30, 0.15);
+  color: #3c1e1e;
+  padding: 2px 5px;
+  border-radius: 7px;
+  font-weight: 700;
+}
+
+.alimBd {
+  padding: 10px;
+}
+
+.alimTitle {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 5px;
+}
+
+.alimDesc {
+  font-size: 9.5px;
+  color: #555;
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+.alimNote {
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 5px 7px;
+  font-size: 8px;
+  color: #888;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.alimBtn {
+  width: 100%;
+  background: #fee500;
+  color: #3c1e1e;
+  border: none;
+  border-radius: 7px;
+  padding: 7px;
+  font-size: 10.5px;
+  font-weight: 800;
+  font-family: inherit;
+}
+
+.joinBadge {
+  align-self: center;
+  font-size: 9px;
+  color: #00976f;
+  background: #e7fbf3;
+  border: 1px solid #b3e5d4;
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin: 4px auto;
+  font-weight: 700;
+  animation: fadeUp 0.3s ease;
+}
+
+/* iOS 홈 (외근) */
+.iosHome {
+  flex: 1;
+  padding: 32px 10px 12px;
+  color: #fff;
+  background: linear-gradient(160deg, #5b7ce4, #8b5be4);
+  display: flex;
+  flex-direction: column;
+}
+
+.iosTime {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 300;
+  margin: 6px 0 14px;
+}
+
+.iosGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px 4px;
+}
+
+.iosApp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.iosIc {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.iosApp.pulseApp .iosIc {
+  animation: appPulse 1.5s infinite;
+}
+
+.iosApp span {
+  font-size: 8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.iosHint {
+  text-align: center;
+  font-size: 10px;
+  margin-top: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 6px;
+}
+
+@keyframes appPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Cowork+ 앱 화면 (외근 응대) */
+.appScreen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ede9ff;
+  padding-top: 22px;
+  min-height: 0;
+}
+
+.appHdr {
+  background: #5b3fe4;
+  color: #fff;
+  padding: 6px 9px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.appHdr .grow {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.appBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+}
+
+.appCap {
+  align-self: center;
+  font-size: 8px;
+  color: #5b3fe4;
+  background: rgba(91, 63, 228, 0.1);
+  padding: 2px 9px;
+  border-radius: 10px;
+  margin: 2px 0;
+}
+
+.appInbar {
+  display: flex;
+  gap: 6px;
+  padding: 7px;
+  background: #fff;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.appIn {
+  flex: 1;
+  background: #f0f2f5;
+  border-radius: 14px;
+  padding: 7px 11px;
+  font-size: 9.5px;
+  min-height: 16px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.appInPh {
+  color: #b0b8cc;
+}
+
+.caret {
+  color: #5b3fe4;
+  animation: caretBlink 0.8s step-end infinite;
+}
+
+@keyframes caretBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.appSend {
+  background: #5b3fe4;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 7px 12px;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: inherit;
+  align-self: flex-end;
+}
+
+/* +N 슬롯 */
+.moreSlot {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1.5px dashed var(--muted);
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.moreIco {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.moreT {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.moreS {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+/* 페인포인트 팝업 */
+.painPop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 120;
+  width: 430px;
+  max-width: 94%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+  border: 2px solid var(--danger);
+}
+
+.painPopHd {
+  background: var(--danger);
+  color: #fff;
+  padding: 11px 18px;
+  border-radius: 13px 13px 0 0;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.painPopBd {
+  padding: 14px 18px;
+}
+
+.painItem {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  padding: 9px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.painItem:last-child {
+  border-bottom: none;
+}
+
+.painNum {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: var(--danger);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  font-weight: 800;
+}
+
+.painH {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--danger);
+  margin-bottom: 2px;
+}
+
+.painD {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+/* ── 우측: 워크스페이스 ── */
+.wsCol {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.wsRole {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.wsRb {
+  padding: 5px 12px;
+  border-radius: 15px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+}
+
+.wsRb.on {
+  background: #5b3fe4;
+  border-color: #5b3fe4;
+  color: #fff;
+}
+
+.wsRoleTag {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--good);
+  background: rgba(0, 200, 150, 0.12);
+  padding: 3px 9px;
+  border-radius: 8px;
+}
+
+.workspace {
+  flex: 1;
+  min-height: 0;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 160px 1fr;
+}
+
+.wsSide {
+  background: #16172a;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.wsShdr {
+  padding: 11px 12px 9px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.wsLogo {
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.wsOnline {
+  font-size: 9px;
+  color: var(--good);
+  background: rgba(0, 200, 150, 0.15);
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-left: auto;
+}
+
+.wsSecT {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.28);
+  padding: 7px 12px 3px;
+  flex-shrink: 0;
+}
+
+.wsDashMenu {
+  margin: 2px 6px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+}
+
+.wsDashIco {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: #0c5460;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.wsDashL {
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.wsDashS {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.wsRooms {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 6px;
+}
+
+.wsRm {
+  padding: 8px 9px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 8px;
+  margin-bottom: 2px;
+  animation: slideIn 0.3s ease;
+}
+
+.wsRm.on {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.wsRav {
+  width: 27px;
+  height: 27px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.wsRi {
+  flex: 1;
+  min-width: 0;
+}
+
+.wsRn {
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wsRp {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wsCountNote {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  padding: 6px;
+}
+
+.wsCenter {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #fafbfd;
+}
+
+.wsChdr {
+  padding: 10px 14px;
+  border-bottom: 1px solid #eef1f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.wsCname {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.wsCsub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.wsMsgs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.wsMr {
+  display: flex;
+  gap: 8px;
+}
+
+.wsMr.isNew {
+  animation: fadeUp 0.28s ease;
+}
+
+.wsMr.out {
+  flex-direction: row-reverse;
+}
+
+.wsAv {
+  width: 29px;
+  height: 29px;
+  border-radius: 9px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wsMc {
+  max-width: 68%;
+}
+
+.wsMr.out .wsMc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.wsMn {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+
+.wsMnSrc {
+  font-weight: 400;
+  color: #b0b8cc;
+}
+
+.wsMnRaw {
+  color: var(--danger);
+  font-style: italic;
+}
+
+.wsBbl {
+  background: #fff;
+  border: 1px solid #eef1f6;
+  padding: 8px 12px;
+  border-radius: 3px 12px 12px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  word-break: break-word;
+}
+
+.wsMr.out .wsBbl {
+  background: #ede9ff;
+  border-color: #ddd5ff;
+  border-radius: 12px 3px 12px 12px;
+}
+
+.wsMeta {
+  font-size: 9px;
+  color: #b0b8cc;
+  margin-top: 3px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.wsMr.out .wsMeta {
+  flex-direction: row-reverse;
+}
+
+.wsRead {
+  color: var(--good);
+  font-weight: 600;
+}
+
+.wsSys {
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted);
+  background: #eef1f6;
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin: 2px auto;
+  max-width: 85%;
+}
+
+.wsSys.hi {
+  color: #5b3fe4;
+  background: #f0ebff;
+  border: 1px solid #ddd5ff;
+  font-weight: 600;
+}
+
+/* raw/fixed 배지 */
+.s2Badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.s2Badge.raw {
+  background: #fff0f3;
+  color: var(--danger);
+  border: 1px solid #ffd4dd;
+}
+
+.s2Badge.fixed {
+  background: #e7fbf3;
+  color: #00976f;
+  border: 1px solid #b3e5d4;
+  animation: fadeUp 0.3s ease;
+}
+
+/* 파일 카드 */
+.wsFile {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 9px 11px;
+  background: #fff;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.wsFile.raw {
+  border-color: #ffd4dd;
+  background: #fff7f9;
+}
+
+.wsFile.fixed {
+  border-color: #b3e5d4;
+  background: #f5fffb;
+}
+
+.wsFileIco {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #ede9ff;
+  color: #5b3fe4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.wsFile.raw .wsFileIco {
+  background: #ffe3ea;
+  color: var(--danger);
+}
+
+.wsFile.fixed .wsFileIco {
+  background: #dff5ec;
+  color: #00976f;
+}
+
+.wsFileInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.wsFileN {
+  font-size: 11px;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.wsFile.raw .wsFileN {
+  color: var(--danger);
+  font-family: monospace;
+}
+
+.wsFileS {
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.wsFileDl {
+  font-size: 10px;
+  font-weight: 700;
+  color: #00976f;
+  flex-shrink: 0;
+}
+
+.wsSendFail {
+  font-size: 10px;
+  color: var(--danger);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+.wsSendOk {
+  font-size: 10px;
+  color: #00976f;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+/* 납기 확정 등 카드 */
+.wsCard {
+  margin-top: 7px;
+  border: 1px solid #ddd5ff;
+  border-radius: 10px;
+  padding: 9px 11px;
+  background: #f8f5ff;
+}
+
+.wsCardT {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #5b3fe4;
+  margin-bottom: 5px;
+}
+
+.wsCardRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 10px;
+  padding: 2px 0;
+  color: #555;
+}
+
+.wsCardRow b {
+  font-weight: 800;
+  color: var(--ink);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .arena {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .leftCol {
+    width: 100%;
+  }
+
+  .workspace {
+    height: 480px;
+  }
+}
+
+/* ── 얇은 스크롤바 (폰·워크스페이스 메시지 영역) ── */
+.kMsgs,
+.appBody {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
+}
+
+.kMsgs::-webkit-scrollbar,
+.appBody::-webkit-scrollbar {
+  width: 3px;
+}
+
+.kMsgs::-webkit-scrollbar-thumb,
+.appBody::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 3px;
+}
+
+.kMsgs::-webkit-scrollbar-track,
+.appBody::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wsMsgs,
+.wsRooms {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 95, 122, 0.28) transparent;
+}
+
+.wsMsgs::-webkit-scrollbar,
+.wsRooms::-webkit-scrollbar {
+  width: 5px;
+}
+
+.wsMsgs::-webkit-scrollbar-thumb,
+.wsRooms::-webkit-scrollbar-thumb {
+  background: rgba(90, 95, 122, 0.28);
+  border-radius: 4px;
+}
+
+.wsMsgs::-webkit-scrollbar-track,
+.wsRooms::-webkit-scrollbar-track {
+  background: transparent;
+}
