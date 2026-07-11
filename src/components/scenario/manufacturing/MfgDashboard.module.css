@@ -910,11 +910,240 @@
   border-top: 1px solid #e6e9f2;
 }
 
+/* ── KPI 드릴다운 ── */
+.hv {
+  cursor: pointer;
+}
+
+.kpi {
+  position: relative;
+  transition: 0.15s;
+}
+
+.kpiClick {
+  cursor: pointer;
+}
+
+.kpiClick:hover {
+  border-color: #5b3fe4;
+  box-shadow: 0 4px 14px rgba(91, 63, 228, 0.12);
+}
+
+.kpiOn {
+  border-color: #5b3fe4;
+  box-shadow: 0 0 0 2px rgba(91, 63, 228, 0.18);
+}
+
+.kpiHint {
+  position: absolute;
+  bottom: 7px;
+  right: 11px;
+  font-size: 9px;
+  color: #9aa1b8;
+}
+
+.drillPanel {
+  background: #fff;
+  border: 1px solid #e6e9f2;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.drillHd {
+  background: #f7f8fc;
+  padding: 12px 18px;
+  border-bottom: 1px solid #e6e9f2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drillHdT {
+  font-size: 13px;
+  font-weight: 800;
+  color: #12275c;
+}
+
+.drillHdX {
+  cursor: pointer;
+  color: #6b7391;
+  font-size: 14px;
+  background: none;
+  border: none;
+  padding: 2px 4px;
+}
+
+.drillIn {
+  padding: 16px 18px;
+}
+
+.drillGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.drillNote {
+  font-size: 10.5px;
+  color: #6b7391;
+  margin-bottom: 10px;
+}
+
+.drillLi {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 4px;
+  border-bottom: 1px solid #edeff5;
+  font-size: 12px;
+  gap: 8px;
+}
+
+.drillLi:last-child {
+  border-bottom: none;
+}
+
+.drillLiRight {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.drillLiVal {
+  color: #6b7391;
+}
+
+.drillTotal {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 12.5px;
+  margin-top: 4px;
+}
+
+.drillTotal b {
+  color: #c8322f;
+}
+
+.kvBox {
+  background: #f7f8fc;
+  border-radius: 9px;
+  padding: 14px;
+}
+
+.kvTitle {
+  font-size: 11px;
+  font-weight: 800;
+  color: #12275c;
+  margin-bottom: 8px;
+}
+
+.kvRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 4px 0;
+}
+
+.kvRow b {
+  color: #12275c;
+}
+
+.kvRow b.tailRed {
+  color: #c8322f;
+}
+
+.chipsRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  flex: 1;
+  min-width: 120px;
+  background: #f7f8fc;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.chip b {
+  color: #12275c;
+}
+
+.chipPos {
+  background: #eaf3ef;
+}
+
+.chipPos b {
+  color: #2e7d66;
+}
+
+.chipNote {
+  flex: 2;
+  font-size: 11px;
+  color: #6b7391;
+}
+
+.chipNote b {
+  font-weight: 500;
+  color: #6b7391;
+}
+
+/* ── 데이터 툴팁 (커서 추종) ── */
+.tip {
+  position: fixed;
+  z-index: 300;
+  background: #141a2e;
+  color: #fff;
+  border-radius: 9px;
+  padding: 11px 13px;
+  font-size: 11px;
+  max-width: 290px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  line-height: 1.5;
+}
+
+.tipT {
+  font-weight: 800;
+  font-size: 12.5px;
+  margin-bottom: 5px;
+}
+
+.tipL {
+  padding: 3px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: #c7ccdc;
+}
+
+.tipL:first-of-type {
+  border-top: none;
+}
+
+.tipAmt {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.24);
+  color: #ffb84d;
+  font-weight: 800;
+  font-size: 13px;
+}
+
 /* ── 좁은 화면 ── */
 @media (max-width: 1100px) {
   .toprow,
   .row2,
-  .row2b {
+  .row2b,
+  .drillGrid {
     grid-template-columns: 1fr;
   }
 }

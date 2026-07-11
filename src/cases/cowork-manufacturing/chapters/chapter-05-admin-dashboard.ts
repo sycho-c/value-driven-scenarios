@@ -21,10 +21,108 @@ const GEN: MfgDashGenTab = {
     ctaLabel: 'AI 리스크 분석 →',
   },
   kpis: [
-    { label: '누적 문서 자산', value: '328', sub: '문서 유형·이력 추적', tag: 'est' },
-    { label: '연결 거래처', value: '57', sub: '국내 55 · 해외 2', tag: 'fix' },
-    { label: '대화방 개설/가동', value: '34 / 10', sub: '가동률 29%', tag: 'fix' },
-    { label: '파일 전송 오류', value: '1', delta: { text: '▼ 89%', tone: 'good' }, sub: '5월 9 → 6월 1건', tag: 'fix' },
+    {
+      label: '누적 문서 자산', value: '328', sub: '문서 유형·이력 추적', tag: 'est',
+      drill: {
+        title: '문서 자산 상세 · 유형 구성 + 버전 관리',
+        blocks: [
+          {
+            kind: 'donut',
+            segs: [
+              { label: '발주서', value: 112, tone: 'navy' },
+              { label: '견적서', value: 96, tone: 'purple' },
+              { label: '현장사진', value: 74, tone: 'purpleL' },
+              { label: '무역서류', value: 46, tone: 'gray' },
+            ],
+            centerV: '328',
+            centerL: '누적 문서',
+          },
+          {
+            kind: 'list',
+            subH: '동일 문서 버전 추적',
+            rows: [
+              { name: '○○산업_견적서.pdf', badge: 'v4', badgeTone: 'amber', value: '공유 6회' },
+              { name: '납기리스트_7월.xlsx', badge: 'v3', badgeTone: 'amber', value: '공유 4회' },
+              { name: '단가표_Q3.xlsx', badge: 'v2', badgeTone: 'amber', value: '공유 3회' },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      label: '연결 거래처', value: '57', sub: '국내 55 · 해외 2', tag: 'fix',
+      drill: {
+        title: '연결 거래처 상세',
+        blocks: [
+          {
+            kind: 'donut',
+            segs: [
+              { label: '국내', value: 55, tone: 'purple' },
+              { label: '해외', value: 2, tone: 'navy' },
+            ],
+            centerV: '57',
+            centerL: '연결 거래처',
+          },
+          {
+            kind: 'vbar',
+            subH: '상위 거래처 대화량',
+            rows: [
+              { label: '○○산업', value: 132, tone: 'purple' },
+              { label: '△△전선', value: 98, tone: 'amber', sub: '주의' },
+              { label: 'US Buyer', value: 44, tone: 'purple' },
+              { label: '华东化工', value: 38, tone: 'purple' },
+            ],
+            max: 140,
+            unit: '건',
+          },
+        ],
+      },
+    },
+    {
+      label: '대화방 개설/가동', value: '34 / 10', sub: '가동률 29%', tag: 'fix',
+      drill: {
+        title: '대화방 가동 현황',
+        blocks: [
+          {
+            kind: 'donut',
+            segs: [
+              { label: '가동(활성)', value: 10, tone: 'purple' },
+              { label: '대기·휴면', value: 24, tone: 'gray' },
+            ],
+            centerV: '29%',
+            centerL: '가동률',
+          },
+        ],
+      },
+    },
+    {
+      label: '파일 전송 오류', value: '1', delta: { text: '▼ 89%', tone: 'good' }, sub: '5월 9 → 6월 1건', tag: 'fix',
+      drill: {
+        title: '파일 전송 오류 추이',
+        blocks: [
+          {
+            kind: 'chips',
+            rows: [
+              { label: '5월', value: '9건' },
+              { label: '6월', value: '1건 (▼89%)', tone: 'pos' },
+              { value: '원본 파일명 복원·다운로드 개발 효과 · 6월 1건은 카카오 측 장애 [확정]', tone: 'note' },
+            ],
+          },
+          {
+            kind: 'monthBars',
+            rows: [
+              { label: '1월', value: 6, tone: 'purpleL' },
+              { label: '2월', value: 7, tone: 'purpleL' },
+              { label: '3월', value: 5, tone: 'purpleL' },
+              { label: '4월', value: 3, tone: 'purpleL' },
+              { label: '5월', value: 9, tone: 'red' },
+              { label: '6월', value: 1, tone: 'pos' },
+            ],
+            max: 10,
+          },
+        ],
+      },
+    },
   ],
   docHeatmap: {
     sub: '거래처별 문서 유형 분포·개별 파일 이력 추적. 최신본 관리 및 감사 이력 확보.',
@@ -74,21 +172,21 @@ const GEN: MfgDashGenTab = {
   rooms: {
     sub: '대화방별 메시지량. 활성·휴면 구분.',
     bars: [
-      { label: '○○산업', value: 132, state: '활발', tone: 'hi' },
-      { label: '△△전선', value: 98, state: '활발', tone: 'hi' },
-      { label: 'US Buyer', value: 44, state: '보통', tone: 'mid' },
-      { label: '华东化工', value: 38, state: '보통', tone: 'mid' },
-      { label: '□□케이블', value: 6, state: '저조', tone: 'low' },
+      { label: '○○산업', value: 132, state: '활발', tone: 'hi', tip: '최근 활동 방금 전' },
+      { label: '△△전선', value: 98, state: '활발', tone: 'hi', tip: '최근 활동 12분 전' },
+      { label: 'US Buyer', value: 44, state: '보통', tone: 'mid', tip: '최근 활동 2시간 전' },
+      { label: '华东化工', value: 38, state: '보통', tone: 'mid', tip: '최근 활동 3시간 전' },
+      { label: '□□케이블', value: 6, state: '저조', tone: 'low', tip: '최근 활동 6일 전' },
     ],
     note: '휴면 대화방 별도 24개',
   },
   agents: {
     sub: '담당자별 처리량. 특정 인력 집중 시 연속성 리스크.',
     rings: [
-      { label: '강승희', sub: '영업지원', pct: 40 },
-      { label: '나회사', sub: '영업지원', pct: 22 },
-      { label: '정발주', sub: '영업', pct: 14 },
-      { label: '신규 담당', sub: '영업', pct: 7 },
+      { label: '강승희', sub: '영업지원', pct: 40, tip: '처리 비중 40% · 대화 132 · 파일 40' },
+      { label: '나회사', sub: '영업지원', pct: 22, tip: '처리 비중 22% · 대화 98 · 파일 28' },
+      { label: '정발주', sub: '영업', pct: 14, tip: '처리 비중 14% · 대화 61 · 파일 16' },
+      { label: '신규 담당', sub: '영업', pct: 7, tip: '처리 비중 7% · 대화 24 · 파일 8' },
     ],
   },
   audit: {
@@ -116,20 +214,122 @@ const AI: MfgDashAiTab = {
     ctaLabel: '본부장 브리핑 →',
   },
   kpis: [
-    { label: 'SLA 준수율', value: '78%', sub: '긴급 2h·일반 4h [예시]', tag: 'est' },
-    { label: 'SLA 위반', value: '14건', sub: '매출 영향 5,700만원', tag: 'est' },
-    { label: '리스크 조치율', value: '64%', sub: '개선 완료 기준', tag: 'fix' },
-    { label: '최우선 리스크', value: '△△전선', sub: '신규 담당 · 위반 5건', tag: 'fix' },
+    {
+      label: 'SLA 준수율', value: '78%', sub: '긴급 2h·일반 4h [예시]', tag: 'est',
+      drill: {
+        title: 'SLA 준수율 — 유형별 (동심원)',
+        note: 'SLA 기준: 긴급 발주 2h · 일반 문의 4h · 수출 서류 1일 [예시 기준 · 고객사 확정]',
+        blocks: [
+          {
+            kind: 'rings',
+            items: [
+              { label: '긴급 발주 (SLA 2h)', pct: 70, tip: '준수 14/20건 · 70%' },
+              { label: '일반 문의 (SLA 4h)', pct: 86, tip: '준수 38/44건 · 86%' },
+              { label: '수출 서류 (SLA 1일)', pct: 86, tip: '준수 12/14건 · 86%' },
+            ],
+            colors: ['red', 'purple', 'navy'],
+            centerV: '78%',
+            centerL: '전체 준수율',
+          },
+        ],
+      },
+    },
+    {
+      label: 'SLA 위반', value: '14건', sub: '매출 영향 5,700만원', tag: 'est',
+      drill: {
+        title: 'SLA 위반 — 거래처별 매출 영향 [추정]',
+        blocks: [
+          {
+            kind: 'vbar',
+            rows: [
+              { label: '△△전선', value: 3200, display: '3,200만원', tone: 'red', sub: '신규 담당 · 위반 6건' },
+              { label: '□□케이블', value: 1100, display: '1,100만원', tone: 'amber', sub: '정발주 · 위반 3건' },
+            ],
+            max: 3200,
+            total: { label: '합계', value: '5,700만원' },
+          },
+        ],
+      },
+    },
+    {
+      label: '리스크 조치율', value: '64%', sub: '개선 완료 기준', tag: 'fix',
+      drill: {
+        title: '리스크 조치율 — 조치 내역',
+        blocks: [
+          {
+            kind: 'donut',
+            segs: [
+              { label: '해결', value: 6, tone: 'pos' },
+              { label: '조치중', value: 2, tone: 'amber' },
+              { label: '미해결', value: 1, tone: 'red' },
+            ],
+            centerV: '64%',
+            centerL: '조치 완료',
+          },
+          {
+            kind: 'list',
+            rows: [
+              { name: '파일 전송 오류', value: '9→1건', badge: '해결', badgeTone: 'pos' },
+              { name: '상담톡 사양 제약', value: '14→1건', badge: '해결', badgeTone: 'pos' },
+              { name: '긴급 발주 SLA 위반', value: '0→5건', badge: '미해결', badgeTone: 'red' },
+              { name: '담당자 편중', value: '진행', badge: '조치중', badgeTone: 'amber' },
+            ],
+          },
+        ],
+      },
+    },
+    {
+      label: '최우선 리스크', value: '△△전선', sub: '신규 담당 · 위반 5건', tag: 'fix',
+      drill: {
+        title: '최우선 리스크 — △△전선 판정 근거',
+        blocks: [
+          {
+            kind: 'vbar',
+            subH: '거래처별 SLA 준수율',
+            rows: [
+              { label: '△△전선', value: 52, tone: 'red', sub: '신규 담당' },
+              { label: '□□케이블', value: 74, tone: 'amber', sub: '정발주' },
+              { label: 'US Buyer', value: 88, tone: 'purple', sub: '수출 담당' },
+              { label: '○○산업', value: 96, tone: 'purple', sub: '강승희' },
+            ],
+            max: 100,
+            unit: '%',
+          },
+          {
+            kind: 'kv',
+            title: '교차 근거 (매출 등급 × SLA × 담당자)',
+            rows: [
+              { k: '매출 등급', v: '3위 (상위)' },
+              { k: '담당자', v: '신규 담당', tone: 'red' },
+              { k: 'SLA 위반', v: '6건 중 5건', tone: 'red' },
+              { k: '매출 영향 [추정]', v: '3,200만원', tone: 'red' },
+            ],
+          },
+        ],
+      },
+    },
   ],
   slaRisk: {
     sub: '거래처 매출 등급 × SLA 준수율 × 담당자 교차. 매출 영향순 정렬.',
     heat: {
       cols: ['긴급 발주', '일반 문의', '수출 서류'],
       rows: [
-        { label: '△△전선', sub: '매출 3위 · 신규 담당', cells: [5, 1, 0], tail: '3,200만원', tailTone: 'red' },
-        { label: '□□케이블', sub: '매출 7위 · 정발주', cells: [1, 2, 0], tail: '1,100만원', tailTone: 'amber' },
-        { label: '○○산업', sub: '매출 1위 · 강승희', cells: [0, 2, 0], tail: '—', tailTone: 'muted' },
-        { label: 'US Buyer', sub: '수출 · 수출 담당', cells: [0, 0, 1], tail: '—', tailTone: 'muted' },
+        {
+          label: '△△전선', sub: '매출 3위 · 신규 담당', cells: [5, 1, 0], tail: '3,200만원', tailTone: 'red',
+          tipLines: ['긴급 발주 6건 중 SLA 위반 5건', '납기 확정 지연 평균 5.2시간', '매출 상위인데 신규 담당 배정'],
+        },
+        {
+          label: '□□케이블', sub: '매출 7위 · 정발주', cells: [1, 2, 0], tail: '1,100만원', tailTone: 'amber',
+          tipLines: ['일반 문의 응답 SLA 위반 3건', '평균 응답 6.1시간'],
+        },
+        {
+          label: '○○산업', sub: '매출 1위 · 강승희', cells: [0, 2, 0], tail: '—', tailTone: 'muted',
+          tipLines: ['긴급 발주 2건 중 2건 SLA 준수', '납기 확정 평균 38분'],
+        },
+        {
+          label: 'US Buyer', sub: '수출 · 수출 담당', cells: [0, 0, 1], tail: '—', tailTone: 'muted',
+          tipLines: ['수출 서류 SLA 준수', '번역 응대 지연 0'],
+        },
       ],
       max: 5,
       palette: 'red',
@@ -139,14 +339,14 @@ const AI: MfgDashAiTab = {
   quality: {
     sub: '조직·담당자별 SLA 준수율. 영업·영업지원 격차 진단.',
     gauges: [
-      { pct: 82, label: '영업지원팀 · 8명', tone: 'purple' },
-      { pct: 68, label: '영업팀(현장) · 5명', tone: 'amber' },
+      { pct: 82, label: '영업지원팀 · 8명', tone: 'purple', tip: 'SLA 목표 80% 상회' },
+      { pct: 68, label: '영업팀(현장) · 5명', tone: 'amber', tip: '목표 80% 하회 · 현장 응대 개선 필요' },
     ],
     rings: [
-      { label: '강승희', sub: '영업지원', pct: 96 },
-      { label: '나회사', sub: '영업지원', pct: 90 },
-      { label: '정발주', sub: '영업', pct: 74 },
-      { label: '신규 담당', sub: '영업', pct: 52 },
+      { label: '강승희', sub: '영업지원', pct: 96, tip: 'SLA 96% · 대화 132건 · 영업지원' },
+      { label: '나회사', sub: '영업지원', pct: 90, tip: 'SLA 90% · 대화 98건 · 영업지원' },
+      { label: '정발주', sub: '영업', pct: 74, tip: 'SLA 74% · 대화 61건 · 영업' },
+      { label: '신규 담당', sub: '영업', pct: 52, tip: 'SLA 52% · 대화 24건 · 영업' },
     ],
   },
   dailyLine: {
@@ -163,33 +363,33 @@ const AI: MfgDashAiTab = {
       {
         key: '월', label: '지난달 → 이번달', done: 6, doing: 2, open: 1,
         items: [
-          { name: '파일 전송 오류', before: 9, after: 1, status: '해결' },
-          { name: '발신자 미표시', before: 1, after: 0, status: '해결' },
-          { name: '긴급 발주 SLA 위반', before: 0, after: 5, status: '미해결' },
+          { name: '파일 전송 오류', before: 9, after: 1, status: '해결', ev: '원본 파일명 복원·다운로드 개발 → 9건→1건' },
+          { name: '발신자 미표시', before: 1, after: 0, status: '해결', ev: '조직도 연동 실명 복원' },
+          { name: '긴급 발주 SLA 위반', before: 0, after: 5, status: '미해결', ev: '△△전선 신규 담당 배정 이슈 — 신규 발생' },
         ],
       },
       {
         key: '분기', label: '2026 Q2', done: 18, doing: 2, open: 2,
         items: [
-          { name: '상담톡 제약(파일명·답장)', before: 8, after: 0, status: '해결' },
-          { name: '외근 파일 공유 끊김', before: 6, after: 1, status: '해결' },
-          { name: '긴급 발주 SLA', before: 0, after: 5, status: '조치중' },
+          { name: '상담톡 제약(파일명·답장)', before: 8, after: 0, status: '해결', ev: '다운로드·메모 기능 개발' },
+          { name: '외근 파일 공유 끊김', before: 6, after: 1, status: '해결', ev: 'iOS 전용 앱 배포' },
+          { name: '긴급 발주 SLA', before: 0, after: 5, status: '조치중', ev: '납기 확정 카드 필수화 검토' },
         ],
       },
       {
         key: '반기', label: '2026 상반기', done: 34, doing: 4, open: 3,
         items: [
-          { name: '개인 카톡 M:N 사각지대', before: 1, after: 0, status: '해결' },
-          { name: '상담톡 사양 제약군', before: 14, after: 1, status: '해결' },
-          { name: '담당자 쏠림(연속성)', before: 1, after: 1, status: '조치중' },
+          { name: '개인 카톡 M:N 사각지대', before: 1, after: 0, status: '해결', ev: '상담톡 채널 전환' },
+          { name: '상담톡 사양 제약군', before: 14, after: 1, status: '해결', ev: '단계적 기능 개발' },
+          { name: '담당자 쏠림(연속성)', before: 1, after: 1, status: '조치중', ev: '강승희 편중 — 백업 담당 배정 진행' },
         ],
       },
       {
         key: '연', label: '2026 연간(누적)', done: 48, doing: 5, open: 5,
         items: [
-          { name: '채널 전환·자산화', before: 1, after: 0, status: '해결' },
-          { name: '문서 통제·감사 이력', before: 1, after: 0, status: '해결' },
-          { name: 'SLA 기반 품질 관리', before: 0, after: 1, status: '조치중' },
+          { name: '채널 전환·자산화', before: 1, after: 0, status: '해결', ev: '거래처 57개 상담톡 전환 완료' },
+          { name: '문서 통제·감사 이력', before: 1, after: 0, status: '해결', ev: '전량 감사 이력 확보' },
+          { name: 'SLA 기반 품질 관리', before: 0, after: 1, status: '조치중', ev: 'NOA SLA 모니터링 도입' },
         ],
       },
     ],

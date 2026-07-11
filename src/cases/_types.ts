@@ -1066,6 +1066,60 @@ export interface MfgOverseasState {
 
 /* ── 신4 관리자 대시보드 (통합 인사이트 — 운영지표 + AI 운영지표·NOA) ── */
 
+/** 대시보드 시맨틱 색 토큰 — 컴포넌트에서 실제 hex로 매핑 */
+export type MfgDashTone = 'navy' | 'purple' | 'purpleL' | 'gray' | 'amber' | 'red' | 'pos';
+
+/** KPI 드릴다운 패널 블록 — 1개면 전체 폭, 2개면 좌우 배치 */
+export type MfgDashDrillBlock =
+  | {
+      kind: 'donut';
+      subH?: string;
+      segs: { label: string; value: number; tone: MfgDashTone }[];
+      centerV: string;
+      centerL: string;
+    }
+  | {
+      kind: 'rings';
+      subH?: string;
+      items: MfgDashRing[];
+      colors: MfgDashTone[];
+      centerV?: string;
+      centerL?: string;
+    }
+  | {
+      kind: 'vbar';
+      subH?: string;
+      rows: { label: string; value: number; display?: string; tone: MfgDashTone; sub?: string }[];
+      max: number;
+      unit?: string;
+      total?: { label: string; value: string };
+    }
+  | {
+      kind: 'list';
+      subH?: string;
+      rows: { name: string; value?: string; badge?: string; badgeTone?: MfgDashTone }[];
+    }
+  | {
+      kind: 'kv';
+      title: string;
+      rows: { k: string; v: string; tone?: 'red' }[];
+    }
+  | {
+      kind: 'chips';
+      rows: { label?: string; value: string; tone?: 'pos' | 'note' }[];
+    }
+  | {
+      kind: 'monthBars';
+      rows: { label: string; value: number; tone: MfgDashTone }[];
+      max: number;
+    };
+
+export interface MfgDashDrill {
+  title: string;
+  note?: string;
+  blocks: MfgDashDrillBlock[];
+}
+
 export interface MfgDashKpi {
   label: string;
   value: string;
@@ -1074,6 +1128,8 @@ export interface MfgDashKpi {
   sub: string;
   /** 확정/추정 배지 */
   tag: 'fix' | 'est';
+  /** 클릭 시 아래로 펼쳐지는 상세 */
+  drill?: MfgDashDrill;
 }
 
 /** 좌측 네이비 인사이트 카드 — 이번 달 결론 한 장 */
@@ -1096,6 +1152,8 @@ export interface MfgDashHeatmap {
     /** 행 끝 요약 값 (예: 매출 영향) */
     tail?: string;
     tailTone?: 'red' | 'amber' | 'muted';
+    /** 셀 호버 툴팁에 붙는 근거 라인 */
+    tipLines?: string[];
   }[];
   max: number;
   palette: 'purple' | 'red';
@@ -1113,6 +1171,8 @@ export interface MfgDashRoomBar {
   value: number;
   state: string;
   tone: 'hi' | 'mid' | 'low';
+  /** 호버 툴팁 보조 라인 (예: 최근 활동) */
+  tip?: string;
 }
 
 /** 동심원 링 항목 — pct만큼 채워진 라운드 링 */
@@ -1120,6 +1180,8 @@ export interface MfgDashRing {
   label: string;
   sub?: string;
   pct: number;
+  /** 호버 툴팁 보조 라인 */
+  tip?: string;
 }
 
 export interface MfgDashAuditRow {
@@ -1133,6 +1195,8 @@ export interface MfgDashGauge {
   pct: number;
   label: string;
   tone: 'purple' | 'amber';
+  /** 호버 툴팁 보조 라인 */
+  tip?: string;
 }
 
 export interface MfgDashTrackPeriod {
@@ -1141,7 +1205,14 @@ export interface MfgDashTrackPeriod {
   done: number;
   doing: number;
   open: number;
-  items: { name: string; before: number; after: number; status: '해결' | '조치중' | '미해결' }[];
+  items: {
+    name: string;
+    before: number;
+    after: number;
+    status: '해결' | '조치중' | '미해결';
+    /** 호버 툴팁 근거 */
+    ev?: string;
+  }[];
 }
 
 export interface MfgDashBriefSection {
