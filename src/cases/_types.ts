@@ -1064,88 +1064,134 @@ export interface MfgOverseasState {
   doneNote?: string;
 }
 
-/* ── 신4 관리자 대시보드 ── */
+/* ── 신4 관리자 대시보드 (통합 인사이트 — 운영지표 + AI 운영지표·NOA) ── */
 
 export interface MfgDashKpi {
-  value: string;
   label: string;
-  tag?: string;
-  tagTone?: 'ok' | 'est';
-  /** 숫자 색상 시맨틱 — 'good' 개선 지표(초록) / 'muted' 추정치(회색) / 기본 브랜드 보라 */
-  tone?: 'good' | 'muted';
-}
-
-export interface MfgDashRiskRow {
-  doc: string;
-  level: 'hi' | 'md';
-  org: string;
-  person: string;
-  badge: string;
-}
-
-export interface MfgDashTypeChip {
-  icon: string;
-  iconBg: string;
-  iconColor: string;
-  name: string;
-  count: number;
-}
-
-export interface MfgDashVersionRow {
-  icon: string;
-  name: string;
+  value: string;
+  /** 증감 표시 (예: '▼ 89%') */
+  delta?: { text: string; tone: 'good' | 'bad' };
   sub: string;
-  badge: string;
-  hot?: boolean;
-  latest: string;
+  /** 확정/추정 배지 */
+  tag: 'fix' | 'est';
 }
 
-export interface MfgDashRankRow {
-  no: number;
-  name: string;
-  msg: number;
-  files: number;
+/** 좌측 네이비 인사이트 카드 — 이번 달 결론 한 장 */
+export interface MfgDashInsight {
+  label: string;
+  value: string;
+  valueSuffix?: string;
+  /** *별표*로 감싼 구간은 강조(앰버)로 렌더 */
+  sub: string;
+  ctaLabel?: string;
 }
 
-export interface MfgDashAccountMember {
-  name: string;
-  msg: number;
-  files: number;
-  lastDoc: string;
+/** 히트맵 (거래처 × 유형) — palette로 보라(자산)/레드(위반) 구분 */
+export interface MfgDashHeatmap {
+  cols: string[];
+  rows: {
+    label: string;
+    sub?: string;
+    cells: number[];
+    /** 행 끝 요약 값 (예: 매출 영향) */
+    tail?: string;
+    tailTone?: 'red' | 'amber' | 'muted';
+  }[];
+  max: number;
+  palette: 'purple' | 'red';
+  tailHeader?: string;
 }
 
-export interface MfgDashAccount {
+export interface MfgDashFileHist {
   name: string;
+  meta: string;
+  timeline: { ev: string; meta: string }[];
+}
+
+export interface MfgDashRoomBar {
+  label: string;
+  value: number;
+  state: string;
+  tone: 'hi' | 'mid' | 'low';
+}
+
+/** 동심원 링 항목 — pct만큼 채워진 라운드 링 */
+export interface MfgDashRing {
+  label: string;
+  sub?: string;
   pct: number;
-  color: string;
-  msg?: number;
-  files?: number;
-  members?: MfgDashAccountMember[];
 }
 
-export interface MfgDashAiCard {
-  icon: string;
+export interface MfgDashAuditRow {
+  file: string;
+  type: string;
+  recv: string;
+  count: string;
+}
+
+export interface MfgDashGauge {
+  pct: number;
+  label: string;
+  tone: 'purple' | 'amber';
+}
+
+export interface MfgDashTrackPeriod {
+  key: string;
+  label: string;
+  done: number;
+  doing: number;
+  open: number;
+  items: { name: string; before: number; after: number; status: '해결' | '조치중' | '미해결' }[];
+}
+
+export interface MfgDashBriefSection {
   title: string;
-  desc: string;
-  tag?: string;
+  lines: string[];
+}
+
+/** 운영 지표 탭 콘텐츠 */
+export interface MfgDashGenTab {
+  insight: MfgDashInsight;
+  kpis: MfgDashKpi[];
+  docHeatmap: { sub: string; heat: MfgDashHeatmap };
+  fileHist: MfgDashFileHist[];
+  rooms: { sub: string; bars: MfgDashRoomBar[]; note?: string };
+  agents: { sub: string; rings: MfgDashRing[] };
+  audit: { sub: string; rows: MfgDashAuditRow[] };
+  dailyBars: { sub: string; values: number[]; max: number };
+  footnote: string;
+}
+
+/** AI 운영지표(NOA) 탭 콘텐츠 */
+export interface MfgDashAiTab {
+  insight: MfgDashInsight;
+  kpis: MfgDashKpi[];
+  slaRisk: { sub: string; heat: MfgDashHeatmap };
+  quality: { sub: string; gauges: MfgDashGauge[]; rings: MfgDashRing[] };
+  dailyLine: { sub: string; values: number[]; min: number; max: number; target: number; targetLabel: string };
+  track: { sub: string; periods: MfgDashTrackPeriod[] };
+  brief: {
+    title: string;
+    sub: string;
+    primaryLabel: string;
+    secondaryLabel?: string;
+    reportTitle: string;
+    reportSub: string;
+    reportSections: MfgDashBriefSection[];
+    reportFoot: string;
+  };
+  footnote: string;
 }
 
 export interface MfgDashboardState {
+  /** 진입 시 활성 탭 — 화면에서 탭 전환도 가능 */
   tab: 'gen' | 'ai';
-  headerTitle: string;
-  aiTabLabel?: string;
-  aiTabSlotTag?: string;
-  kpis: MfgDashKpi[];
-  risk?: { title: string; sub: string; rows: MfgDashRiskRow[]; note?: string };
-  fileTypes?: MfgDashTypeChip[];
-  versions?: { title: string; sub?: string; rows: MfgDashVersionRow[]; note?: string };
-  ranking?: { title: string; sub?: string; rows: MfgDashRankRow[] };
-  accounts?: { title: string; sub?: string; rows: MfgDashAccount[]; note?: string };
-  /** state 진입 시 자동 펼침할 거래처명 */
-  openAccount?: string;
-  aiSlot?: { title: string; sub: string };
-  aiCards?: MfgDashAiCard[];
-  aiNote?: string;
+  title: string;
+  subtitle: string;
+  /** state 진입 시 자동 전개할 파일 히스토리 이름 */
+  openFile?: string;
+  gen: MfgDashGenTab;
+  ai: MfgDashAiTab;
 }
 
 export type MobilePCPhase = 'warn' | 'solve';
