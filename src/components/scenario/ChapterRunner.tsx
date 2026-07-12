@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import type { CaseDef, Chapter, PresetChip as PresetChipDef } from '@/cases/_types';
+import type { CaseDef, Chapter, ChapterGroupDef, PresetChip as PresetChipDef } from '@/cases/_types';
 import { ACT_LABEL } from '@/cases/_types';
 import { StagePhoneWorkspace } from './stages/StagePhoneWorkspace';
 import { StageThreePhones } from './stages/StageThreePhones';
@@ -17,6 +17,103 @@ import { TakeoverOverlay } from './moments/TakeoverOverlay';
 import { useAutoAdvance } from './hooks/useAutoAdvance';
 import { cn } from '@/lib/cn';
 import styles from './ChapterRunner.module.css';
+
+/**
+ * 챕터 → 탭 표시 스텝 번호 매핑. 같은 group.id를 가진 연속 챕터는 하나의 스텝으로
+ * 센다. group이 하나도 없으면 hasGroups=false이며, 이 경우 호출부는 기존처럼
+ * chapter.id를 표시 번호로 쓴다(다른 사례 회귀 방지).
+ */
+function chapterStepMap(chapters: Chapter[]): { steps: Record<number, number>; hasGroups: boolean } {
+  const steps: Record<number, number> = {};
+  const groupStep: Record<string, number> = {};
+  let hasGroups = false;
+  let step = 0;
+  for (const c of chapters) {
+    if (c.group) {
+      hasGroups = true;
+      if (!(c.group.id in groupStep)) {
+        groupStep[c.group.id] = step;
+        step += 1;
+      }
+      steps[c.id] = groupStep[c.group.id];
+    } else {
+      steps[c.id] = step;
+      step += 1;
+    }
+  }
+  return { steps, hasGroups };
+}
+
+/** 산업 적용 등 그룹으로 묶인 챕터들의 드롭다운 탭. */
+function ChapterGroupTab({
+  step,
+  group,
+  members,
+  currentId,
+  onSelect,
+}: {
+  step: number;
+  group: ChapterGroupDef;
+  members: Chapter[];
+  currentId: number;
+  onSelect?: (chapterId: number) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const active = members.some((m) => m.id === currentId);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  return (
+    <div className={styles.groupTabWrap} ref={wrapRef}>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={active}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className={cn(styles.chapterTab, active && styles.chapterTabActive)}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span className={styles.chapterTabNum}>Ch.{step}</span>
+        <span className={styles.chapterTabTitle}>{group.tabLabel}</span>
+        <span className={cn(styles.groupCaret, open && styles.groupCaretOpen)}>▾</span>
+      </button>
+      {open && (
+        <div className={styles.groupMenu} role="menu">
+          {members.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              role="menuitem"
+              className={cn(styles.groupMenuItem, m.id === currentId && styles.groupMenuItemActive)}
+              onClick={() => {
+                setOpen(false);
+                onSelect?.(m.id);
+              }}
+            >
+              {m.group?.optionLabel ?? m.title}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface ChapterRunnerProps {
   caseDef: CaseDef;
@@ -51,6 +148,12 @@ export function ChapterRunner({
   const totalStates = chapter.states.length;
   const safeIndex = Math.min(Math.max(stateIndex, 0), Math.max(totalStates - 1, 0));
   const node = chapter.states[safeIndex];
+
+  const { steps: chapterSteps, hasGroups } = useMemo(
+    () => chapterStepMap(caseDef.chapters),
+    [caseDef.chapters],
+  );
+  const displayNum = hasGroups ? chapterSteps[chapter.id] ?? chapter.id : chapter.id;
 
   const guideKey = `${chapter.id}-${safeIndex}`;
   const takeoverKey = `${chapter.id}-${safeIndex}-takeover`;
@@ -273,22 +376,40 @@ export function ChapterRunner({
     <div className={styles.runner}>
       {caseDef.chapters.length > 1 && (
         <div className={styles.chapterTabs} role="tablist" aria-label="챕터 선택">
-          {caseDef.chapters.map((c) => {
-            const active = c.id === chapter.id;
-            return (
-              <button
-                key={c.id}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                className={cn(styles.chapterTab, active && styles.chapterTabActive)}
-                onClick={() => onChapterChange?.(c.id)}
-              >
-                <span className={styles.chapterTabNum}>Ch.{c.id}</span>
-                <span className={styles.chapterTabTitle}>{c.title.split('—')[0].trim()}</span>
-              </button>
-            );
-          })}
+          {(() => {
+            const seenGroups = new Set<string>();
+            return caseDef.chapters.map((c) => {
+              if (c.group) {
+                if (seenGroups.has(c.group.id)) return null;
+                seenGroups.add(c.group.id);
+                const members = caseDef.chapters.filter((x) => x.group?.id === c.group!.id);
+                return (
+                  <ChapterGroupTab
+                    key={`group-${c.group.id}`}
+                    step={chapterSteps[c.id] ?? c.id}
+                    group={c.group}
+                    members={members}
+                    currentId={chapter.id}
+                    onSelect={(id) => onChapterChange?.(id)}
+                  />
+                );
+              }
+              const active = c.id === chapter.id;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  className={cn(styles.chapterTab, active && styles.chapterTabActive)}
+                  onClick={() => onChapterChange?.(c.id)}
+                >
+                  <span className={styles.chapterTabNum}>Ch.{hasGroups ? chapterSteps[c.id] ?? c.id : c.id}</span>
+                  <span className={styles.chapterTabTitle}>{c.title.split('—')[0].trim()}</span>
+                </button>
+              );
+            });
+          })()}
         </div>
       )}
 
@@ -299,7 +420,7 @@ export function ChapterRunner({
               <span className={styles.actLabel}>{ACT_LABEL[chapter.act]}</span>
             )}
             <h2 className={styles.chapterTitle}>
-              Ch.{chapter.id} · {chapter.title}
+              Ch.{displayNum} · {chapter.title}
             </h2>
           </div>
           {chapter.subtitle && (

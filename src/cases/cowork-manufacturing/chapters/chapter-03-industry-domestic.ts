@@ -222,6 +222,11 @@ const VALUE: MfgValueStripDef = {
 export const chapter03IndustryDomestic: Chapter = {
   id: 3,
   act: 4,
+  group: {
+    id: 'industry',
+    tabLabel: '산업 적용',
+    optionLabel: '🏭 국내 그룹 채널',
+  },
   title: '산업 적용 · 국내 — 그룹 채널 (주문제작)',
   subtitle: '산업별 확장 (교체 슬롯) · 규격 도면 → 오더메이드 납기 → 발주서 → 외근 앱 응대',
   narration:

@@ -262,6 +262,66 @@
   }
 }
 
+/* ── 산업 적용 등 그룹 드롭다운 탭 ── */
+.groupTabWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.groupCaret {
+  font-size: 9px;
+  line-height: 1;
+  transition: transform 0.15s var(--easing-out);
+  opacity: 0.75;
+}
+
+.groupCaretOpen {
+  transform: rotate(180deg);
+}
+
+.groupMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 60;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card-hover);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.groupMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 12px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s var(--easing-out), color 0.12s var(--easing-out);
+}
+
+.groupMenuItem:hover {
+  background: var(--bg-soft);
+}
+
+.groupMenuItemActive,
+.groupMenuItemActive:hover {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
 
 .advanceBtn {
   padding: 9px 16px;

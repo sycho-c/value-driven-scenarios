@@ -1498,6 +1498,20 @@ export const ACT_LABEL: Record<ActId, string> = {
   4: 'Act IV · 정착',
 };
 
+/**
+ * 챕터 그룹 — 같은 `id`를 가진 (레지스트리상 연속된) 챕터들을 챕터 탭에서
+ * 하나의 드롭다운 탭으로 묶는다. "산업 적용" 슬롯처럼 산업별 챕터를 선택지로
+ * 확장할 때 사용한다. 그룹이 없는 사례의 탭 렌더링에는 영향이 없다.
+ */
+export interface ChapterGroupDef {
+  /** 같은 값을 가진 연속 챕터가 한 탭으로 묶인다 (예: 'industry') */
+  id: string;
+  /** 묶인 탭에 표시되는 라벨 (예: '산업 적용') */
+  tabLabel: string;
+  /** 드롭다운 항목 라벨 — 아이콘 이모지 포함 가능 (예: '🏭 국내 그룹 채널') */
+  optionLabel: string;
+}
+
 export interface Chapter {
   id: number;
   act?: ActId;
@@ -1507,6 +1521,8 @@ export interface Chapter {
   stage: StageVariant;
   states: ChapterStateNode[];
   onComplete?: { nextChapter?: number; demoAutoAdvance?: boolean };
+  /** 산업 적용 등 선택형 슬롯으로 묶을 때 지정 */
+  group?: ChapterGroupDef;
 }
 
 export type RoiTrend = 'up-good' | 'down-good' | 'neutral';
