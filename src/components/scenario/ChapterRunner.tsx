@@ -51,12 +51,14 @@ function ChapterGroupTab({
   members,
   currentId,
   onSelect,
+  onReselect,
 }: {
   step: number;
   group: ChapterGroupDef;
   members: Chapter[];
   currentId: number;
   onSelect?: (chapterId: number) => void;
+  onReselect?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -78,6 +80,12 @@ function ChapterGroupTab({
     };
   }, [open]);
 
+  // 슬롯이 하나로 좁혀졌거나(시작 전 산업 선택) 그룹 내 챕터를 보고 있는 동안에는
+  // 탭에 선택된 산업명을 그대로 노출한다. 그 외에는 그룹 라벨(예: '산업 적용')을 쓴다.
+  const selectedMember =
+    members.find((m) => m.id === currentId) ?? (members.length === 1 ? members[0] : undefined);
+  const tabTitle = selectedMember?.group?.optionLabel ?? group.tabLabel;
+
   return (
     <div className={styles.groupTabWrap} ref={wrapRef}>
       <button
@@ -86,11 +94,12 @@ function ChapterGroupTab({
         aria-selected={active}
         aria-haspopup="menu"
         aria-expanded={open}
+        title={group.tabLabel}
         className={cn(styles.chapterTab, active && styles.chapterTabActive)}
         onClick={() => setOpen((v) => !v)}
       >
         <span className={styles.chapterTabNum}>Ch.{step}</span>
-        <span className={styles.chapterTabTitle}>{group.tabLabel}</span>
+        <span className={styles.chapterTabTitle}>{tabTitle}</span>
         <span className={cn(styles.groupCaret, open && styles.groupCaretOpen)}>▾</span>
       </button>
       {open && (
@@ -109,6 +118,22 @@ function ChapterGroupTab({
               {m.group?.optionLabel ?? m.title}
             </button>
           ))}
+          {onReselect && (
+            <>
+              <div className={styles.groupMenuDivider} role="separator" />
+              <button
+                type="button"
+                role="menuitem"
+                className={styles.groupMenuItem}
+                onClick={() => {
+                  setOpen(false);
+                  onReselect();
+                }}
+              >
+                ↺ 산업 다시 선택
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>
@@ -120,6 +145,8 @@ interface ChapterRunnerProps {
   chapter: Chapter;
   onChapterChange?: (chapterId: number, opts?: { atEnd?: boolean }) => void;
   initialStateIndex?: number;
+  /** 산업 적용 등 그룹 슬롯을 다시 고를 수 있게 선택 화면을 재오픈한다. */
+  onGroupReselect?: () => void;
 }
 
 export function ChapterRunner({
@@ -127,6 +154,7 @@ export function ChapterRunner({
   chapter,
   onChapterChange,
   initialStateIndex = 0,
+  onGroupReselect,
 }: ChapterRunnerProps) {
   const clampIndex = (i: number) =>
     Math.min(Math.max(0, i), Math.max(0, chapter.states.length - 1));
@@ -356,7 +384,7 @@ export function ChapterRunner({
           className={styles.advanceBtn}
           onClick={() => onChapterChange?.(nextChapter.id)}
         >
-          Ch.{nextChapter.id} · {nextChapter.title} →
+          Ch.{hasGroups ? chapterSteps[nextChapter.id] ?? nextChapter.id : nextChapter.id} · {nextChapter.title} →
         </button>
       ) : (
         <span className={styles.actionsHint}>다음 챕터는 곧 공개됩니다.</span>
@@ -391,6 +419,7 @@ export function ChapterRunner({
                     members={members}
                     currentId={chapter.id}
                     onSelect={(id) => onChapterChange?.(id)}
+                    onReselect={onGroupReselect}
                   />
                 );
               }

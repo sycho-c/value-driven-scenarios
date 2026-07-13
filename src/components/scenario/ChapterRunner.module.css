@@ -322,6 +322,12 @@
   color: var(--brand);
 }
 
+.groupMenuDivider {
+  height: 1px;
+  margin: 4px 4px;
+  background: var(--border);
+}
+
 
 .advanceBtn {
   padding: 9px 16px;

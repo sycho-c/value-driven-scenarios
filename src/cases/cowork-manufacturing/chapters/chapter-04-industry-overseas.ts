@@ -237,6 +237,7 @@ export const chapter04IndustryOverseas: Chapter = {
     id: 'industry',
     tabLabel: '산업 적용',
     optionLabel: '🌐 해외 멀티 메신저',
+    optionDesc: 'WhatsApp·WeChat 통합 + 채널별 M365 인증 + 양방향 AI 번역',
   },
   title: '산업 적용 · 해외 — 멀티 메신저 (수출)',
   subtitle: '산업별 확장 (교체 슬롯) · WhatsApp·WeChat 통합 + 채널별 M365 인증 + 양방향 AI 번역',

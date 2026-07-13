@@ -1510,6 +1510,19 @@ export interface ChapterGroupDef {
   tabLabel: string;
   /** 드롭다운 항목 라벨 — 아이콘 이모지 포함 가능 (예: '🏭 국내 그룹 채널') */
   optionLabel: string;
+  /** 시작 전 선택 화면 카드에 쓰이는 한 줄 설명 */
+  optionDesc?: string;
+}
+
+/** 시나리오 시작 전, 그룹 슬롯(예: 산업 적용)에서 하나를 고르게 하는 선택 화면 정의. */
+export interface ChapterGroupSelectDef {
+  /** 대상 ChapterGroupDef.id */
+  groupId: string;
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  /** "전체 보기"(선택 없이 모두 노출) 버튼 라벨 */
+  allOptionLabel?: string;
 }
 
 export interface Chapter {
@@ -1563,4 +1576,6 @@ export interface CaseDef {
   cast: CastMember[];
   chapters: Chapter[];
   roi: RoiCardDef[];
+  /** 산업 적용 등 그룹 슬롯을 시나리오 시작 전에 고르게 할 때 지정 */
+  chapterGroupSelect?: ChapterGroupSelectDef;
 }

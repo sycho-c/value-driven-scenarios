@@ -24,6 +24,13 @@ export const coworkManufacturingCase: CaseDef = {
     chapter04IndustryOverseas,
     chapter05AdminDashboard,
   ],
+  chapterGroupSelect: {
+    groupId: 'industry',
+    eyebrow: '산업 적용 · 슬롯 선택',
+    title: '어떤 산업 흐름으로 보시겠습니까?',
+    subtitle: '공통 골격(개인 카톡 → 채널 전환 → 한계 해소)은 그대로, 산업 슬롯만 하나 골라 얹습니다.',
+    allOptionLabel: '전체 흐름 보기 (국내 + 해외)',
+  },
   roi: [
     {
       id: 'vendors',
