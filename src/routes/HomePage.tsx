@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { PRODUCT } from '@/content/brand';
 import { ColdOpenHero } from '@/components/marketing/ColdOpenHero';
 import { ProblemCards } from '@/components/marketing/ProblemCards';
-import { SolutionStrip } from '@/components/marketing/SolutionStrip';
 import { CaseGrid } from '@/components/marketing/CaseGrid';
 import { RoiTeaserPanel } from '@/components/marketing/RoiTeaserPanel';
 import { CtaSection } from '@/components/marketing/CtaSection';
@@ -18,7 +17,6 @@ export default function HomePage() {
           </Link>
           <div className={styles.navLinks}>
             <a href="#problem">문제</a>
-            <a href="#solution">해결</a>
             <a href="#cases">사례</a>
             <a href="#roi">ROI</a>
           </div>
@@ -36,7 +34,6 @@ export default function HomePage() {
 
       <ColdOpenHero />
       <ProblemCards />
-      <SolutionStrip />
       <CaseGrid />
       <RoiTeaserPanel />
       <CtaSection />

@@ -29,8 +29,8 @@ export function CtaSection() {
             <Link to="/case/wontalk-woori" className={styles.secondaryBtn}>
               WON TALK 사례 보기
             </Link>
-            <Link to="/case/salesbridge-gaon" className={styles.secondaryBtn}>
-              ONE TALK 사례 보기
+            <Link to="/case/cowork-manufacturing" className={styles.secondaryBtn}>
+              제조·유통 사례 보기
             </Link>
             <span className={styles.hint}>약 6분 · 키보드 ESC로 언제든 종료</span>
           </div>

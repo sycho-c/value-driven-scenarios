@@ -31,23 +31,7 @@ const TEASER_ROI: RoiCardDef[] = [
   {
     id: 't4',
     label: '잘못된 파일 첨부 사전 차단율',
-    caption: 'ONE TALK · 가온전선',
-    value: null,
-    unit: '%',
-    trend: 'up-good',
-  },
-  {
-    id: 't5',
-    label: '"어떻게 됐어요?" 메시지 감소',
-    caption: '내 대화 보기 셀프 조회',
-    value: null,
-    unit: '%',
-    trend: 'down-good',
-  },
-  {
-    id: 't6',
-    label: '감사 로그 자동 적재율',
-    caption: '컴플라이언스 완전 자동',
+    caption: '파트너 협업 · 제조·유통',
     value: null,
     unit: '%',
     trend: 'up-good',
@@ -80,7 +64,7 @@ export function RoiTeaserPanel() {
       <div className={styles.footer}>
         <div className={styles.footerText}>
           <strong>측정 기준 확정 + 베이스라인 수집</strong>까지 평균 2주.
-          PoC 첫 1주차부터 위 6개 지표를 함께 정의합니다.
+          PoC 첫 1주차부터 위 지표들을 함께 정의합니다.
         </div>
         <a
           href="https://www.spectra.co.kr"

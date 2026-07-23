@@ -116,42 +116,42 @@ const SLIDES: HeroSlide[] = [
     primaryCta: '개인정보 차단 보기 →',
   },
   {
-    caseId: 'salesbridge-gaon',
-    caseLabel: 'ONE TALK',
-    customer: '가온전선',
-    industry: '전선 · 소재 B2B',
-    eyebrow: 'ONE TALK · 가온전선',
+    caseId: 'cowork-manufacturing',
+    caseLabel: '파트너 협업',
+    customer: '제조·유통',
+    industry: '제조 · 유통 B2B',
+    eyebrow: '파트너 협업 · 제조·유통',
     hook: (
       <>
-        단톡방 4개, Excel 단가표 4개,
+        발주가 담당자 개인 카톡으로만 오갑니다,
         <br />
-        <em>잘못 보낸 한 번이 단가를 노출합니다.</em>
+        <em>그가 자리를 비우면 회사는 아무것도 모릅니다.</em>
       </>
     ),
-    sub: '카카오톡 단톡방은 그대로 두고, 거버넌스와 가시성만 더합니다.',
+    sub: '거래처는 쓰던 카카오톡 그대로, 회사는 상담톡으로 모든 대화를 자산화합니다.',
     meaningLabel: '이 사례가 보여주는 것',
     meaning:
-      '카오스 → 거버넌스 → 통제 확대 → 경영 자산화. 7 SCENE으로 풀어낸 가온전선 Cowork+ 도입 흐름.',
-    chatLabel: '실제 사례 · SCENE 0 · 평범한 오전 9:14',
+      '개인 카톡 사각지대 → 상담톡 전환 → 제약 해결 → 국내·해외 산업 슬롯 → AI 대시보드로 이어지는 제조·유통 Cowork+ 도입 흐름.',
+    chatLabel: '실제 사례 · 신 0 · 담당자 개인 카톡 오전 9:14',
     chatHeader: {
-      initial: '박',
-      color: '#C9302C',
-      name: '박대표 (미우케이블)',
-      sub: '미우케이블 단톡방 · 단톡방 4개 중 1개',
+      initial: '영',
+      color: '#E67E22',
+      name: '이영업 대리 (○○산업)',
+      sub: '개인 카톡 1:1 · 담당자만 아는 대화',
     },
     messages: [
       {
         kind: 'message',
-        text: 'CV-A001 견적 부탁드립니다',
+        text: '내일 납기 건 수량 확인 부탁드립니다',
         time: '어제 17:32',
       },
       {
         kind: 'message',
-        text: '오늘 안에 회신 가능하실까요?',
+        text: '지난번 단가표로 진행하면 될까요?',
         time: '오전 9:14',
       },
     ],
-    primaryCta: '카오스 1분 보기 →',
+    primaryCta: '상담톡 전환 보기 →',
   },
 ];
 
@@ -298,15 +298,6 @@ export function ColdOpenHero() {
                   ),
                 )}
               </div>
-              <motion.div
-                className={styles.slogan}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.8 }}
-              >
-                <div className={styles.sloganLabel}>{slide.meaningLabel}</div>
-                {slide.meaning}
-              </motion.div>
             </div>
           </motion.div>
         </AnimatePresence>
