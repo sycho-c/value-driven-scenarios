@@ -159,8 +159,14 @@ function Heatmap({ heat, bindTip }: { heat: MfgDashHeatmap; bindTip: BindTip }) 
   const txtCol = (v: number) => (v / heat.max > 0.55 ? '#fff' : '#141A2E');
   const cellTip = (row: MfgDashHeatmap['rows'][number], col: string, v: number) => {
     if (heat.palette === 'red') {
-      const lines = v > 0 ? [`SLA 위반 ${v}건`, ...(row.tipLines ?? [])] : ['위반 없음'];
-      const amt = v > 0 && row.tail && row.tail !== '—' ? `매출 영향 ${row.tail} [추정]` : undefined;
+      const lines =
+        v > 0
+          ? [`${heat.cellMetricLabel ?? 'SLA 위반'} ${v}${heat.cellUnit ?? '건'}`, ...(row.tipLines ?? [])]
+          : [heat.cellZeroLabel ?? '위반 없음'];
+      const amt =
+        v > 0 && row.tail && row.tail !== '—'
+          ? `${heat.tailMetricLabel ?? '매출 영향'} ${row.tail} [추정]`
+          : undefined;
       return bindTip(`${row.label} · ${col}`, lines, amt);
     }
     return bindTip(`${row.label} · ${col}`, [v > 0 ? `${v}건 공유` : '공유 없음']);
@@ -212,7 +218,17 @@ function Heatmap({ heat, bindTip }: { heat: MfgDashHeatmap; bindTip: BindTip }) 
 }
 
 /** 라운드 세로 막대 (연결성) */
-function RoomBars({ bars, bindTip }: { bars: MfgDashRoomBar[]; bindTip: BindTip }) {
+function RoomBars({
+  bars,
+  bindTip,
+  metricLabel,
+  unit,
+}: {
+  bars: MfgDashRoomBar[];
+  bindTip: BindTip;
+  metricLabel?: string;
+  unit?: string;
+}) {
   const W = 460;
   const H = 210;
   const padB = 42;
@@ -230,7 +246,10 @@ function RoomBars({ bars, bindTip }: { bars: MfgDashRoomBar[]; bindTip: BindTip 
           const by = H - padB - bh;
           const rad = bwid / 2;
           const cx = 10 + i * bw + bw / 2;
-          const handlers = bindTip(b.label, [`메시지 ${b.value}건 · ${b.state}`, ...(b.tip ? [b.tip] : [])]);
+          const handlers = bindTip(b.label, [
+            `${metricLabel ?? '메시지'} ${b.value}${unit ?? '건'} · ${b.state}`,
+            ...(b.tip ? [b.tip] : []),
+          ]);
           return (
             <g key={b.label}>
               <rect x={bx} y={padT} width={bwid} height={H - padB - padT} rx={rad} fill={TRACK} />
@@ -566,7 +585,9 @@ function DrillMonthBars({ block, bindTip }: {
         const by = y(r.value);
         const bh = H - padB - by;
         const bwid = bw * 0.56;
-        const handlers = bindTip(r.label, [`파일 전송 오류 ${r.value}건`]);
+        const handlers = bindTip(r.label, [
+          `${block.metricLabel ?? '파일 전송 오류'} ${r.value}${block.unit ?? '건'}`,
+        ]);
         return (
           <g key={r.label}>
             <rect className={styles.hv} x={bx} y={by} width={bwid} height={bh} rx={4} fill={TONE[r.tone]} {...handlers} />
@@ -797,7 +818,12 @@ export function MfgDashboard({ state, actions }: Props) {
               <div className={styles.row2}>
                 <div className={styles.card}>
                   <CardHd title="연결성" sub={gen.rooms.sub} />
-                  <RoomBars bars={gen.rooms.bars} bindTip={bindTip} />
+                  <RoomBars
+                    bars={gen.rooms.bars}
+                    bindTip={bindTip}
+                    metricLabel={gen.rooms.metricLabel}
+                    unit={gen.rooms.unit}
+                  />
                   {gen.rooms.note && <div className={styles.chartCap}>{gen.rooms.note}</div>}
                 </div>
                 <div className={styles.card}>

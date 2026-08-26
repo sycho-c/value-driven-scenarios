@@ -4,6 +4,7 @@ import { salesbridgeSkCase } from './salesbridge-sk';
 import { coworkHanaCase } from './cowork-hana';
 import { coworkManufacturingCase } from './cowork-manufacturing';
 import { coworkRetailCase } from './cowork-retail';
+import { coworkFranchiseCase } from './cowork-franchise';
 
 export const caseRegistry: Record<string, CaseDef> = {
   [coworkHanaCase.id]: coworkHanaCase,
@@ -11,6 +12,7 @@ export const caseRegistry: Record<string, CaseDef> = {
   [salesbridgeSkCase.id]: salesbridgeSkCase,
   [coworkManufacturingCase.id]: coworkManufacturingCase,
   [coworkRetailCase.id]: coworkRetailCase,
+  [coworkFranchiseCase.id]: coworkFranchiseCase,
 };
 
 export function getCase(id: string): CaseDef | null {

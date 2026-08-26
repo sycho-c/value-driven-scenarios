@@ -899,6 +899,8 @@ export interface MfgKakaoItem {
   inviteNotes?: string[];
   /** kind 'invite' — 버튼 라벨 오버라이드 */
   inviteBtn?: string;
+  /** kind 'invite' — 카드 우상단 채널 배지 (기본 '알림톡'). 문자·웹 등 다른 경로일 때 지정 */
+  inviteTag?: string;
   isNew?: boolean;
 }
 
@@ -1157,6 +1159,10 @@ export type MfgDashDrillBlock =
       kind: 'monthBars';
       rows: { label: string; value: number; tone: MfgDashTone }[];
       max: number;
+      /** 툴팁 지표명 (기본 '파일 전송 오류') */
+      metricLabel?: string;
+      /** 툴팁 단위 (기본 '건') */
+      unit?: string;
     };
 
 export interface MfgDashDrill {
@@ -1203,6 +1209,14 @@ export interface MfgDashHeatmap {
   max: number;
   palette: 'purple' | 'red';
   tailHeader?: string;
+  /** 셀 툴팁 지표명 (red 팔레트 기본 'SLA 위반') */
+  cellMetricLabel?: string;
+  /** 셀 툴팁 단위 (기본 '건') */
+  cellUnit?: string;
+  /** 값 0일 때 문구 (기본 '위반 없음') */
+  cellZeroLabel?: string;
+  /** tail 툴팁 접두 (기본 '매출 영향') */
+  tailMetricLabel?: string;
 }
 
 export interface MfgDashFileHist {
@@ -1271,7 +1285,7 @@ export interface MfgDashGenTab {
   kpis: MfgDashKpi[];
   docHeatmap: { sub: string; heat: MfgDashHeatmap; axisLabel?: string };
   fileHist: MfgDashFileHist[];
-  rooms: { sub: string; bars: MfgDashRoomBar[]; note?: string };
+  rooms: { sub: string; bars: MfgDashRoomBar[]; note?: string; metricLabel?: string; unit?: string };
   agents: { sub: string; rings: MfgDashRing[] };
   audit: { sub: string; rows: MfgDashAuditRow[] };
   dailyBars: { sub: string; values: number[]; max: number };
