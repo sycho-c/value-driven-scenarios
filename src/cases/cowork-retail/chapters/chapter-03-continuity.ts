@@ -155,17 +155,25 @@ function backupPhone(step: Step): MfgPhoneDef {
   }
 
   items.push({ id: 'date', kind: 'date', text: '9월 3일 (수)' });
-  // 시간 순서대로 쌓는다: 고객 문의(11:02)가 먼저이고,
-  // 그 문의가 담당 부재를 만나 자동 배정 → 이력 승계로 이어진다.
-  items.push({
-    id: 'b0',
-    kind: 'message',
-    senderId: 'cust',
-    text: '지난번 재킷이랑 같이 매치할 스커트 보고 싶은데, 오늘 매장에 있을까요?',
-    time: '11:02',
-    isNew: step === 0,
-  });
+  if (step === 0) {
+    // 아직 배정 전 — 박지훈은 이 문의의 존재를 모른다. 자기 담당 건만 보고 있다.
+    items.push({
+      id: 'b-idle',
+      kind: 'joined',
+      text: '📭 배정된 신규 상담 없음 — 오늘 담당 고객 12명 응대 중',
+    });
+  }
   if (step >= 1) {
+    // 배정과 함께 문의가 넘어온다. 문의(11:02)가 먼저이고, 그것이 담당 부재를
+    // 만나 자동 배정 → 이력 승계로 이어지는 순서를 그대로 따른다.
+    items.push({
+      id: 'b0',
+      kind: 'message',
+      senderId: 'cust',
+      text: '지난번 재킷이랑 같이 매치할 스커트 보고 싶은데, 오늘 매장에 있을까요?',
+      time: '11:02',
+      isNew: step === 1,
+    });
     items.push({
       id: 'b1',
       kind: 'joined',
@@ -227,26 +235,29 @@ function backupPhone(step: Step): MfgPhoneDef {
     badgeLabel: '매장 직원',
     companyFrame: true,
     companyRibbonLabel: 'Cowork App',
-    headerTitle: '정수현 고객님',
+    headerTitle: step === 0 ? '오늘 상담' : '정수현 고객님',
     screen: 'cowork-app',
     appCaption: '매장 근무 중 · 담당 고객 응대',
     appBadge: 'Cowork App',
-    // 이력 승계(step 2) 전에는 인계만 받은 상태 — 아직 고객을 모른다.
+    // 배정 전(step 0)엔 컨텍스트 자체가 없고, 배정 후에도 이력 승계(step 2) 전까지는
+    // 이름만 안다. 승계가 끝나야 취향·구매 이력이 채워진다.
     appContext:
-      step >= 2
-        ? {
-            initial: '수',
-            title: '정수현 · VIP 3년차',
-            sub: '원담당 김소연 휴무 · 이력 승계 완료',
-            chips: ['선호 55', '08/26 재킷 구매', 'A/S 완료'],
-            tag: '백업 응대',
-          }
-        : {
-            initial: '수',
-            title: '정수현 · VIP 3년차',
-            sub: '원담당 김소연 휴무 · 이력 확인 중',
-            tag: '백업 응대',
-          },
+      step === 0
+        ? undefined
+        : step >= 2
+          ? {
+              initial: '수',
+              title: '정수현 · VIP 3년차',
+              sub: '원담당 김소연 휴무 · 이력 승계 완료',
+              chips: ['선호 55', '08/26 재킷 구매', 'A/S 완료'],
+              tag: '백업 응대',
+            }
+          : {
+              initial: '수',
+              title: '정수현 · VIP 3년차',
+              sub: '원담당 김소연 휴무 · 이력 확인 중',
+              tag: '백업 응대',
+            },
     statusTime: '11:23',
     items,
     highlight: step === 1 || step === 2 || step === 3 || step === 5,
@@ -299,7 +310,7 @@ export const chapter03Continuity: Chapter = {
         title: 'STATE 1 — 담당 휴무일의 문의',
         meta: '신 3 · 연속성',
         situation:
-          'VIP 고객이 후속 문의를 보낸다. 그런데 담당 어드바이저는 휴무다. 신 0 구조였다면 답은 다음 근무일까지 오지 않는다.',
+          'VIP 고객이 후속 문의를 보낸다. 그런데 담당 어드바이저는 휴무고, 오른쪽 백업 어드바이저는 아직 이 문의의 존재조차 모른다. 신 0 구조였다면 답은 다음 근무일까지 오지 않는다.',
         interact: '다음 → 백업 자동 배정',
         feel: ['"담당자 없으면 그냥 기다리는 수밖에요"'],
         connect: ['→ 자동 인계'],

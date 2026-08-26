@@ -231,10 +231,9 @@ function advPhone(step: Step): MfgPhoneDef {
     },
     statusTime: '14:15',
     items,
-    appInput:
-      step === 3
-        ? { text: '내일 15:00 예약 확정했습니다', state: 'typing' }
-        : { state: 'idle' },
+    // step 3 시점엔 답변이 이미 전송되어 대화에 올라가 있다 — 같은 문구를 입력창에서
+    // 타이핑 중으로 겹쳐 보여주면 전송과 작성이 동시에 일어난 것처럼 읽힌다.
+    appInput: step === 3 ? { text: '내일 15:00 예약 확정했습니다', state: 'sent' } : { state: 'idle' },
     highlight: step === 1 || step === 3 || step === 5,
   };
 }
