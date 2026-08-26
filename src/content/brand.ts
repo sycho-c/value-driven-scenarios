@@ -42,6 +42,13 @@ export const CASES = {
     summary: '어드바이저 개인폰 사각지대 → Cowork App 전환 → 매장 응대 → 담당 부재 연속성 → 본사 대시보드',
     accentColor: '#C2185B',
   },
+  'cowork-franchise': {
+    label: '가맹점 관리',
+    customer: '프랜차이즈 F&B',
+    industry: '가맹본부 · 슈퍼바이저 운영관리',
+    summary: 'SV 1:N 사각지대 → 점포 채널 전환 → 공지·교육·설문 → 이슈·인수인계 → 가맹본부 대시보드',
+    accentColor: '#A0522D',
+  },
 } as const;
 
 export type CaseId = keyof typeof CASES;

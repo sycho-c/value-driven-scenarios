@@ -1,0 +1,58 @@
+import type { CastMember } from '../_types';
+
+export const coworkFranchiseCast: CastMember[] = [
+  {
+    id: 'sv',
+    initial: '태',
+    color: '#A0522D',
+    role: 'br',
+    label: '한태민 슈퍼바이저',
+    shortLabel: '한태민',
+    org: '수도권 2권역 · 34개점 담당',
+  },
+  {
+    id: 'owner1',
+    initial: '정',
+    color: '#E67E22',
+    role: 'guest',
+    label: '정미경 점주',
+    shortLabel: '정미경',
+    org: '강동천호점 · 7년차',
+  },
+  {
+    id: 'owner2',
+    initial: '오',
+    color: '#27AE60',
+    role: 'guest',
+    label: '오세훈 점주',
+    shortLabel: '오세훈',
+    org: '하남미사점 · 신규 개점',
+  },
+  {
+    id: 'mgr',
+    initial: '지',
+    color: '#7B5E9E',
+    role: 'guest',
+    label: '김지아 매니저',
+    shortLabel: '김지아',
+    org: '강동천호점 근무',
+  },
+  {
+    id: 'sv2',
+    initial: '서',
+    color: '#2E86AB',
+    role: 'br',
+    label: '이서준 슈퍼바이저',
+    shortLabel: '이서준',
+    org: '수도권 2권역 · 후임',
+  },
+  {
+    id: 'hq',
+    initial: '본',
+    color: '#16172A',
+    role: 'admin',
+    label: '서윤아 팀장',
+    shortLabel: '본사',
+    org: '가맹기획팀',
+  },
+];
