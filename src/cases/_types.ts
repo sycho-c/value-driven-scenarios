@@ -891,6 +891,14 @@ export interface MfgKakaoItem {
   inviteVendor?: string;
   /** kind 'invite' — 초대 채널명 */
   inviteChannel?: string;
+  /** kind 'invite' — 카드 제목 오버라이드 (기본 '[채널 입장 초대]') */
+  inviteTitle?: string;
+  /** kind 'invite' — 본문 오버라이드. 지정 시 기본 문안 대신 사용 */
+  inviteDesc?: string;
+  /** kind 'invite' — 하단 주의 문구 오버라이드 */
+  inviteNotes?: string[];
+  /** kind 'invite' — 버튼 라벨 오버라이드 */
+  inviteBtn?: string;
   isNew?: boolean;
 }
 
@@ -906,8 +914,10 @@ export interface MfgPhoneDef {
   ownerSub: string;
   badge: MfgPhoneBadge;
   badgeLabel?: string;
-  /** 회사 담당자 폰 — 보라 테두리 + '회사 담당자' 리본 */
+  /** 회사 담당자 폰 — 강조색 테두리 + 리본 */
   companyFrame?: boolean;
+  /** companyFrame 리본 문구 오버라이드 (기본 '회사 담당자') */
+  companyRibbonLabel?: string;
   headerTitle?: string;
   headerCount?: string;
   /** 상담톡 입장 후 보라 헤더 테마 */
@@ -918,6 +928,25 @@ export interface MfgPhoneDef {
   items?: MfgKakaoItem[];
   /** screen 'cowork-app' — 입력창 상태 */
   appInput?: { text?: string; state: 'idle' | 'typing' | 'sent' };
+  /** screen 'cowork-app' — 상단 캡션 오버라이드 (기본 '외근 중 · Cowork+ 앱') */
+  appCaption?: string;
+  /** screen 'ios-home' — 하단 힌트 오버라이드. 빈 문자열이면 숨김 */
+  iosHint?: string;
+  /** screen 'cowork-app' — 헤더 우측 배지 (기본 'iOS') */
+  appBadge?: string;
+  /**
+   * screen 'cowork-app' — 헤더 아래 고정 컨텍스트 패널.
+   * 카톡에는 없고 업무용 앱에만 있는 정보(고객 등급·구매 이력·담당)를 상시 노출한다.
+   */
+  appContext?: {
+    title: string;
+    sub?: string;
+    chips?: string[];
+    /** 좌측 아바타에 쓸 이니셜 (생략 시 title 첫 글자) */
+    initial?: string;
+    /** 우측 상태 뱃지 (예: '담당', '백업 응대') */
+    tag?: string;
+  };
   /** 발신 강조 펄스 */
   highlight?: boolean;
   /** 문제 강조 시 회색 처리 */
@@ -974,6 +1003,12 @@ export interface MfgWorkspaceDef {
   role?: 'br' | 'admin';
   headerTitle: string;
   headerSub?: string;
+  /** 사이드바 '채널 대시보드' 보조 라벨 오버라이드 (기본 '거래처별 · 담당자별') */
+  dashSubLabel?: string;
+  /** 상단 역할 탭 라벨 오버라이드 (기본 ['🖥 영업지원 담당자', '👔 이윤 관리자']) */
+  roleTabs?: [string, string];
+  /** 역할 탭 자체를 숨긴다 (담당자 뷰 단일 구성일 때) */
+  hideRoleTabs?: boolean;
   rooms?: MfgWsRoom[];
   /** 사이드바 '대화방' 카운트 표기 (예: '· 57') */
   roomCount?: string;
@@ -1029,6 +1064,14 @@ export interface MfgOvsChannelDef {
   phoneItems?: MfgOvsPhoneItem[];
   /** phoneScreen 'auth' — Authenticator 푸시 카드 */
   auth?: { title: string; app: string; num: string; hint: string; no: string; yes: string };
+  /** 폰 헤더 우측 축약 태그 (기본: WhatsApp이면 'WA', 그 외 '微信') */
+  phoneTagLabel?: string;
+  /** 상대 아바타 이니셜 (기본: theme 'wc'면 '华', 그 외 'U') */
+  partnerInitial?: string;
+  /** 날짜 캡션 (기본: theme 'wc'면 '今天', 그 외 'Today') */
+  dateCaption?: string;
+  /** 입력창 placeholder (기본: theme 'wc'면 '输入消息…', 그 외 'Type a message…') */
+  inputPlaceholder?: string;
 }
 
 export interface MfgOvsWsMessage {
@@ -1062,6 +1105,8 @@ export interface MfgOverseasState {
   transBar?: { placeholder?: string; typed?: string; state: 'idle' | 'typing' | 'translating' };
   /** 완결 배너 */
   doneNote?: string;
+  /** 워크스페이스 헤더 역할 배지 (기본 '🖥 영업지원 담당자') */
+  wsRoleBadge?: string;
 }
 
 /* ── 신4 관리자 대시보드 (통합 인사이트 — 운영지표 + AI 운영지표·NOA) ── */
@@ -1224,7 +1269,7 @@ export interface MfgDashBriefSection {
 export interface MfgDashGenTab {
   insight: MfgDashInsight;
   kpis: MfgDashKpi[];
-  docHeatmap: { sub: string; heat: MfgDashHeatmap };
+  docHeatmap: { sub: string; heat: MfgDashHeatmap; axisLabel?: string };
   fileHist: MfgDashFileHist[];
   rooms: { sub: string; bars: MfgDashRoomBar[]; note?: string };
   agents: { sub: string; rings: MfgDashRing[] };
@@ -1523,6 +1568,8 @@ export interface ChapterGroupSelectDef {
   subtitle?: string;
   /** "전체 보기"(선택 없이 모두 노출) 버튼 라벨 */
   allOptionLabel?: string;
+  /** 챕터 탭 드롭다운의 재선택 항목 라벨 (기본 '↺ 산업 다시 선택') */
+  reselectLabel?: string;
 }
 
 export interface Chapter {

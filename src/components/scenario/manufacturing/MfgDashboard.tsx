@@ -756,7 +756,9 @@ export function MfgDashboard({ state, actions }: Props) {
                 <CardHd title="문서 자산성" sub={gen.docHeatmap.sub} />
                 <div className={styles.row2b}>
                   <div>
-                    <div className={styles.subH}>거래처 × 문서 유형 (셀 농도 = 건수)</div>
+                    <div className={styles.subH}>
+                      {gen.docHeatmap.axisLabel ?? '거래처 × 문서 유형'} (셀 농도 = 건수)
+                    </div>
                     <Heatmap heat={gen.docHeatmap.heat} bindTip={bindTip} />
                   </div>
                   <div>

@@ -35,6 +35,13 @@ export const CASES = {
     summary: '개인 카톡 사각지대 → 상담톡 전환 → 제약 해결 → 산업 슬롯(국내/해외) → AI 대시보드',
     accentColor: '#4C3BC7',
   },
+  'cowork-retail': {
+    label: '매장 현장 소통',
+    customer: '뷰티·패션 리테일',
+    industry: '직영 매장 · 어드바이저 고객관리',
+    summary: '어드바이저 개인폰 사각지대 → Cowork App 전환 → 매장 응대 → 담당 부재 연속성 → 본사 대시보드',
+    accentColor: '#C2185B',
+  },
 } as const;
 
 export type CaseId = keyof typeof CASES;

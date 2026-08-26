@@ -201,7 +201,7 @@
 .kpiV {
   font-size: 24px;
   font-weight: 800;
-  color: #5b3fe4;
+  color: var(--mfg-accent, #5B3FE4);
   margin-top: 5px;
   line-height: 1;
 }
@@ -274,7 +274,7 @@
 
 .secPeriod {
   background: #ede9fb;
-  color: #5b3fe4;
+  color: var(--mfg-accent, #5B3FE4);
   border: 1px solid #d9cef7;
 }
 
@@ -305,7 +305,7 @@
 .aiTag {
   font-size: 8px;
   font-weight: 800;
-  background: #5b3fe4;
+  background: var(--mfg-accent, #5B3FE4);
   color: #fff;
   padding: 1px 6px;
   border-radius: 4px;
@@ -494,7 +494,7 @@
   height: 27px;
   border-radius: 50%;
   background: #fff;
-  border: 1.5px solid #5b3fe4;
+  border: 1.5px solid var(--mfg-accent, #5B3FE4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -508,7 +508,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #5b3fe4;
+  background: var(--mfg-accent, #5B3FE4);
 }
 
 .tlEv {
@@ -679,7 +679,7 @@
 }
 
 .periodBtn:hover {
-  border-color: #5b3fe4;
+  border-color: var(--mfg-accent, #5B3FE4);
 }
 
 .periodBtn.on {
@@ -925,12 +925,12 @@
 }
 
 .kpiClick:hover {
-  border-color: #5b3fe4;
+  border-color: var(--mfg-accent, #5B3FE4);
   box-shadow: 0 4px 14px rgba(91, 63, 228, 0.12);
 }
 
 .kpiOn {
-  border-color: #5b3fe4;
+  border-color: var(--mfg-accent, #5B3FE4);
   box-shadow: 0 0 0 2px rgba(91, 63, 228, 0.18);
 }
 

@@ -15,7 +15,7 @@
 .banner {
   font-size: 12px;
   font-weight: 700;
-  color: #5B3FE4;
+  color: var(--mfg-accent, #5B3FE4);
   background: linear-gradient(90deg, #f0ebff, #f8f5ff);
   border: 1px solid #ddd5ff;
   border-radius: 10px;
@@ -131,7 +131,7 @@
 }
 
 .pBadge.company {
-  background: #5B3FE4;
+  background: var(--mfg-accent, #5B3FE4);
   color: #fff;
 }
 
@@ -141,8 +141,8 @@
 }
 
 .pBadge.channel {
-  background: #ede9ff;
-  color: #5B3FE4;
+  background: color-mix(in srgb, var(--mfg-accent, #5B3FE4) 13%, #fff);
+  color: var(--mfg-accent, #5B3FE4);
 }
 
 /* 스마트폰 프레임 */
@@ -164,12 +164,12 @@
 }
 
 .phoneUnit.companyFrame .pOwnerN {
-  color: #5B3FE4;
+  color: var(--mfg-accent, #5B3FE4);
 }
 
 .phoneUnit.companyFrame .phone {
   border-color: #3a2d7a;
-  box-shadow: 0 0 0 2px #5B3FE4, 0 8px 22px rgba(91, 63, 228, 0.3);
+  box-shadow: 0 0 0 2px var(--mfg-accent, #5B3FE4), 0 8px 22px rgba(91, 63, 228, 0.3);
 }
 
 .companyRibbon {
@@ -178,7 +178,7 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 58;
-  background: #5B3FE4;
+  background: var(--mfg-accent, #5B3FE4);
   color: #fff;
   font-size: 8.5px;
   font-weight: 700;
@@ -189,7 +189,7 @@
 }
 
 .phone.highlight {
-  box-shadow: 0 0 0 3px #5B3FE4, 0 8px 22px rgba(91, 63, 228, 0.4);
+  box-shadow: 0 0 0 3px var(--mfg-accent, #5B3FE4), 0 8px 22px rgba(91, 63, 228, 0.4);
 }
 
 .phone.dimmed {
@@ -258,8 +258,9 @@
   background: #ebebeb;
 }
 
+/* 공식 채널 화면 — 배경도 사례 액센트에서 파생시켜 헤더 텍스트와 계열을 맞춘다 */
 .kakaoScreen.channelTheme {
-  background: #e8e4f5;
+  background: color-mix(in srgb, var(--mfg-accent, #5B3FE4) 9%, #f4f2f8);
 }
 
 .kHdr {
@@ -272,7 +273,7 @@
 }
 
 .channelTheme .kHdr {
-  background: #ede9ff;
+  background: color-mix(in srgb, var(--mfg-accent, #5B3FE4) 14%, #fff);
 }
 
 .kBack {
@@ -300,7 +301,7 @@
 }
 
 .channelTheme .kHdrN {
-  color: #5B3FE4;
+  color: var(--mfg-accent, #5B3FE4);
 }
 
 .kHdrC {
@@ -605,13 +606,13 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #ede9ff;
+  background: var(--brand-soft, #F0EBFF);
   padding-top: 22px;
   min-height: 0;
 }
 
 .appHdr {
-  background: #5B3FE4;
+  background: var(--cowork-app-accent, var(--brand, #5B3FE4));
   color: #fff;
   padding: 6px 9px;
   display: flex;
@@ -629,6 +630,97 @@
   text-overflow: ellipsis;
 }
 
+.appHdrBadge {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--cowork-app-accent, var(--brand, #5B3FE4));
+  background: #fff;
+  border-radius: 6px;
+  padding: 1.5px 6px;
+  white-space: nowrap;
+}
+
+/* 업무용 앱 전용 — 고객 컨텍스트 패널 (카톡에는 없는 화면) */
+.appCtx {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 6px 8px;
+  background: #fff;
+  border-bottom: 1px solid rgba(91, 63, 228, 0.16);
+  box-shadow: 0 1px 3px rgba(15, 22, 60, 0.06);
+}
+
+.appCtxAv {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cowork-app-accent, var(--brand, #5B3FE4));
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.appCtxMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.appCtxT {
+  font-size: 9px;
+  font-weight: 800;
+  color: #16172a;
+  line-height: 1.3;
+}
+
+.appCtxS {
+  font-size: 7.5px;
+  color: #6b7391;
+  margin-top: 1px;
+  line-height: 1.3;
+}
+
+.appCtxChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 3px;
+}
+
+.appCtxChip {
+  font-size: 7px;
+  font-weight: 700;
+  color: var(--cowork-app-accent, var(--brand, #5B3FE4));
+  background: rgba(91, 63, 228, 0.09);
+  border: 1px solid rgba(91, 63, 228, 0.18);
+  border-radius: 5px;
+  padding: 1px 4px;
+  white-space: nowrap;
+}
+
+.appCtxTag {
+  flex: none;
+  font-size: 7px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--cowork-app-accent, var(--brand, #5B3FE4));
+  border-radius: 5px;
+  padding: 2px 5px;
+  white-space: nowrap;
+}
+
+/* 앱 안의 시스템 알림은 브랜드 톤 — 카톡 화면(민트)과 구분한다 */
+.appScreen .joinBadge {
+  color: var(--cowork-app-accent, var(--brand, #5B3FE4));
+  background: rgba(91, 63, 228, 0.07);
+  border-color: rgba(91, 63, 228, 0.2);
+}
+
 .appBody {
   flex: 1;
   overflow-y: auto;
@@ -642,7 +734,7 @@
 .appCap {
   align-self: center;
   font-size: 8px;
-  color: #5B3FE4;
+  color: var(--cowork-app-accent, var(--brand, #5B3FE4));
   background: rgba(91, 63, 228, 0.1);
   padding: 2px 9px;
   border-radius: 10px;
@@ -674,7 +766,7 @@
 }
 
 .caret {
-  color: #5B3FE4;
+  color: var(--cowork-app-accent, var(--brand, #5B3FE4));
   animation: caretBlink 0.8s step-end infinite;
 }
 
@@ -685,7 +777,7 @@
 }
 
 .appSend {
-  background: #5B3FE4;
+  background: var(--cowork-app-accent, var(--brand, #5B3FE4));
   color: #fff;
   border: none;
   border-radius: 14px;
@@ -830,8 +922,8 @@
 }
 
 .wsRb.on {
-  background: #5B3FE4;
-  border-color: #5B3FE4;
+  background: var(--mfg-accent, #5B3FE4);
+  border-color: var(--mfg-accent, #5B3FE4);
   color: #fff;
 }
 
@@ -1130,7 +1222,7 @@
 }
 
 .wsSys.hi {
-  color: #5B3FE4;
+  color: var(--mfg-accent, #5B3FE4);
   background: #f0ebff;
   border: 1px solid #ddd5ff;
   font-weight: 600;
@@ -1187,7 +1279,7 @@
   height: 30px;
   border-radius: 8px;
   background: #ede9ff;
-  color: #5B3FE4;
+  color: var(--mfg-accent, #5B3FE4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1264,7 +1356,7 @@
 .wsCardT {
   font-size: 10.5px;
   font-weight: 800;
-  color: #5B3FE4;
+  color: var(--mfg-accent, #5B3FE4);
   margin-bottom: 5px;
 }
 
