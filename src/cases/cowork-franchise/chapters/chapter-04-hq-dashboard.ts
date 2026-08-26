@@ -77,7 +77,7 @@ const GEN: MfgDashGenTab = {
     {
       label: '교육 이수율',
       value: '91%',
-      sub: '신메뉴 제조 교육 · 마감 D-2',
+      sub: '신메뉴 제조 교육 · 09/05 마감 종료',
       tag: 'est',
       drill: {
         title: '교육 이수 현황',
@@ -94,7 +94,7 @@ const GEN: MfgDashGenTab = {
           },
           {
             kind: 'list',
-            subH: '미착수 집중 권역',
+            subH: '마감 시점 미이수 집중 권역',
             rows: [
               { name: '충청권', value: '28개점', badge: '주의', badgeTone: 'red' },
               { name: '호남권', value: '19개점', badge: '주의', badgeTone: 'amber' },
@@ -111,14 +111,14 @@ const GEN: MfgDashGenTab = {
       sub: '전월 198 → 당월 12건',
       tag: 'fix',
       drill: {
-        title: '응대 누락 추이 (2시간 초과 미응답)',
+        title: '응대 누락 추이 (1시간 초과 미응답)',
         blocks: [
           {
             kind: 'chips',
             rows: [
               { label: '전월', value: '198건' },
               { label: '당월', value: '12건 (▼94%)', tone: 'pos' },
-              { value: '미응답 2시간 알림 · SV/본사 동시 통지 도입 효과 [예시]', tone: 'note' },
+              { value: '미응답 1시간 알림 · SV/본사 동시 통지 도입 효과 [예시]', tone: 'note' },
             ],
           },
           {
@@ -127,11 +127,12 @@ const GEN: MfgDashGenTab = {
               { label: '4월', value: 221, tone: 'purpleL' },
               { label: '5월', value: 207, tone: 'purpleL' },
               { label: '6월', value: 214, tone: 'purpleL' },
-              { label: '7월', value: 198, tone: 'red' },
-              { label: '8월', value: 46, tone: 'purpleL' },
+              { label: '7월', value: 205, tone: 'purpleL' },
+              { label: '8월', value: 198, tone: 'red' },
               { label: '9월', value: 12, tone: 'pos' },
             ],
             max: 230,
+            metricLabel: '응대 누락',
           },
         ],
       },
@@ -189,7 +190,7 @@ const GEN: MfgDashGenTab = {
     },
   ],
   rooms: {
-    sub: '권역별 소통량. 이슈 접수가 몰리는 권역은 현장 부하 신호.',
+    sub: '권역별 점포 수와 운영 상태. SV 1인당 담당 점포가 많은 권역이 주의 대상.',
     bars: [
       { label: '수도권 1·2권역', value: 682, state: '활발', tone: 'hi', tip: '682개점 · SV 17명' },
       { label: '호남권', value: 548, state: '활발', tone: 'hi', tip: '548개점 · SV 13명' },
@@ -198,6 +199,8 @@ const GEN: MfgDashGenTab = {
       { label: '충청권', value: 312, state: '주의', tone: 'low', tip: '312개점 · SV 7명 · 1인당 44.6개점' },
     ],
     note: '휴면(3개월 무활동) 점포방 별도 38개',
+    metricLabel: '점포',
+    unit: '개',
   },
   agents: {
     sub: '슈퍼바이저별 담당 점포 수. 과부하 SV는 응대 품질과 이탈 리스크로 이어진다.',
@@ -236,22 +239,22 @@ const AI: MfgDashAiTab = {
   kpis: [
     {
       label: '응대 SLA 준수율',
-      value: '87%',
-      sub: '일반 2h · 현장이슈 당일 [예시]',
+      value: '88%',
+      sub: '일반 1h · 현장이슈 당일 [예시]',
       tag: 'est',
       drill: {
         title: '응대 SLA — 유형별 (동심원)',
-        note: 'SLA 기준: 일반 문의 2h · 현장 이슈 당일 · 정산 문의 1일 [예시 기준 · 고객사 확정]',
+        note: 'SLA 기준: 일반 문의 1h · 현장 이슈 당일 · 정산 문의 1일 [예시 기준 · 고객사 확정] · 전체 2,552/2,889건 = 88%',
         blocks: [
           {
             kind: 'rings',
             items: [
               { label: '현장 이슈 (당일)', pct: 78, tip: '준수 292/374건 · 78%' },
-              { label: '일반 문의 (2h)', pct: 89, tip: '준수 1,842/2,070건 · 89%' },
+              { label: '일반 문의 (1h)', pct: 89, tip: '준수 1,842/2,070건 · 89%' },
               { label: '정산 문의 (1일)', pct: 94, tip: '준수 418/445건 · 94%' },
             ],
             colors: ['red', 'purple', 'navy'],
-            centerV: '87%',
+            centerV: '88%',
             centerL: '전체 준수율',
           },
         ],
@@ -264,7 +267,7 @@ const AI: MfgDashAiTab = {
       tag: 'est',
       drill: {
         title: '이탈 위험 판정 — 선행 신호 조합 [추정]',
-        note: '문의 급감(3주 이상 무활동) · 교육 미이수 · 설문 무응답 · 공지 미열람이 겹치는 점포. 가맹점 수가 4,000 → 2,500으로 줄어든 흐름에서 조기 감지가 핵심 [예시]',
+        note: '3주 이상 무활동 · 교육 미이수 · 설문 무응답 세 신호가 모두 겹치는 점포. 가맹점 수가 4,000 → 2,500으로 줄어든 흐름에서 조기 감지가 핵심 [예시]',
         blocks: [
           {
             kind: 'vbar',
@@ -314,7 +317,7 @@ const AI: MfgDashAiTab = {
             title: '충청권 교차 근거',
             rows: [
               { k: 'SV 1인당 점포', v: '44.6개점 (전사 최고)', tone: 'red' },
-              { k: '응대 SLA', v: '71% (전사 87%)', tone: 'red' },
+              { k: '응대 SLA', v: '71% (전사 88%)', tone: 'red' },
               { k: '교육 이수', v: '77% (전사 91%)', tone: 'red' },
               { k: '이탈 위험 점포', v: '17개점 (전사 38 중 45%)', tone: 'red' },
             ],
@@ -403,6 +406,10 @@ const AI: MfgDashAiTab = {
       max: 28,
       palette: 'red',
       tailHeader: '이탈 위험 [추정]',
+      cellMetricLabel: '해당 신호',
+      cellUnit: '개점',
+      cellZeroLabel: '신호 없음',
+      tailMetricLabel: '이탈 위험',
     },
   },
   quality: {
@@ -436,7 +443,7 @@ const AI: MfgDashAiTab = {
         doing: 4,
         open: 2,
         items: [
-          { name: '응대 누락', before: 198, after: 12, status: '해결', ev: '미응답 2시간 알림 도입 → 198건→12건' },
+          { name: '응대 누락', before: 198, after: 12, status: '해결', ev: '미응답 1시간 알림 도입 → 198건→12건' },
           { name: '공지 도달 확인 불가', before: 1, after: 0, status: '해결', ev: '도달·열람 집계 + 미열람 리마인드' },
           { name: '충청권 SV 과부하', before: 0, after: 1, status: '미해결', ev: '1인당 44.6개점 — 증원 품의 진행 중' },
         ],

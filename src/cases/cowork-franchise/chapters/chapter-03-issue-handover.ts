@@ -50,12 +50,15 @@ function ownerPhone(step: Step): MfgPhoneDef {
     );
   }
   if (step >= 4) {
-    items.push({
-      id: 'h1',
-      kind: 'joined',
-      text: '담당 슈퍼바이저 변경 — 한태민 → 이서준. 상담 이력은 그대로 유지됩니다',
-      isNew: step === 4,
-    });
+    items.push(
+      { id: 'h-date', kind: 'date', text: '9월 15일 (월)' },
+      {
+        id: 'h1',
+        kind: 'joined',
+        text: '담당 슈퍼바이저 변경 — 한태민 → 이서준. 상담 이력은 그대로 유지됩니다',
+        isNew: step === 4,
+      },
+    );
   }
   if (step >= 5) {
     items.push(
@@ -63,7 +66,7 @@ function ownerPhone(step: Step): MfgPhoneDef {
         id: 'h2',
         kind: 'message',
         senderId: 'sv2',
-        text: '점주님, 후임 이서준입니다. 제빙기 A/S 이후 재발 없는지 확인차 연락드렸습니다. 개점 3주차 체크리스트도 이번 주 함께 보겠습니다',
+        text: '점주님, 후임 이서준입니다. 제빙기 A/S 이후 재발 없는지 확인차 연락드렸습니다. 개점 4주차 체크리스트도 이번 주 함께 보겠습니다',
         time: '09/15 10:12',
         isNew: step === 5,
       },
@@ -234,7 +237,7 @@ function successorPhone(step: Step): MfgPhoneDef {
       {
         id: 'hist',
         kind: 'joined',
-        text: '📇 점포 이력 승계 — 하남미사점: 개점 3주차 · 제빙기 이슈 FR-26090801 처리완료 · 교육 이수 · 설문 응답',
+        text: '📇 점포 이력 승계 — 하남미사점: 개점 4주차 · 제빙기 이슈 FR-26090801 처리완료 · 교육 이수 · 설문 응답',
         isNew: step === 4,
       },
     );
@@ -245,7 +248,7 @@ function successorPhone(step: Step): MfgPhoneDef {
         id: 'msg1',
         kind: 'message',
         senderId: 'sv2',
-        text: '점주님, 후임 이서준입니다. 제빙기 A/S 이후 재발 없는지 확인차 연락드렸습니다. 개점 3주차 체크리스트도 이번 주 함께 보겠습니다',
+        text: '점주님, 후임 이서준입니다. 제빙기 A/S 이후 재발 없는지 확인차 연락드렸습니다. 개점 4주차 체크리스트도 이번 주 함께 보겠습니다',
         time: '10:12',
         isNew: step === 5,
       },
@@ -277,7 +280,7 @@ function successorPhone(step: Step): MfgPhoneDef {
       step >= 5
         ? {
             initial: '미',
-            title: '하남미사점 · 개점 3주차',
+            title: '하남미사점 · 개점 4주차',
             sub: '전임 한태민 · 이력 승계 완료',
             chips: ['제빙기 이슈 처리완료', '교육 이수', '아이스 매출 42%'],
             tag: '승계',
@@ -420,7 +423,7 @@ export const chapter03IssueHandover: Chapter = {
         title: 'STATE 5 — 재설명 없는 인수인계',
         meta: '신 3 · ROI',
         situation:
-          '후임이 제빙기 이슈 재발 여부를 먼저 확인하고 개점 3주차 체크리스트를 챙긴다. 점주는 "처음부터 설명 안 해도 되니 편하다"고 답한다.',
+          '후임이 제빙기 이슈 재발 여부를 먼저 확인하고 개점 4주차 체크리스트를 챙긴다. 점주는 "처음부터 설명 안 해도 되니 편하다"고 답한다.',
         interact: '다음 → (신 4 본사 대시보드로)',
         feel: ['"점포가 사람이 아니라 본사에 묶여 있습니다"'],
         connect: ['→ 신 4: 2,500개점을 한 화면으로'],

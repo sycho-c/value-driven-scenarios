@@ -36,7 +36,7 @@ function KakaoLine({
         <div className={styles.alimHd}>
           <span className={styles.alimIc}>💬</span>
           <span className={styles.alimT}>{item.inviteChannel ?? 'Cowork+ 채널'}</span>
-          <span className={styles.alimTag}>알림톡</span>
+          <span className={styles.alimTag}>{item.inviteTag ?? '알림톡'}</span>
         </div>
         <div className={styles.alimBd}>
           <div className={styles.alimTitle}>{item.inviteTitle ?? '[채널 입장 초대]'}</div>
