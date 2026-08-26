@@ -37,8 +37,8 @@ export function CtaSection() {
         </div>
       </section>
       <footer className={styles.footer}>
-        © {new Date().getFullYear()} {PRODUCT}는 실제 도입 사례에 기반한
-        시나리오로 소개됩니다.
+        © {new Date().getFullYear()} {PRODUCT}는 실제 도입 사례와 제안 시나리오로
+        소개됩니다. 각 사례의 성격은 카드와 상단에 표시됩니다.
       </footer>
     </>
   );

@@ -1625,6 +1625,13 @@ export interface CaseIntroVideoDef {
   continueLabel?: string;
 }
 
+/**
+ * 사례의 성격.
+ * - 'reference'  실제 구축·구독 고객사의 도입 사례 (기본값)
+ * - 'proposal'   확보한 요구사항으로 구성한 제안 시나리오 — 도입 실적이 아니다
+ */
+export type CaseKind = 'reference' | 'proposal';
+
 export interface CaseDef {
   id: string;
   label: string;
@@ -1632,6 +1639,8 @@ export interface CaseDef {
   industry: string;
   brandLine: string;
   accentColor: string;
+  /** 생략 시 'reference' */
+  kind?: CaseKind;
   disableGuideOverlay?: boolean;
   introVideo?: CaseIntroVideoDef;
   cast: CastMember[];
