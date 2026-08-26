@@ -50,7 +50,11 @@ function OvsPhone({ channel, active }: { channel: MfgOvsChannelDef; active: bool
             <span className={styles.grow}>
               {isAuth ? '담당자 폰 · Authenticator' : channel.phoneHeader}
             </span>
-            <span style={{ fontSize: 9 }}>{isAuth ? '🔐' : channel.messengerTag === 'WhatsApp' ? 'WA' : '微信'}</span>
+            <span style={{ fontSize: 9 }}>
+              {isAuth
+                ? '🔐'
+                : (channel.phoneTagLabel ?? (channel.messengerTag === 'WhatsApp' ? 'WA' : '微信'))}
+            </span>
           </div>
           <div className={styles.phBody} ref={bodyRef}>
             {isAuth && channel.auth ? (
@@ -70,7 +74,9 @@ function OvsPhone({ channel, active }: { channel: MfgOvsChannelDef; active: bool
               </div>
             ) : (
               <>
-                <div className={styles.dateCap}>{channel.theme === 'wc' ? '今天' : 'Today'}</div>
+                <div className={styles.dateCap}>
+                  {channel.dateCaption ?? (channel.theme === 'wc' ? '今天' : 'Today')}
+                </div>
                 {(channel.phoneItems ?? []).map((item) => (
                   <div
                     key={item.id}
@@ -78,7 +84,7 @@ function OvsPhone({ channel, active }: { channel: MfgOvsChannelDef; active: bool
                   >
                     {item.side === 'partner' && (
                       <div className={styles.msgAv} style={{ background: theme.avBg }}>
-                        {channel.theme === 'wc' ? '华' : 'U'}
+                        {channel.partnerInitial ?? (channel.theme === 'wc' ? '华' : 'U')}
                       </div>
                     )}
                     <div className={styles.msgCol}>
@@ -108,7 +114,7 @@ function OvsPhone({ channel, active }: { channel: MfgOvsChannelDef; active: bool
           {!isAuth && (
             <div className={styles.phFoot}>
               <div className={styles.phFootIn}>
-                {channel.theme === 'wc' ? '输入消息…' : 'Type a message…'}
+                {channel.inputPlaceholder ?? (channel.theme === 'wc' ? '输入消息…' : 'Type a message…')}
               </div>
             </div>
           )}
@@ -215,7 +221,7 @@ export function MfgOverseas({ state, actions }: Props) {
               <div className={styles.wsHdT}>{state.headerTitle}</div>
               {state.headerSub && <div className={styles.wsHdS}>{state.headerSub}</div>}
             </div>
-            <div className={styles.wsHdBadge}>🖥 영업지원 담당자</div>
+            <div className={styles.wsHdBadge}>{state.wsRoleBadge ?? '🖥 영업지원 담당자'}</div>
           </div>
 
           <div className={styles.ovsTabs}>

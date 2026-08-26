@@ -19,18 +19,20 @@ interface Props {
 export function StageManufacturing({ state }: Props) {
   const tail = state.mfgValueStrip ? <MfgValueStrip value={state.mfgValueStrip} /> : null;
 
+  let body: ReactNode;
   if (state.mfgArena) {
-    return <MfgArena state={state.mfgArena} actions={tail} />;
+    body = <MfgArena state={state.mfgArena} actions={tail} />;
+  } else if (state.mfgOverseas) {
+    body = <MfgOverseas state={state.mfgOverseas} actions={tail} />;
+  } else if (state.mfgDashboard) {
+    body = <MfgDashboard state={state.mfgDashboard} actions={tail} />;
+  } else {
+    body = (
+      <div style={{ padding: 24, color: 'var(--muted)', textAlign: 'center' }}>
+        manufacturing 화면 데이터가 없습니다.
+      </div>
+    );
   }
-  if (state.mfgOverseas) {
-    return <MfgOverseas state={state.mfgOverseas} actions={tail} />;
-  }
-  if (state.mfgDashboard) {
-    return <MfgDashboard state={state.mfgDashboard} actions={tail} />;
-  }
-  return (
-    <div style={{ padding: 24, color: 'var(--muted)', textAlign: 'center' }}>
-      manufacturing 화면 데이터가 없습니다.
-    </div>
-  );
+
+  return <>{body}</>;
 }

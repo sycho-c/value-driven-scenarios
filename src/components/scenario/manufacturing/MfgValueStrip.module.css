@@ -37,7 +37,7 @@
 }
 
 .sell .label {
-  color: #5B3FE4;
+  color: var(--mfg-accent, #5B3FE4);
 }
 
 .pain .label {

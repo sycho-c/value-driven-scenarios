@@ -52,6 +52,7 @@ function ChapterGroupTab({
   currentId,
   onSelect,
   onReselect,
+  reselectLabel,
 }: {
   step: number;
   group: ChapterGroupDef;
@@ -59,6 +60,7 @@ function ChapterGroupTab({
   currentId: number;
   onSelect?: (chapterId: number) => void;
   onReselect?: () => void;
+  reselectLabel?: string;
 }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -130,7 +132,7 @@ function ChapterGroupTab({
                   onReselect();
                 }}
               >
-                ↺ 산업 다시 선택
+                {reselectLabel ?? '↺ 산업 다시 선택'}
               </button>
             </>
           )}
@@ -420,6 +422,7 @@ export function ChapterRunner({
                     currentId={chapter.id}
                     onSelect={(id) => onChapterChange?.(id)}
                     onReselect={onGroupReselect}
+                    reselectLabel={caseDef.chapterGroupSelect?.reselectLabel}
                   />
                 );
               }

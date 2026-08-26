@@ -39,17 +39,26 @@ function KakaoLine({
           <span className={styles.alimTag}>알림톡</span>
         </div>
         <div className={styles.alimBd}>
-          <div className={styles.alimTitle}>[채널 입장 초대]</div>
+          <div className={styles.alimTitle}>{item.inviteTitle ?? '[채널 입장 초대]'}</div>
           <div className={styles.alimDesc}>
-            <b>{item.inviteVendor}</b>님, {item.inviteChannel ?? '채널'}에 초대되었습니다. 인증
-            후 입장하실 수 있습니다.
+            {item.inviteDesc ?? (
+              <>
+                <b>{item.inviteVendor}</b>님, {item.inviteChannel ?? '채널'}에 초대되었습니다. 인증
+                후 입장하실 수 있습니다.
+              </>
+            )}
           </div>
           <div className={styles.alimNote}>
-            ※ 조직도 인증 후 자동 입장
-            <br />※ 미인가자·퇴사자 자동 차단
+            {(item.inviteNotes ?? ['조직도 인증 후 자동 입장', '미인가자·퇴사자 자동 차단']).map(
+              (note, i) => (
+                <span key={note}>
+                  {i > 0 && <br />}※ {note}
+                </span>
+              ),
+            )}
           </div>
           <button type="button" className={styles.alimBtn}>
-            인증하고 입장 ▶
+            {item.inviteBtn ?? '인증하고 입장 ▶'}
           </button>
         </div>
       </div>
@@ -135,7 +144,9 @@ function PhoneScreenBody({ phone, actors }: { phone: MfgPhoneDef; actors: MfgAct
             </div>
           ))}
         </div>
-        <div className={styles.iosHint}>👆 Cowork+ 앱을 탭하세요</div>
+        {phone.iosHint !== '' && (
+          <div className={styles.iosHint}>{phone.iosHint ?? '👆 Cowork+ 앱을 탭하세요'}</div>
+        )}
       </div>
     );
   }
@@ -146,10 +157,31 @@ function PhoneScreenBody({ phone, actors }: { phone: MfgPhoneDef; actors: MfgAct
         <div className={styles.appHdr}>
           <span>‹</span>
           <span className={styles.grow}>{phone.headerTitle ?? 'Cowork+'}</span>
-          <span style={{ fontSize: 9 }}>iOS</span>
+          <span className={styles.appHdrBadge}>{phone.appBadge ?? 'iOS'}</span>
         </div>
+        {phone.appContext && (
+          <div className={styles.appCtx}>
+            <div className={styles.appCtxAv}>
+              {phone.appContext.initial ?? phone.appContext.title.slice(0, 1)}
+            </div>
+            <div className={styles.appCtxMain}>
+              <div className={styles.appCtxT}>{phone.appContext.title}</div>
+              {phone.appContext.sub && <div className={styles.appCtxS}>{phone.appContext.sub}</div>}
+              {phone.appContext.chips && phone.appContext.chips.length > 0 && (
+                <div className={styles.appCtxChips}>
+                  {phone.appContext.chips.map((chip) => (
+                    <span key={chip} className={styles.appCtxChip}>
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+            {phone.appContext.tag && <div className={styles.appCtxTag}>{phone.appContext.tag}</div>}
+          </div>
+        )}
         <div className={styles.appBody} ref={msgsRef}>
-          <div className={styles.appCap}>외근 중 · Cowork+ 앱</div>
+          <div className={styles.appCap}>{phone.appCaption ?? '외근 중 · Cowork+ 앱'}</div>
           {(phone.items ?? []).map((item) => (
             <KakaoLine key={item.id} item={item} phone={phone} actors={actors} />
           ))}
@@ -219,6 +251,8 @@ function Phone({
   const dimmed = dimAll || phone.dimmed;
   const lastTimed = [...(phone.items ?? [])].reverse().find((it) => it.time);
   const statusTime = phone.statusTime ?? lastTimed?.time ?? '09:00';
+  // Cowork App 화면은 헤더 배지가 앱 정체성을 이미 표시하므로 하단 리본을 겹쳐 그리지 않는다.
+  const isProductApp = phone.screen === 'cowork-app';
   return (
     <div
       className={cn(
@@ -245,7 +279,9 @@ function Phone({
           <span>●●● 📶 🔋</span>
         </div>
         <PhoneScreenBody phone={phone} actors={actors} />
-        {phone.companyFrame && <div className={styles.companyRibbon}>회사 담당자</div>}
+        {phone.companyFrame && !isProductApp && (
+          <div className={styles.companyRibbon}>{phone.companyRibbonLabel ?? '회사 담당자'}</div>
+        )}
       </div>
     </div>
   );
@@ -376,17 +412,19 @@ export function MfgArena({ state, actions }: Props) {
 
         {state.layout === 'split' && ws && (
           <div className={styles.wsCol}>
-            <div className={styles.wsRole}>
-              <button type="button" className={cn(styles.wsRb, ws.role !== 'admin' && styles.on)}>
-                🖥 영업지원 담당자
-              </button>
-              <button type="button" className={cn(styles.wsRb, ws.role === 'admin' && styles.on)}>
-                👔 이윤 관리자
-              </button>
-              <span className={styles.wsRoleTag}>
-                {ws.role === 'admin' ? '관리자 뷰 · 대시보드 권한' : '담당자 뷰'}
-              </span>
-            </div>
+            {!ws.hideRoleTabs && (
+              <div className={styles.wsRole}>
+                <button type="button" className={cn(styles.wsRb, ws.role !== 'admin' && styles.on)}>
+                  {ws.roleTabs?.[0] ?? '🖥 영업지원 담당자'}
+                </button>
+                <button type="button" className={cn(styles.wsRb, ws.role === 'admin' && styles.on)}>
+                  {ws.roleTabs?.[1] ?? '👔 이윤 관리자'}
+                </button>
+                <span className={styles.wsRoleTag}>
+                  {ws.role === 'admin' ? '관리자 뷰 · 대시보드 권한' : '담당자 뷰'}
+                </span>
+              </div>
+            )}
             <div className={styles.workspace}>
               <div className={styles.wsSide}>
                 <div className={styles.wsShdr}>
@@ -398,7 +436,7 @@ export function MfgArena({ state, actions }: Props) {
                   <div className={styles.wsDashIco}>📊</div>
                   <div>
                     <div className={styles.wsDashL}>채널 대시보드</div>
-                    <div className={styles.wsDashS}>거래처별 · 담당자별</div>
+                    <div className={styles.wsDashS}>{ws.dashSubLabel ?? '거래처별 · 담당자별'}</div>
                   </div>
                 </div>
                 <div className={styles.wsSecT}>대화방 {ws.roomCount ?? ''}</div>
