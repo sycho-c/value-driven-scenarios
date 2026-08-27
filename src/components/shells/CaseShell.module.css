@@ -91,6 +91,13 @@
   font-size: 11px;
 }
 
+/* 제안 시나리오 — 도입 사례(브랜드색)와 달리 중립 앰버로 구분한다 */
+.proposalBadge {
+  background: #FFF4E0;
+  color: #8A5A00;
+  border: 1px solid #F0D9A8;
+}
+
 .backLink {
   font-size: 12px;
   color: var(--ink-soft);
@@ -119,6 +126,16 @@
   }
   .brandLine,
   .customerInfo {
+    display: none;
+  }
+  /* 제안 시나리오 표기는 모바일에서도 남긴다 — 도입 사례로 오인되면 안 된다.
+     보조 문구만 접고 배지는 계속 보이게 한다. */
+  .customerInfoProposal {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .customerInfoProposal .customerInfoSub {
     display: none;
   }
 }

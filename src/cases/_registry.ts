@@ -3,7 +3,6 @@ import { wontalkCase } from './wontalk-woori';
 import { salesbridgeSkCase } from './salesbridge-sk';
 import { coworkHanaCase } from './cowork-hana';
 import { coworkManufacturingCase } from './cowork-manufacturing';
-import { coworkRetailCase } from './cowork-retail';
 import { coworkFranchiseCase } from './cowork-franchise';
 
 export const caseRegistry: Record<string, CaseDef> = {
@@ -11,7 +10,6 @@ export const caseRegistry: Record<string, CaseDef> = {
   [wontalkCase.id]: wontalkCase,
   [salesbridgeSkCase.id]: salesbridgeSkCase,
   [coworkManufacturingCase.id]: coworkManufacturingCase,
-  [coworkRetailCase.id]: coworkRetailCase,
   [coworkFranchiseCase.id]: coworkFranchiseCase,
 };
 

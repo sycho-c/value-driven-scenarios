@@ -14,6 +14,8 @@ export const coworkFranchiseCase: CaseDef = {
   industry: coworkFranchiseMeta.industry,
   brandLine: coworkFranchiseMeta.brandLine,
   accentColor: coworkFranchiseMeta.accentColor,
+  // 실제 도입 사례가 아니라, 확보한 요구사항으로 구성한 제안 시나리오다.
+  kind: 'proposal',
   cast: coworkFranchiseCast,
   chapters: [
     chapter00SupervisorOverload,

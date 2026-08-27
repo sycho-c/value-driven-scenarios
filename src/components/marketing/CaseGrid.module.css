@@ -165,3 +165,44 @@
   color: var(--ink-soft);
   font-weight: 800;
 }
+
+/* 사례 성격 구분 — 도입 사례와 제안 시나리오 */
+.labelRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.proposalTag {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8A5A00;
+  background: #FFF4E0;
+  border: 1px solid #F0D9A8;
+  border-radius: var(--radius-pill);
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.kindNote {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0 0 20px;
+}
+
+.kindNote b {
+  color: var(--ink-soft);
+}
+
+.kindNoteTag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8A5A00;
+  background: #FFF4E0;
+  border: 1px solid #F0D9A8;
+  border-radius: var(--radius-pill);
+  padding: 1px 6px;
+  white-space: nowrap;
+}

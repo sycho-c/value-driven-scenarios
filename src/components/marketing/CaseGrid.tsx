@@ -15,6 +15,11 @@ export function CaseGrid() {
         <br />
         하나의 Cowork+가 산업을 가리지 않고 해결합니다.
       </h2>
+      <p className={styles.kindNote}>
+        표시 없는 사례는 실제 구축·구독 고객사의 <b>도입 사례</b>입니다.{' '}
+        <span className={styles.kindNoteTag}>제안 시나리오</span>는 확보한 요구사항으로 구성한 것으로,
+        도입 실적이 아닙니다.
+      </p>
       <div className={styles.grid}>
         {entries.map(([id, c], i) => {
           const caseDef = caseRegistry[id];
@@ -39,8 +44,13 @@ export function CaseGrid() {
                   className={styles.cardAccent}
                   style={{ background: caseDef.accentColor }}
                 />
-                <span className={styles.label} style={{ color: caseDef.accentColor }}>
-                  {c.label}
+                <span className={styles.labelRow}>
+                  <span className={styles.label} style={{ color: caseDef.accentColor }}>
+                    {c.label}
+                  </span>
+                  {caseDef.kind === 'proposal' && (
+                    <span className={styles.proposalTag}>제안 시나리오</span>
+                  )}
                 </span>
                 <div className={styles.customer}>{c.customer}</div>
                 <div className={styles.industry}>{c.industry}</div>

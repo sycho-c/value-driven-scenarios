@@ -35,19 +35,13 @@ export const CASES = {
     summary: '개인 카톡 사각지대 → 상담톡 전환 → 제약 해결 → 산업 슬롯(국내/해외) → AI 대시보드',
     accentColor: '#4C3BC7',
   },
-  'cowork-retail': {
-    label: '매장 현장 소통',
-    customer: '뷰티·패션 리테일',
-    industry: '직영 매장 · 어드바이저 고객관리',
-    summary: '어드바이저 개인폰 사각지대 → Cowork App 전환 → 매장 응대 → 담당 부재 연속성 → 본사 대시보드',
-    accentColor: '#C2185B',
-  },
   'cowork-franchise': {
     label: '가맹점 관리',
     customer: '프랜차이즈 F&B',
     industry: '가맹본부 · 슈퍼바이저 운영관리',
     summary: 'SV 1:N 사각지대 → 점포 채널 전환 → 공지·교육·설문 → 이슈·인수인계 → 가맹본부 대시보드',
     accentColor: '#A0522D',
+    kind: 'proposal',
   },
 } as const;
 
