@@ -128,4 +128,14 @@
   .customerInfo {
     display: none;
   }
+  /* 제안 시나리오 표기는 모바일에서도 남긴다 — 도입 사례로 오인되면 안 된다.
+     보조 문구만 접고 배지는 계속 보이게 한다. */
+  .customerInfoProposal {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .customerInfoProposal .customerInfoSub {
+    display: none;
+  }
 }

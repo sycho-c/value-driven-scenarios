@@ -25,11 +25,16 @@ export function CaseShell({ caseDef, children }: CaseShellProps) {
           <span className={styles.industryChip}>{caseDef.industry}</span>
           <span className={styles.brandLine}>{caseDef.brandLine}</span>
           <div className={styles.spacer} />
-          <span className={styles.customerInfo}>
+          <span
+            className={cn(
+              styles.customerInfo,
+              caseDef.kind === 'proposal' && styles.customerInfoProposal,
+            )}
+          >
             {caseDef.kind === 'proposal' ? (
               <>
                 <span className={cn(styles.customerBadge, styles.proposalBadge)}>제안 시나리오</span>
-                <span>확보한 요구사항 기반 · 도입 실적 아님</span>
+                <span className={styles.customerInfoSub}>확보한 요구사항 기반 · 도입 실적 아님</span>
               </>
             ) : (
               <>
