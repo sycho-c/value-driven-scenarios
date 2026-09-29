@@ -428,6 +428,8 @@ export interface ChapterStateNode {
   mfgOverseas?: MfgOverseasState;
   mfgDashboard?: MfgDashboardState;
   mfgValueStrip?: MfgValueStripDef;
+  /** 무대 위 단계 안내 줄 — 관객이 읽는 문장(연출 메모와 별개). title 은 사례에서 채운다 */
+  mfgCaption?: MfgCaption;
   guide?: string;
   memo?: MemoSection;
   presets?: PresetChip[];
@@ -902,11 +904,34 @@ export interface MfgKakaoItem {
   /** kind 'invite' — 카드 우상단 채널 배지 (기본 '알림톡'). 문자·웹 등 다른 경로일 때 지정 */
   inviteTag?: string;
   isNew?: boolean;
+  /** 화면에 안 보이는 순서용 시각(HH:MM) — time 이 없는 줄의 등장 순서를 정한다 */
+  at?: string;
 }
 
 export type MfgPhoneBadge = 'company' | 'vendor' | 'channel';
 
-export type MfgPhoneScreen = 'chat' | 'alert-list' | 'ios-home' | 'cowork-app';
+export type MfgPhoneScreen = 'chat' | 'alert-list' | 'ios-home' | 'cowork-app' | 'room-list';
+
+/** screen 'room-list' — 메신저 대화방 목록의 한 줄 */
+export interface MfgRoomListItem {
+  id: string;
+  name: string;
+  preview: string;
+  time?: string;
+  unread?: number;
+  /** 강조 (지금 문제가 되는 방) */
+  hot?: boolean;
+  color?: string;
+}
+
+/** 점주 폰 상단 점포 전환 탭 — 선택된 탭의 phone 값이 기본값 위에 덮인다 */
+export interface MfgPhoneTab {
+  id: string;
+  label: string;
+  phone: Partial<MfgPhoneDef>;
+  /** 새 소식 점 표시 */
+  dot?: boolean;
+}
 
 export interface MfgPhoneDef {
   id: string;
@@ -918,7 +943,7 @@ export interface MfgPhoneDef {
   badgeLabel?: string;
   /** 회사 담당자 폰 — 강조색 테두리 + 리본 */
   companyFrame?: boolean;
-  /** companyFrame 리본 문구 오버라이드 (기본 '회사 담당자') */
+  /** companyFrame 리본 문구 오버라이드 (기본 '회사 담당자'). 빈 문자열이면 리본을 그리지 않는다 */
   companyRibbonLabel?: string;
   headerTitle?: string;
   headerCount?: string;
@@ -953,6 +978,12 @@ export interface MfgPhoneDef {
   highlight?: boolean;
   /** 문제 강조 시 회색 처리 */
   dimmed?: boolean;
+  /** screen 'room-list' — 대화방 목록 */
+  roomList?: MfgRoomListItem[];
+  /** 점포 전환 탭 (점주 폰 1대로 여러 점포를 보여줄 때) */
+  tabs?: MfgPhoneTab[];
+  /** 처음 선택된 탭 id */
+  activeTab?: string;
 }
 
 export interface MfgPainPopupDef {
@@ -989,7 +1020,14 @@ export interface MfgWsMessage {
   badge?: { tone: 'raw' | 'fixed'; text: string };
   file?: MfgWsFileDef;
   /** 납기 확정 등 카드 */
-  card?: { title: string; rows: Array<[string, string]> };
+  /** 화면에 안 보이는 순서용 시각(HH:MM) — time 이 없는 줄의 등장 순서를 정한다 */
+  at?: string;
+  card?: {
+    title: string;
+    rows: Array<[string, string]>;
+    /** 선택형 행 — 관리자 콘솔의 부서·기한·후임 선택 등 */
+    choices?: Array<{ k: string; opts: string[]; pick?: string }>;
+  };
   isNew?: boolean;
 }
 
@@ -1016,7 +1054,61 @@ export interface MfgWorkspaceDef {
   roomCount?: string;
   /** 사이드바 하단 노트 */
   sideNote?: string;
+  /** 사이드바 대화방 섹션 제목 오버라이드 (기본 '대화방') */
+  roomsLabel?: string;
+  /** 사이드바 대시보드 메뉴 라벨 오버라이드 (기본 '채널 대시보드') */
+  dashLabel?: string;
+  /** 대화 영역 상단 고정 집계 보드 (공지 도달·열람 등 발송 집계 화면) */
+  board?: MfgWsBoard;
+  /** hideRoleTabs 일 때 워크스페이스 위에 붙는 컬럼 라벨 */
+  label?: string;
+  /** 도입 전 관리자 PC (엑셀 보고서 + 발송 기록) — 지정 시 Cowork+ 화면 대신 그린다 */
+  legacy?: MfgLegacyPcDef;
   messages: MfgWsMessage[];
+}
+
+/** 도입 전 관리자 PC — 주간 보고 엑셀과 공지 발송 기록 */
+export interface MfgLegacyPcDef {
+  windowTitle: string;
+  logTitle?: string;
+  log: Array<{ text: string; meta?: string; tone?: 'muted' | 'ok' | 'warn'; hi?: boolean }>;
+  sheetTitle?: string;
+  cols: string[];
+  rows: Array<{ cells: string[]; hi?: boolean }>;
+  /** 화면 전체 강조 */
+  hi?: boolean;
+}
+
+/**
+ * STATE 안에서 데모 사용자가 누르는 버튼(또는 점주 폰 탭).
+ * 누르거나 → 키를 누르면 arena 위에 after 가 덮여 결과가 보이고, 한 번 더 누르면 다음 STATE로 간다.
+ */
+export interface MfgArenaAction {
+  label: string;
+  /** 버튼 위치 — 워크스페이스 헤더 또는 특정 폰 아래 */
+  at: 'workspace' | 'phone';
+  phoneId?: string;
+  /** 지정 시 버튼 대신 이 탭을 누르는 것이 액션이다 */
+  tabId?: string;
+  /** 실행 후 표시 (예: '✓ 배정 완료') */
+  doneLabel?: string;
+}
+
+/** 워크스페이스 집계 보드 — 지표 막대 + 대상 목록 */
+export interface MfgWsBoard {
+  metrics: Array<{
+    label: string;
+    /** 표시 값 (예: '28/34') */
+    value: string;
+    /** 막대 채움 비율 0~100 */
+    pct: number;
+    tone?: 'navy' | 'purple' | 'pos' | 'amber' | 'red';
+    sub?: string;
+    isNew?: boolean;
+  }>;
+  /** 목록 제목 (예: '미열람 점포 6') */
+  listTitle?: string;
+  list?: Array<{ name: string; state: string; tone?: 'pos' | 'amber' | 'red' | 'muted' }>;
 }
 
 export interface MfgArenaState {
@@ -1031,6 +1123,23 @@ export interface MfgArenaState {
   painPopup?: MfgPainPopupDef;
   workspace?: MfgWorkspaceDef;
   banner?: string;
+  /** STATE 안 액션 — 실행 전 화면이 이 state, 실행 후 화면은 after 를 덮은 것.
+   *  after 는 얕은 병합이라 필드를 덮어쓸 수만 있고 지울 수는 없다.
+   *  after 안에 다시 action/after 를 두면 버튼이 차례로 이어진다 (한 STATE 여러 단계) */
+  action?: MfgArenaAction;
+  after?: Partial<MfgArenaState>;
+}
+
+/** 단계 안내 줄 — 버튼 전(before)과 후(after) 문장을 나눠 결과를 미리 말하지 않는다 */
+export interface MfgCaption {
+  title?: string;
+  /** 시점 칩 (예: '9월 8일 (화) 08:40') */
+  when?: string;
+  /** 앞 STATE에서 시간이 건너뛰었을 때 (예: '1주 뒤') */
+  jump?: string;
+  before: string;
+  /** 버튼 뒤 문장 — 버튼이 여러 단계면 단계마다 하나씩 */
+  after?: string | string[];
 }
 
 /** 하단 고정 3대 요건 스트립 (셀링포인트 · 페인포인트 · ROI) */
@@ -1279,17 +1388,55 @@ export interface MfgDashBriefSection {
   lines: string[];
 }
 
+/** 전사 → 권역 → 담당자 → 점포 4단 드릴다운 */
+export interface MfgDashDrill4 {
+  sub: string;
+  total: { label: string; stores: string; rate: string };
+  regions: Array<{
+    name: string;
+    stores: string;
+    rate: string;
+    tone?: 'pos' | 'amber' | 'red';
+    agents?: Array<{
+      name: string;
+      stores: string;
+      rate: string;
+      tasks: string;
+      tone?: 'pos' | 'amber' | 'red';
+      storeList?: Array<{
+        name: string;
+        state: string;
+        tone?: 'pos' | 'amber' | 'red';
+        timeline: { ev: string; meta: string }[];
+      }>;
+    }>;
+  }>;
+}
+
 /** 운영 지표 탭 콘텐츠 */
 export interface MfgDashGenTab {
   insight: MfgDashInsight;
   kpis: MfgDashKpi[];
   docHeatmap: { sub: string; heat: MfgDashHeatmap; axisLabel?: string };
+  /** 비어 있으면 히트맵이 카드 전체 폭을 쓴다 */
   fileHist: MfgDashFileHist[];
+  drill4?: MfgDashDrill4;
   rooms: { sub: string; bars: MfgDashRoomBar[]; note?: string; metricLabel?: string; unit?: string };
   agents: { sub: string; rings: MfgDashRing[] };
   audit: { sub: string; rows: MfgDashAuditRow[] };
   dailyBars: { sub: string; values: number[]; max: number };
   footnote: string;
+  /** 섹션 제목 오버라이드 — 생략 시 제조·유통 기준 문구 */
+  labels?: {
+    doc?: string;
+    hist?: string;
+    histHint?: string;
+    rooms?: string;
+    agents?: string;
+    audit?: string;
+    /** 감사 표 컬럼 4개 (기본 ['파일','유형','수신','수신처']) */
+    auditCols?: [string, string, string, string];
+  };
 }
 
 /** AI 운영지표(NOA) 탭 콘텐츠 */
@@ -1300,6 +1447,15 @@ export interface MfgDashAiTab {
   quality: { sub: string; gauges: MfgDashGauge[]; rings: MfgDashRing[] };
   dailyLine: { sub: string; values: number[]; min: number; max: number; target: number; targetLabel: string };
   track: { sub: string; periods: MfgDashTrackPeriod[] };
+  /** 문구 오버라이드 — 생략 시 제조·유통 기준(SLA) 문구 */
+  labels?: {
+    /** 카드 AI 태그 (기본 'SLA') */
+    tag?: string;
+    /** 지표 이름 (기본 'SLA 준수율') */
+    metric?: string;
+    gauges?: string;
+    rings?: string;
+  };
   brief: {
     title: string;
     sub: string;
@@ -1320,6 +1476,8 @@ export interface MfgDashboardState {
   subtitle: string;
   /** state 진입 시 자동 전개할 파일 히스토리 이름 */
   openFile?: string;
+  /** state 진입 시 4단 드릴다운 선택 */
+  drill4Open?: { region?: string; agent?: string; store?: string };
   gen: MfgDashGenTab;
   ai: MfgDashAiTab;
 }

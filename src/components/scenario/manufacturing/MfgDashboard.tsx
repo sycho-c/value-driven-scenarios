@@ -2,6 +2,7 @@ import { Fragment, type MouseEvent, type ReactNode, useEffect, useState } from '
 import type {
   MfgDashboardState,
   MfgDashDrill,
+  MfgDashDrill4,
   MfgDashDrillBlock,
   MfgDashGauge,
   MfgDashHeatmap,
@@ -373,8 +374,8 @@ function DailyBars({ values, max, bindTip }: { values: number[]; max: number; bi
 }
 
 /** 일별 SLA 라인 차트 (목표선 포함) */
-function DailyLine({ values, min, max, target, targetLabel, bindTip }: {
-  values: number[]; min: number; max: number; target: number; targetLabel: string; bindTip: BindTip;
+function DailyLine({ values, min, max, target, targetLabel, bindTip, metric = 'SLA 준수율' }: {
+  values: number[]; min: number; max: number; target: number; targetLabel: string; bindTip: BindTip; metric?: string;
 }) {
   const W = 1240;
   const H = 200;
@@ -404,7 +405,7 @@ function DailyLine({ values, min, max, target, targetLabel, bindTip }: {
           cy={y(v)}
           r={4.5}
           fill={v < target - 5 ? AMBER : PURPLE}
-          {...bindTip(`D-${values.length - 1 - i}`, [`SLA 준수율 ${v}%`])}
+          {...bindTip(`D-${values.length - 1 - i}`, [`${metric} ${v}%`])}
         />
       ))}
       {values.map((_, i) => (
@@ -417,7 +418,7 @@ function DailyLine({ values, min, max, target, targetLabel, bindTip }: {
 }
 
 /** 반원 게이지 (조직별 SLA) */
-function Gauge({ gauge, bindTip }: { gauge: MfgDashGauge; bindTip: BindTip }) {
+function Gauge({ gauge, bindTip, metric = 'SLA 준수율' }: { gauge: MfgDashGauge; bindTip: BindTip; metric?: string }) {
   const W = 230;
   const H = 150;
   const cx = 115;
@@ -428,7 +429,7 @@ function Gauge({ gauge, bindTip }: { gauge: MfgDashGauge; bindTip: BindTip }) {
   const ang = Math.PI * (1 - gauge.pct / 100);
   const px = cx + Math.cos(ang) * R;
   const py = cy - Math.sin(ang) * R;
-  const handlers = bindTip(gauge.label, [`SLA 준수율 ${gauge.pct}%`, ...(gauge.tip ? [gauge.tip] : [])]);
+  const handlers = bindTip(gauge.label, [`${metric} ${gauge.pct}%`, ...(gauge.tip ? [gauge.tip] : [])]);
   return (
     <div className={styles.gaugeWrap}>
       <svg width={W} height={H}>
@@ -694,6 +695,110 @@ function DrillPanel({ drill, onClose, bindTip }: { drill: MfgDashDrill; onClose:
   );
 }
 
+/** 전사 → 권역 → 담당자 → 점포 4단 드릴다운 — 클릭할 때마다 한 단씩 펼쳐진다 */
+function Drill4({
+  data,
+  open,
+}: {
+  data: MfgDashDrill4;
+  open?: { region?: string; agent?: string; store?: string };
+}) {
+  const [region, setRegion] = useState(open?.region);
+  const [agent, setAgent] = useState(open?.agent);
+  const [store, setStore] = useState(open?.store);
+  useEffect(() => {
+    setRegion(open?.region);
+    setAgent(open?.agent);
+    setStore(open?.store);
+  }, [open]);
+
+  const reg = data.regions.find((x) => x.name === region);
+  const ag = reg?.agents?.find((x) => x.name === agent);
+  const st = ag?.storeList?.find((x) => x.name === store);
+  const toneCls = (t?: string) => (t ? styles[`d4_${t}`] : undefined);
+
+  return (
+    <div className={styles.d4}>
+      <div className={styles.d4Col}>
+        <div className={styles.d4H}>전사</div>
+        <div className={cn(styles.d4Row, styles.on)}>
+          <b>{data.total.label}</b>
+          <span>{data.total.stores}</span>
+          <em>{data.total.rate}</em>
+        </div>
+      </div>
+      <div className={styles.d4Col}>
+        <div className={styles.d4H}>권역</div>
+        {data.regions.map((x) => (
+          <button
+            key={x.name}
+            type="button"
+            className={cn(styles.d4Row, x.name === region && styles.on, !x.agents && styles.d4Flat)}
+            onClick={() => {
+              if (!x.agents) return;
+              setRegion(x.name);
+              setAgent(undefined);
+              setStore(undefined);
+            }}
+          >
+            <b>{x.name}</b>
+            <span>{x.stores}</span>
+            <em className={toneCls(x.tone)}>{x.rate}</em>
+          </button>
+        ))}
+      </div>
+      <div className={styles.d4Col}>
+        <div className={styles.d4H}>담당자</div>
+        {reg?.agents?.map((x) => (
+          <button
+            key={x.name}
+            type="button"
+            className={cn(styles.d4Row, x.name === agent && styles.on)}
+            onClick={() => {
+              setAgent(x.name);
+              setStore(undefined);
+            }}
+          >
+            <b>{x.name}</b>
+            <span>
+              {x.stores} · {x.tasks}
+            </span>
+            <em className={toneCls(x.tone)}>{x.rate}</em>
+          </button>
+        )) ?? <div className={styles.d4Empty}>권역을 선택하세요</div>}
+      </div>
+      <div className={styles.d4Col}>
+        <div className={styles.d4H}>점포</div>
+        {ag?.storeList?.map((x) => (
+          <button
+            key={x.name}
+            type="button"
+            className={cn(styles.d4Row, x.name === store && styles.on)}
+            onClick={() => setStore(x.name)}
+          >
+            <b>{x.name}</b>
+            <em className={toneCls(x.tone)}>{x.state}</em>
+          </button>
+        )) ?? <div className={styles.d4Empty}>담당자를 선택하세요</div>}
+      </div>
+      {st && (
+        <div className={styles.d4Tl}>
+          <div className={styles.d4H}>{st.name} · 응대 · 공지 · 이슈 이력</div>
+          {st.timeline.map((t) => (
+            <div key={t.ev + t.meta} className={styles.tlItem}>
+              <span className={styles.tlIc} />
+              <div>
+                <div className={styles.tlEv}>{t.ev}</div>
+                <div className={styles.tlMeta}>{t.meta}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function MfgDashboard({ state, actions }: Props) {
   const [tab, setTab] = useState<'gen' | 'ai'>(state.tab);
   const [openHist, setOpenHist] = useState<string | null>(state.openFile ?? null);
@@ -773,18 +878,27 @@ export function MfgDashboard({ state, actions }: Props) {
             <>
               <SecTag kind="today" label="당일 현황" desc="현재 시점 스냅샷" />
 
+              {gen.drill4 && (
+                <div className={styles.card}>
+                  <CardHd title="전사 → 권역 → 담당자 → 점포" sub={gen.drill4.sub} />
+                  <Drill4 data={gen.drill4} open={state.drill4Open} />
+                </div>
+              )}
+
               <div className={styles.card}>
-                <CardHd title="문서 자산성" sub={gen.docHeatmap.sub} />
-                <div className={styles.row2b}>
+                <CardHd title={gen.labels?.doc ?? '문서 자산성'} sub={gen.docHeatmap.sub} />
+                <div className={cn(styles.row2b, gen.fileHist.length === 0 && styles.row1)}>
                   <div>
                     <div className={styles.subH}>
                       {gen.docHeatmap.axisLabel ?? '거래처 × 문서 유형'} (셀 농도 = 건수)
                     </div>
                     <Heatmap heat={gen.docHeatmap.heat} bindTip={bindTip} />
                   </div>
+                  {gen.fileHist.length > 0 && (
                   <div>
                     <div className={styles.subH}>
-                      파일 히스토리 추적 <span className={styles.subHFaint}>· 문서 선택 시 이력 전개</span>
+                      {gen.labels?.hist ?? '파일 히스토리 추적'}{' '}
+                      <span className={styles.subHFaint}>· {gen.labels?.histHint ?? '문서 선택 시 이력 전개'}</span>
                     </div>
                     {gen.fileHist.map((f) => {
                       const open = openHist === f.name;
@@ -812,12 +926,13 @@ export function MfgDashboard({ state, actions }: Props) {
                       );
                     })}
                   </div>
+                  )}
                 </div>
               </div>
 
               <div className={styles.row2}>
                 <div className={styles.card}>
-                  <CardHd title="연결성" sub={gen.rooms.sub} />
+                  <CardHd title={gen.labels?.rooms ?? '연결성'} sub={gen.rooms.sub} />
                   <RoomBars
                     bars={gen.rooms.bars}
                     bindTip={bindTip}
@@ -827,16 +942,16 @@ export function MfgDashboard({ state, actions }: Props) {
                   {gen.rooms.note && <div className={styles.chartCap}>{gen.rooms.note}</div>}
                 </div>
                 <div className={styles.card}>
-                  <CardHd title="담당자 활동·편중" sub={gen.agents.sub} />
+                  <CardHd title={gen.labels?.agents ?? '담당자 활동·편중'} sub={gen.agents.sub} />
                   <Rings rings={gen.agents.rings} colors={SHARE_RING_COLORS} bindTip={bindTip} />
                 </div>
               </div>
 
               <div className={styles.card}>
-                <CardHd title="리스크 파일 감사 이력" sub={gen.audit.sub} />
+                <CardHd title={gen.labels?.audit ?? '리스크 파일 감사 이력'} sub={gen.audit.sub} />
                 <table className={styles.tbl}>
                   <thead>
-                    <tr><th>파일</th><th>유형</th><th>수신</th><th>수신처</th></tr>
+                    <tr>{(gen.labels?.auditCols ?? ['파일', '유형', '수신', '수신처']).map((c) => <th key={c}>{c}</th>)}</tr>
                   </thead>
                   <tbody>
                     {gen.audit.rows.map((r) => (
@@ -863,23 +978,23 @@ export function MfgDashboard({ state, actions }: Props) {
               <SecTag kind="today" label="당일 현황" desc="현재 시점 리스크·품질" />
 
               <div className={styles.card}>
-                <CardHd title="리스크 판정" aiTag="SLA" sub={ai.slaRisk.sub} />
+                <CardHd title="리스크 판정" aiTag={ai.labels?.tag ?? 'SLA'} sub={ai.slaRisk.sub} />
                 <Heatmap heat={ai.slaRisk.heat} bindTip={bindTip} />
               </div>
 
               <div className={styles.card}>
-                <CardHd title="서비스 품질" aiTag="SLA" sub={ai.quality.sub} />
+                <CardHd title="서비스 품질" aiTag={ai.labels?.tag ?? 'SLA'} sub={ai.quality.sub} />
                 <div className={styles.row2b}>
                   <div>
-                    <div className={styles.subH}>조직별 SLA 준수율</div>
+                    <div className={styles.subH}>{ai.labels?.gauges ?? '조직별 SLA 준수율'}</div>
                     <div className={styles.gaugeRow}>
                       {ai.quality.gauges.map((g) => (
-                        <Gauge key={g.label} gauge={g} bindTip={bindTip} />
+                        <Gauge key={g.label} gauge={g} bindTip={bindTip} metric={ai.labels?.metric} />
                       ))}
                     </div>
                   </div>
                   <div>
-                    <div className={styles.subH}>담당자별 SLA 준수율</div>
+                    <div className={styles.subH}>{ai.labels?.rings ?? '담당자별 SLA 준수율'}</div>
                     <Rings rings={ai.quality.rings} colors={SLA_RING_COLORS} bindTip={bindTip} />
                   </div>
                 </div>
@@ -888,8 +1003,8 @@ export function MfgDashboard({ state, actions }: Props) {
               <SecTag kind="period" label="기간 추이" desc="일별·기간별 흐름" />
 
               <div className={styles.card}>
-                <CardHd title="일별 SLA 준수율" sub={ai.dailyLine.sub} />
-                <DailyLine {...ai.dailyLine} bindTip={bindTip} />
+                <CardHd title={`일별 ${ai.labels?.metric ?? 'SLA 준수율'}`} sub={ai.dailyLine.sub} />
+                <DailyLine {...ai.dailyLine} bindTip={bindTip} metric={ai.labels?.metric} />
               </div>
 
               <div className={styles.card}>

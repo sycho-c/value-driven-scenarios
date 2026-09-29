@@ -38,8 +38,8 @@ export const CASES = {
   'cowork-franchise': {
     label: '가맹점 관리',
     customer: '프랜차이즈 F&B',
-    industry: '가맹본부 · 슈퍼바이저 운영관리',
-    summary: 'SV 1:N 사각지대 → 점포 채널 전환 → 공지·교육·설문 → 이슈·인수인계 → 가맹본부 대시보드',
+    industry: '가맹본부 운영관리',
+    summary: '관리자·담당자·점주 3단 단절 → 관리자 기준 설정 → 발송·재안내·담당자 과업 → 상향·승계 승인 → 대시보드 조치 지정',
     accentColor: '#A0522D',
     kind: 'proposal',
   },

@@ -63,7 +63,8 @@
   flex: 1;
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  /* 폰 두 대가 붙어 보이지 않게 — 좌측 컬럼 460px 안에 200px 폰 2대 + 간격 */
+  gap: 36px;
   min-height: 0;
   align-items: center;
   justify-content: center;
@@ -75,6 +76,7 @@
 }
 
 .phoneUnit {
+  position: relative;
   flex: 1 1 0;
   max-width: 200px;
   min-height: 0;
@@ -105,6 +107,16 @@
 .pOwnerL {
   display: flex;
   flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  width: 100%;
+}
+
+/* 역할 칩은 이름 앞에 붙여 누구의 폰인지 한 줄로 읽히게 한다 */
+.pOwnerRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   min-width: 0;
 }
 
@@ -1454,4 +1466,533 @@
 .wsMsgs::-webkit-scrollbar-track,
 .wsRooms::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* ── 워크스페이스 집계 보드 (본부 발송·집계 화면) ── */
+.wsBoard {
+  flex-shrink: 0;
+  padding: 10px 14px;
+  background: #fff;
+  border-bottom: 1px solid #eef1f6;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wsBoardMetrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 8px 12px;
+}
+
+.wsBm {
+  min-width: 0;
+}
+
+.wsBmHd {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10.5px;
+  color: var(--muted);
+  gap: 6px;
+}
+
+.wsBmHd b {
+  font-size: 13px;
+  color: #16172a;
+}
+
+.wsBmTrack {
+  height: 6px;
+  border-radius: 4px;
+  background: #eef0f5;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.wsBmFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.tone_navy { background: #16172a; }
+.tone_purple { background: #5b3fe4; }
+.tone_pos { background: #00a37a; }
+.tone_amber { background: #e0a800; }
+.tone_red { background: #e5484d; }
+
+.wsBmSub {
+  font-size: 9.5px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.wsBoardList {
+  border-top: 1px dashed #e3e6ee;
+  padding-top: 7px;
+}
+
+.wsBlT {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.wsBlItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.wsBlItem {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.wsBlItem em {
+  font-style: normal;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.chip_pos { background: rgba(0, 163, 122, 0.12); color: #00805f; }
+.chip_amber { background: #fff3cd; color: #856404; }
+.chip_red { background: rgba(229, 72, 77, 0.12); color: #c62f34; }
+.chip_muted { background: #eef0f5; color: #5a5f7a; }
+
+.wsBm.isNew .wsBmHd b {
+  color: #5b3fe4;
+}
+
+/* ── 점주 폰 점포 전환 탭 ── */
+.pTabs {
+  display: flex;
+  gap: 4px;
+  background: #eef0f5;
+  border-radius: 9px;
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.pTabsGhost {
+  visibility: hidden;
+}
+
+
+.pTab {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 4px 6px;
+  border-radius: 7px;
+  cursor: pointer;
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pTab.on {
+  background: #fff;
+  color: #16172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.pTabCue {
+  color: #5b3fe4;
+  animation: actPulse 1.4s ease-in-out infinite;
+}
+
+.pTabDot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e5484d;
+}
+
+/* ── STATE 안 액션 버튼 ── */
+.actBtn {
+  border: 0;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  background: #5b3fe4;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  animation: actPulse 1.4s ease-in-out infinite;
+}
+
+.actBtn:hover {
+  background: #4a30cc;
+}
+
+@keyframes actPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(91, 63, 228, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(91, 63, 228, 0);
+  }
+}
+
+.doneChip {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 800;
+  color: #00805f;
+  background: rgba(0, 163, 122, 0.12);
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
+/* ── 선택형 카드 행 (부서·기한·후임 선택) ── */
+.wsChoiceRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  padding: 3px 0;
+}
+
+.wsChoiceRow > span {
+  color: var(--muted);
+  min-width: 56px;
+}
+
+.wsChoiceOpts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.wsChoice {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 7px;
+  border: 1px solid #e3e6ee;
+  color: #5a5f7a;
+  background: #fff;
+}
+
+.wsChoice.on {
+  border-color: #5b3fe4;
+  background: #f0ebff;
+  color: #5b3fe4;
+  font-weight: 800;
+}
+
+/* ── 대화방 목록 화면 (개인 카톡) ── */
+.rlHdr {
+  padding: 10px 12px 8px;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.rlCount {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.rlList {
+  flex: 1;
+  overflow-y: auto;
+  background: #fff;
+  min-height: 0;
+}
+
+.rlRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+}
+
+.rlHot {
+  background: #fff4f4;
+}
+
+.rlAv {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rlMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.rlName {
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rlPrev {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rlSide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.rlTime {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.rlBadge {
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: #e5484d;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 도입 전 관리자 PC (엑셀 보고서) ── */
+.legacy {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.legacyHi {
+  box-shadow: 0 0 0 3px rgba(229, 72, 77, 0.35), 0 6px 22px rgba(0, 0, 0, 0.08);
+}
+
+.lgBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  background: #1f7244;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.lgDots {
+  font-size: 8px;
+  letter-spacing: 2px;
+  opacity: 0.7;
+}
+
+.lgBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+}
+
+.lgSecT {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #5a5f7a;
+  margin-top: 4px;
+}
+
+.lgLog {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.lgLogRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: #f7f7f8;
+}
+
+.lgLogRow em {
+  font-style: normal;
+  color: var(--muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.lg_ok { color: #00805f; }
+.lg_warn { color: #c62f34; }
+.lg_muted { color: #8a8fa3; }
+
+.lgHiRow {
+  background: #fff1f1 !important;
+  outline: 2px solid rgba(229, 72, 77, 0.45);
+  outline-offset: -2px;
+}
+
+.lgSheet {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10.5px;
+}
+
+.lgSheet th,
+.lgSheet td {
+  border: 1px solid #d9dde5;
+  padding: 4px 6px;
+  text-align: left;
+}
+
+.lgSheet th {
+  background: #f1f3f6;
+  font-weight: 700;
+  color: #5a5f7a;
+}
+
+.lgRowNo {
+  width: 22px;
+  background: #f1f3f6;
+  color: #8a8fa3;
+  text-align: center !important;
+}
+
+.lgTitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.labelAct {
+  margin-left: auto;
+  padding: 4px 10px;
+  font-size: 10.5px;
+  letter-spacing: 0;
+}
+
+/* 폰 액션 버튼 — 화면 하단(입력창 위)에 띄워, 옆 폰과 위치가 어긋나거나 아래 안내 칸을 가리지 않는다 */
+.phoneAct {
+  position: absolute;
+  bottom: 62px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+/* ── 상대 입력 중 (점 세 개) ── */
+.typingRow {
+  display: flex;
+  padding: 2px 0 2px 30px;
+}
+
+.typingDots {
+  display: inline-flex;
+  gap: 3px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 7px 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.typingDots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #9aa0b4;
+  animation: typingBounce 1s infinite ease-in-out;
+}
+
+.typingDots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typingDots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes typingBounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+/* 방금 버블이 나온 관리자 콘솔 */
+.workspace {
+  transition: box-shadow 0.3s ease;
+}
+
+.workspace.wsFocus {
+  box-shadow: 0 0 0 3px var(--mfg-accent, #5B3FE4), 0 6px 22px rgba(91, 63, 228, 0.25);
+}
+
+/* 메시지 목록의 줄은 줄어들지 않는다 — 넘치면 목록이 스크롤되어 위로 밀린다 (알림톡 카드가 눌리지 않게) */
+.kMsgs > *,
+.appBody > *,
+.wsMsgs > * {
+  flex-shrink: 0;
+}
+
+/* 페인포인트 항목이 한 개씩 들어온다 */
+.painItemIn {
+  animation: fadeUp 0.35s ease both;
 }

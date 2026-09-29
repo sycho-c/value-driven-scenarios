@@ -229,7 +229,10 @@ export function ChapterRunner({
     });
   }, [chapter.states, nextChapter, onChapterChange, totalStates]);
 
-  const autoplayPaused = guideOverlayVisible || takeoverVisible;
+  // 스테이지가 버블을 순서대로 내보내는 중이면 자동재생 카운트를 멈춘다
+  const [stageBusy, setStageBusy] = useState(false);
+  const overlayVisible = guideOverlayVisible || takeoverVisible;
+  const autoplayPaused = overlayVisible || stageBusy;
   const autoplayResetKey = useMemo(
     () => `${chapter.id}-${safeIndex}-${autoplayOn ? '1' : '0'}-${autoplayPaused ? 'p' : 'r'}`,
     [chapter.id, safeIndex, autoplayOn, autoplayPaused],
@@ -509,7 +512,13 @@ export function ChapterRunner({
       ) : chapter.stage === 'rentacar' ? (
         <StageRentacar state={node} actions={actions} onAdvance={setStateIndex} />
       ) : chapter.stage === 'manufacturing' ? (
-        <StageManufacturing state={node} actions={actions} />
+        <StageManufacturing
+          state={node}
+          actions={actions}
+          autoplay={autoplayOn && !overlayVisible}
+          overlay={overlayVisible}
+          onBusyChange={setStageBusy}
+        />
       ) : (
         <StagePhoneWorkspace
           state={node}
