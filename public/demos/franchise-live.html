@@ -1,0 +1,1783 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>스펙트라 · 가맹점 관리 지원 솔루션 인터랙티브 데모 v1</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --F:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --navy:#12275C;--navy2:#1E3A73;--purple:#5B3FE4;--purple-l:#8B6BF0;--purple-bg:#EEF0FA;
+  --ink:#141A2E;--muted:#6B7391;--faint:#9AA1B8;--line:#E6E9F2;--bg:#EEF0F6;--card:#fff;
+  --amber:#D98A00;--amber-bg:#FDF3E0;--red:#C8322F;--red-bg:#FBE9E9;--pos:#2E7D66;--pos-bg:#EAF3EF;--grid:#EDEFF5;
+  --pw:248px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--F);background:var(--bg);color:var(--ink);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere;display:flex;flex-direction:column;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ─── 신 바 ─── */
+.scene-bar{flex-shrink:0;background:var(--card);border-bottom:1px solid var(--line);padding:8px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.scene-track{display:flex;align-items:center;gap:6px}
+.sb-i{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:8px;font-size:12px;font-weight:700;color:var(--faint);cursor:pointer;position:relative;user-select:none}
+.sb-i:hover{background:var(--bg)}
+.sb-i.done{color:var(--pos)}
+.sb-i.active{background:var(--navy);color:#fff}
+.sb-d{width:19px;height:19px;border-radius:50%;background:rgba(0,0,0,.07);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+.sb-i.active .sb-d{background:rgba(255,255,255,.22)}.sb-i.done .sb-d{background:var(--pos);color:#fff}
+.sb-sep{width:14px;height:1px;background:var(--line)}
+.ind-dd{display:none;position:absolute;top:34px;left:0;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(18,39,92,.16);min-width:190px;padding:6px;z-index:60}
+.ind-dd.on{display:block}
+.ind-dd-i{padding:9px 12px;border-radius:7px;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.ind-dd-i:hover{background:var(--purple-bg);color:var(--purple)}
+.ind-dd-i.on{background:var(--navy);color:#fff}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-t{font-size:13px;font-weight:800;color:var(--navy)}
+.brand-t span{color:var(--purple)}
+.ver{font-size:10px;font-weight:700;color:var(--faint);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+
+/* ─── 진행 중 건 스트립 + 카운터 ─── */
+.strip{flex-shrink:0;background:var(--navy);color:#fff;padding:7px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.strip-l{display:flex;align-items:center;gap:10px;font-size:12px}
+.strip-k{font-size:10px;font-weight:800;letter-spacing:.4px;opacity:.7;text-transform:uppercase}
+.strip-v{font-weight:700}
+.strip-v b{color:#FFB84D}
+.strip-sep{width:1px;height:14px;background:rgba(255,255,255,.25)}
+.strip-r{display:flex;gap:6px}
+.cnt{display:flex;align-items:baseline;gap:5px;background:rgba(255,255,255,.08);border-radius:7px;padding:3px 10px;font-size:11px}
+.cnt b{font-size:14px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+.cnt span{opacity:.75}
+.cnt.bump b{color:#FFB84D}
+
+/* ─── 내레이션 바 ─── */
+.narr-bar{flex-shrink:0;background:#F7F8FC;border-bottom:1px solid var(--line);padding:9px 22px;display:flex;align-items:center;gap:14px}
+.narr-step{font-size:10.5px;font-weight:800;color:var(--purple);background:var(--purple-bg);border-radius:6px;padding:3px 8px;white-space:nowrap}
+.narr-txt{flex:1;font-size:12.5px;color:var(--ink)}
+.narr-hint{font-size:11px;color:var(--muted);white-space:nowrap}
+.next-btn{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+.next-btn:disabled{opacity:.35;cursor:default}
+.next-btn.need{box-shadow:0 0 0 3px rgba(91,63,228,.25)}
+.reset-btn{background:transparent;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--muted);cursor:pointer}
+
+/* ─── 아레나 ─── */
+.arena{flex:1;min-height:0;display:grid;grid-template-columns:auto 1fr;gap:16px;padding:14px 22px}
+.left{display:flex;flex-direction:column;gap:8px;min-height:0}
+.col-label{font-size:11px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:8px}
+.col-label .tag{font-size:9px;font-weight:800;background:var(--amber-bg);color:var(--amber);border-radius:5px;padding:1px 6px}
+.phones{display:flex;gap:14px;align-items:flex-start;flex:1;min-height:0}
+.punit{display:flex;flex-direction:column;gap:6px;transition:opacity .25s,transform .25s}
+.punit.hidden{display:none}
+.punit.dim{opacity:.35;filter:grayscale(1)}
+.pown{display:flex;align-items:center;justify-content:space-between;padding:0 4px}
+.pown-n{font-size:12px;font-weight:800;color:var(--ink)}
+.pown-t{font-size:10px;color:var(--muted)}
+.bg{font-size:9px;font-weight:800;border-radius:5px;padding:2px 7px}
+.bg-me{background:var(--purple-bg);color:var(--purple)}.bg-g{background:var(--amber-bg);color:var(--amber)}.bg-o{background:#E7F3EE;color:#1F7A5A}
+.more{border:1.5px dashed #C9CEDE;border-radius:12px;padding:9px 14px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.55)}
+.more-i{width:26px;height:26px;border-radius:8px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--muted)}
+.more-t{font-size:12px;font-weight:800}.more-s{font-size:10px;color:var(--muted)}
+
+/* ─── 폰 (iPhone 15 Pro 비율 393×852) ─── */
+.phone{width:var(--pw);aspect-ratio:393/852;position:relative;border-radius:calc(var(--pw)*0.165);padding:calc(var(--pw)*0.03);
+  background:linear-gradient(160deg,#4a4b50 0%,#2a2b2f 30%,#1c1d20 70%,#3a3b40 100%);
+  box-shadow:0 0 0 1px #5a5b60 inset,0 1px 0 rgba(255,255,255,.25) inset,0 24px 50px rgba(0,0,0,.35),0 6px 14px rgba(0,0,0,.25);
+  transition:box-shadow .25s}
+.phone.active{box-shadow:0 0 0 1px #5a5b60 inset,0 1px 0 rgba(255,255,255,.25) inset,0 24px 50px rgba(0,0,0,.35),0 0 0 4px rgba(91,63,228,.55)}
+.phone::before,.phone::after{content:'';position:absolute;background:#2f3034;border-radius:2px}
+.phone::before{left:-3px;top:22%;width:3px;height:9%;box-shadow:0 14% 0 0 #2f3034}/* 볼륨 */
+.phone::after{right:-3px;top:27%;width:3px;height:13%}/* 전원 */
+.screen{position:absolute;inset:calc(var(--pw)*0.03);border-radius:calc(var(--pw)*0.135);overflow:hidden;background:#000;display:flex;flex-direction:column}
+.screen::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,0) 28%);z-index:40;border-radius:inherit}
+.island{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:32%;height:22px;background:#000;border-radius:14px;z-index:45;box-shadow:0 0 0 1px #111}
+.island::after{content:'';position:absolute;right:9px;top:6px;width:8px;height:8px;border-radius:50%;background:#0d1a2a;box-shadow:0 0 0 1px #1b2b3a inset}
+.sbar{height:38px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 18px 4px;font-size:12px;font-weight:700;color:#000;flex-shrink:0;position:relative;z-index:44}
+.sbar.light{color:#fff}
+.sbar-r{display:flex;align-items:center;gap:5px}
+.sbar-r svg{display:block}
+.home-ind{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:34%;height:4px;border-radius:3px;background:#111;opacity:.9;z-index:44}
+.home-ind.light{background:#fff}
+.app{flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+
+/* 카카오톡 */
+.kk{background:#B2C7D9}
+.kk-hd{background:#B2C7D9;padding:6px 12px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.kk-hd .back{font-size:20px;color:#333;line-height:1;width:20px}
+.kk-hd .mid{flex:1;text-align:center;line-height:1.15}
+.kk-hd .nm{font-size:13px;font-weight:700;color:#222}
+.kk-hd .cnt2{font-size:11px;color:#556;margin-left:4px;font-weight:600}
+.kk-hd .sub{font-size:9.5px;color:#556}
+.kk-hd .ic{display:flex;gap:10px;color:#333;font-size:15px}
+.ch-badge{display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:800;background:#fff;color:#111;border-radius:4px;padding:0 4px;margin-left:4px;vertical-align:middle}
+.ch-badge i{width:8px;height:8px;border-radius:2px;background:#FEE500;display:inline-block}
+.kk-msgs{flex:1;min-height:0;overflow-y:auto;padding:6px 10px 8px;display:flex;flex-direction:column;gap:6px;scrollbar-width:none}
+.kk-msgs::-webkit-scrollbar{display:none}
+.kk-date{align-self:center;font-size:9.5px;color:#fff;background:rgba(0,0,0,.18);border-radius:10px;padding:2px 9px;margin:4px 0}
+.km{display:flex;gap:6px;align-items:flex-end;animation:up .16s ease-out}
+.km.me{flex-direction:row-reverse}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.kav{width:30px;height:30px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;align-self:flex-start;overflow:hidden}
+.kav.ch{background:#fff;color:#111;border:1px solid #d9dde3}
+.kcol{display:flex;flex-direction:column;gap:2px;max-width:76%}
+.km.me .kcol{align-items:flex-end}
+.knm{font-size:10px;color:#333;padding-left:2px;display:flex;align-items:center}
+.krow{display:flex;gap:4px;align-items:flex-end}
+.km.me .krow{flex-direction:row-reverse}
+.kb{background:#fff;border-radius:4px 12px 12px 12px;padding:7px 10px;font-size:11.5px;line-height:1.45;color:#111;box-shadow:0 1px 1px rgba(0,0,0,.06);white-space:pre-wrap}
+.km.me .kb{background:#FEE500;border-radius:12px 4px 12px 12px}
+.kmeta{display:flex;flex-direction:column;align-items:flex-start;gap:0;font-size:9px;color:#556;line-height:1.2;padding-bottom:1px;flex-shrink:0;white-space:nowrap}
+.km.me .kmeta{align-items:flex-end}
+.kmeta .rd{color:#F5B400;font-weight:700}
+.kfile{background:#fff;border-radius:12px;padding:9px 10px;min-width:150px;box-shadow:0 1px 1px rgba(0,0,0,.06)}
+.km.me .kfile{background:#FEE500}
+.kfile .fi{display:flex;gap:8px;align-items:center}
+.kfile .fic{width:30px;height:30px;border-radius:7px;background:#F0F2F5;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:800;color:#333;flex-shrink:0;border:1px solid rgba(0,0,0,.06)}
+.kfile .fn{font-size:11px;font-weight:700;color:#111;line-height:1.3;word-break:break-all}
+.kfile .fs{font-size:9px;color:#666;margin-top:1px}
+.kfile .fx{border-top:1px solid rgba(0,0,0,.08);margin-top:7px;padding-top:6px;font-size:9.5px;color:#333;display:flex;justify-content:space-between}
+.kfile .fx b{color:#111}
+.kfile.err .fn{color:#888}
+.kfile .prog{height:3px;background:rgba(0,0,0,.08);border-radius:2px;margin-top:6px;overflow:hidden}
+.kfile .prog i{display:block;height:100%;width:38%;background:#999}
+.ksys{align-self:center;font-size:9.5px;color:#334;background:rgba(255,255,255,.55);border-radius:8px;padding:3px 9px;text-align:center;max-width:90%}
+.kk-in{background:#fff;padding:6px 8px 18px;display:flex;align-items:center;gap:7px;flex-shrink:0;border-top:1px solid #e1e4ea}
+.kk-in .plus{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;color:#444;cursor:pointer;flex-shrink:0;line-height:1}
+.kk-in .plus:hover{background:#f0f0f0}
+.kk-in input{flex:1;min-width:0;border:none;background:#f5f6f8;border-radius:16px;padding:7px 11px;font-size:11.5px;outline:none;color:#111}
+.kk-in input:disabled{background:#f5f6f8;color:#aaa}
+.kk-in .snd{width:28px;height:28px;border-radius:50%;border:none;background:#e9eaee;color:#999;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.kk-in .snd.on{background:#FEE500;color:#111}
+.kk-in .snd svg{width:14px;height:14px}
+.app.locked .kk-in{opacity:.55;pointer-events:none}
+
+/* 시스템 카드 (납기 확정 · 출하요청) */
+.kcard{background:#fff;border-radius:12px;padding:10px 11px;min-width:170px;border-left:4px solid var(--purple);box-shadow:0 1px 1px rgba(0,0,0,.06)}
+.kcard .ct{font-size:9.5px;font-weight:800;color:var(--purple);letter-spacing:.3px}
+.kcard .cv{font-size:12px;font-weight:800;color:#111;margin-top:3px}
+.kcard .cd{font-size:10px;color:#444;margin-top:2px;line-height:1.4}
+.kcard .cf{font-size:9px;color:#777;margin-top:6px;border-top:1px solid #eee;padding-top:5px}
+
+/* iOS 키보드 목업 */
+.kbd{flex-shrink:0;background:#D1D4DA;padding:6px 4px 14px;display:none;flex-direction:column;gap:6px;position:relative;z-index:43}
+.app.typing .kbd{display:flex}
+.app.typing .kk-in,.app.typing .cw-in,.app.typing .wa-in,.app.typing .wc-in{padding-bottom:8px}
+.kbd-row{display:flex;justify-content:center;gap:4px}
+.kbd-k{flex:1;max-width:23px;height:30px;background:#fff;border-radius:5px;box-shadow:0 1px 0 #8a8d93;font-size:11.5px;font-weight:600;display:flex;align-items:center;justify-content:center;color:#111}
+.kbd-k.w{max-width:36px;background:#ABB0BA;font-size:9px;font-weight:700}
+.kbd-k.sp{max-width:110px;flex:3}
+.kbd-k.ret{max-width:54px;background:#007AFF;color:#fff;font-size:9.5px;font-weight:700}
+.kbd-b{display:flex;justify-content:space-between;padding:2px 12px 0;font-size:13px;color:#444}
+
+/* 알림 화면 (알림톡) */
+.al{background:#F6F6F6}
+.al-hd{background:#fff;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e5e5e5;flex-shrink:0}
+.al-hd .t{font-size:13px;font-weight:700;color:#111}
+.al-body{flex:1;min-height:0;overflow-y:auto;padding:10px}
+.alim{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);animation:up .2s ease-out}
+.alim-top{background:#FEE500;padding:8px 11px;display:flex;align-items:center;justify-content:space-between}
+.alim-top .ch{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:#111}
+.alim-top .ch i{width:22px;height:22px;border-radius:7px;background:#111;display:flex;align-items:center;justify-content:center;color:#FEE500;font-size:9px;font-weight:900}
+.alim-top .lb{font-size:8.5px;font-weight:800;background:#111;color:#FEE500;border-radius:4px;padding:1px 5px}
+.alim-bd{padding:10px 11px}
+.alim-bd .ti{font-size:12px;font-weight:800;color:#111;margin-bottom:5px}
+.alim-bd .tx{font-size:11px;color:#333;line-height:1.5}
+.alim-bd .nt{background:#F5F6F8;border-radius:7px;padding:7px 9px;margin-top:8px;font-size:10px;color:#555;line-height:1.5}
+.alim-btn{margin:0 11px 11px;background:#FEE500;border:none;border-radius:8px;padding:9px;font-size:11.5px;font-weight:800;color:#111;cursor:pointer;width:calc(100% - 22px)}
+.alim-btn.pulse{box-shadow:0 0 0 3px rgba(91,63,228,.35)}
+.al-empty{text-align:center;color:#999;font-size:11px;padding:40px 0}
+/* 인증 화면 */
+.auth{background:#fff;padding:26px 18px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;flex:1}
+.auth .lg{width:44px;height:44px;border-radius:13px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px}
+.auth .t{font-size:14px;font-weight:800;color:#111}
+.auth .d{font-size:11px;color:#666;line-height:1.5}
+.auth .row{width:100%;display:flex;justify-content:space-between;font-size:11px;padding:8px 10px;background:#F5F6F8;border-radius:8px}
+.auth .row b{color:#111}
+.auth .ok{margin-top:auto;width:100%;background:var(--navy);color:#fff;border:none;border-radius:9px;padding:11px;font-weight:800;font-size:12px;cursor:pointer}
+.auth .chk{color:var(--pos);font-weight:800;font-size:11px}
+
+/* iOS 홈 */
+.ios{background:transparent;padding:0 12px;display:flex;flex-direction:column;flex:1}
+.ios-time{color:#fff;font-size:40px;font-weight:300;text-align:center;letter-spacing:-1px;margin-top:16px;line-height:1}
+.ios-date{color:rgba(255,255,255,.85);font-size:11px;text-align:center;margin-top:2px}
+.ios-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px;margin-top:22px}
+.ios-ic{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:default}
+.ios-ic i{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);font-style:normal;font-weight:800}
+.ios-ic span{font-size:9px;color:#fff;font-weight:500}
+.ios-ic.cw{cursor:pointer}.ios-ic.cw i{background:var(--navy);border:2px solid #fff}
+.ios-ic.cw.pulse i{box-shadow:0 0 0 4px rgba(255,255,255,.6),0 2px 6px rgba(0,0,0,.2)}
+.ios-dock{margin-top:auto;margin-bottom:14px;background:rgba(255,255,255,.22);border-radius:22px;padding:8px 10px;display:flex;justify-content:space-around}
+.ios-dock i{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;font-style:normal;font-weight:800}
+/* Cowork+ 앱 */
+.cw{background:#F5F6FA}
+.cw .sbar{background:var(--navy)}
+.wa .sbar{background:#075E54}
+.wa .ch-badge,.wc .ch-badge{display:none}
+.cw-notice{flex-shrink:0}
+.iosapp{background:linear-gradient(180deg,#5b6bd6 0%,#7b52e0 55%,#3f2f8e 100%)}
+.cw-hd{background:var(--navy);color:#fff;padding:8px 12px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cw-hd .nm{font-size:12.5px;font-weight:800}
+.cw-hd .sub{font-size:9.5px;opacity:.75}
+.cw-hd .lg{font-size:10px;font-weight:900;background:#fff;color:var(--navy);border-radius:5px;padding:1px 6px}
+.cw-msgs{flex:1;min-height:0;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:6px;scrollbar-width:none}
+.cm{display:flex;gap:6px;align-items:flex-end;animation:up .16s ease-out}
+.cm.me{flex-direction:row-reverse}
+.cm .cb{background:#fff;border-radius:4px 12px 12px 12px;padding:7px 10px;font-size:11.5px;color:#111;box-shadow:0 1px 1px rgba(0,0,0,.06);max-width:78%;line-height:1.45}
+.cm.me .cb{background:var(--purple);color:#fff;border-radius:12px 4px 12px 12px}
+.cm .cnm{font-size:9.5px;color:#666;margin-bottom:2px}
+.cw-in{background:#fff;padding:7px 8px 18px;display:flex;gap:7px;align-items:center;border-top:1px solid #e3e5ec;flex-shrink:0}
+.cw-in .plus{width:24px;height:24px;border-radius:50%;background:var(--purple-bg);color:var(--purple);display:flex;align-items:center;justify-content:center;font-weight:800;cursor:pointer;flex-shrink:0}
+.cw-in input{flex:1;min-width:0;border:1px solid #e3e5ec;border-radius:16px;padding:7px 11px;font-size:11.5px;outline:none;background:#F7F8FC}
+.cw-in .snd{width:28px;height:28px;border-radius:50%;border:none;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.cw-in .snd svg{width:13px;height:13px}
+/* 앱 전환 안내 */
+.cw-notice{background:#fff;border-radius:10px;padding:8px 10px;font-size:10.5px;color:#444;line-height:1.5;border:1px solid #e3e5ec;align-self:center;text-align:center}
+
+/* WhatsApp */
+.wa{background:#EFE7DE url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60'><circle cx='10' cy='10' r='1.2' fill='%23d9cfc3'/><circle cx='40' cy='30' r='1.2' fill='%23d9cfc3'/><circle cx='20' cy='48' r='1.2' fill='%23d9cfc3'/></svg>")}
+.wa-hd{background:#075E54;color:#fff;padding:6px 10px 8px;display:flex;align-items:center;gap:9px;flex-shrink:0}
+.wa-hd .av{width:30px;height:30px;border-radius:50%;background:#128C7E;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+.wa-hd .nm{font-size:12.5px;font-weight:700;line-height:1.1}
+.wa-hd .st{font-size:9.5px;opacity:.85}
+.wa .kb{border-radius:0 8px 8px 8px;background:#fff}
+.wa .km.me .kb{background:#DCF8C6;border-radius:8px 0 8px 8px}
+.wa .kmeta{font-size:8.5px;color:#7a7a7a}
+.wa .kfile{background:#fff;border-radius:8px}.wa .km.me .kfile{background:#DCF8C6}
+.wa-in{background:#F0F0F0;padding:6px 8px 18px;display:flex;gap:7px;align-items:center;flex-shrink:0}
+.wa-in input{flex:1;min-width:0;border:none;border-radius:18px;padding:8px 12px;font-size:11.5px;outline:none;background:#fff}
+.wa-in .snd{width:30px;height:30px;border-radius:50%;border:none;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.wa-in .snd svg{width:13px;height:13px}
+/* WeChat */
+.wc{background:#EDEDED}
+.wc-hd{background:#EDEDED;padding:6px 12px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #d9d9d9;flex-shrink:0}
+.wc-hd .nm{font-size:13px;font-weight:600;color:#111;flex:1;text-align:center}
+.wc .kb{border-radius:6px;background:#fff}
+.wc .km.me .kb{background:#95EC69;border-radius:6px}
+.wc .kav{border-radius:6px}
+.wc .kfile{border-radius:6px;background:#fff}.wc .km.me .kfile{background:#95EC69}
+.wc-in{background:#F7F7F7;padding:6px 8px 18px;display:flex;gap:7px;align-items:center;border-top:1px solid #dcdcdc;flex-shrink:0}
+.wc-in input{flex:1;min-width:0;border:none;border-radius:6px;padding:8px 10px;font-size:11.5px;outline:none;background:#fff}
+.wc-in .snd{border:none;background:#07C160;color:#fff;border-radius:5px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer}
+/* Authenticator */
+.au{background:#F3F5F9;display:flex;flex-direction:column;flex:1}
+.au-hd{background:#0067B8;color:#fff;padding:9px 12px;font-size:12.5px;font-weight:700;flex-shrink:0;display:flex;align-items:center;gap:8px}
+.au-hd i{width:18px;height:18px;border-radius:4px;background:#fff;display:inline-block;background:linear-gradient(90deg,#F25022 50%,#7FBA00 50%) top/100% 50% no-repeat,linear-gradient(90deg,#00A4EF 50%,#FFB900 50%) bottom/100% 50% no-repeat}
+.au-card{margin:14px 12px;background:#fff;border-radius:12px;padding:16px 14px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center}
+.au-card .t{font-size:13px;font-weight:800;color:#111}
+.au-card .d{font-size:10.5px;color:#666;margin-top:4px}
+.au-card .n{font-size:38px;font-weight:800;color:#0067B8;margin:12px 0 4px;letter-spacing:1px}
+.au-card .h{font-size:10px;color:#777}
+.au-btns{display:flex;gap:8px;margin-top:14px}
+.au-btns button{flex:1;border-radius:7px;padding:9px;font-size:11.5px;font-weight:700;cursor:pointer;border:1px solid #d0d4dc;background:#fff;color:#333}
+.au-btns button.ok{background:#0067B8;color:#fff;border-color:#0067B8}
+.au-btns button.ok.pulse{box-shadow:0 0 0 3px rgba(0,103,184,.3)}
+.au-empty{text-align:center;color:#999;font-size:11px;padding:40px 12px;line-height:1.5}
+
+/* 파일 선택 시트 */
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.25);z-index:46;padding:10px 10px 14px;animation:sheetUp .2s ease-out;display:none}
+.sheet.on{display:block}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
+.sheet .sh-t{font-size:11px;font-weight:800;color:#333;text-align:center;margin-bottom:8px}
+.sheet .sh-i{display:flex;align-items:center;gap:9px;padding:8px;border-radius:9px;cursor:pointer;border:1px solid #eee;margin-bottom:5px}
+.sheet .sh-i:hover{background:#F7F8FC;border-color:var(--purple-l)}
+.sheet .sh-i.rec{border-color:var(--purple);background:var(--purple-bg)}
+.sheet .sh-i .fic{width:30px;height:30px;border-radius:7px;background:#F0F2F5;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:800;color:#333}
+.sheet .sh-i .fn{font-size:11px;font-weight:700;color:#111}.sheet .sh-i .fs{font-size:9px;color:#666}
+.sheet .sh-x{text-align:center;font-size:11px;color:#999;padding-top:6px;cursor:pointer}
+
+/* ─── 워크스페이스 ─── */
+.wscol{display:flex;flex-direction:column;gap:8px;min-height:0;min-width:0}
+.ws-role{display:flex;align-items:center;gap:8px}
+.ws-rb{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;font-size:11.5px;font-weight:800;color:var(--muted);cursor:pointer}
+.ws-rb.on{background:var(--purple);color:#fff;border-color:var(--purple)}
+.ws-rtag{font-size:10px;color:var(--muted);margin-left:auto}
+.ws{flex:1;min-height:0;display:grid;grid-template-columns:200px 1fr;border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(18,39,92,.12);background:#fff;border:1px solid var(--line)}
+.ws-side{background:#0F1A3A;color:#fff;padding:14px 12px;display:flex;flex-direction:column;gap:8px;min-height:0;overflow-y:auto}
+.ws-logo{font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:space-between}
+.ws-logo small{font-size:9px;font-weight:700;color:#5EE0A8;background:rgba(94,224,168,.12);border-radius:5px;padding:2px 6px}
+.ws-sec{font-size:9.5px;font-weight:800;color:rgba(255,255,255,.45);letter-spacing:.4px;margin-top:8px}
+.ws-menu{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer;font-size:11px}
+.ws-menu:hover{background:rgba(255,255,255,.06)}
+.ws-menu i{width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;font-weight:800}
+.ws-menu .s{font-size:9px;color:rgba(255,255,255,.5)}
+.ws-room{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer;font-size:11px;animation:up .2s ease-out}
+.ws-room.on{background:rgba(91,63,228,.35)}
+.ws-room .av{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0}
+.ws-room .rn{font-weight:700;line-height:1.15}
+.ws-room .rs{font-size:9px;color:rgba(255,255,255,.5)}
+.ws-room .ub{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:800;border-radius:9px;padding:0 6px}
+.ws-empty{font-size:10.5px;color:rgba(255,255,255,.4);padding:6px 8px;line-height:1.5}
+.ws-main{display:flex;flex-direction:column;min-height:0;min-width:0;background:#F7F8FC}
+.ws-chd{background:#fff;border-bottom:1px solid var(--line);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ws-cn{font-size:13.5px;font-weight:800;color:var(--ink)}
+.ws-cs{font-size:10.5px;color:var(--muted)}
+.ws-cn .mem{font-size:10px;font-weight:600;color:var(--muted);margin-left:8px}
+.ws-tabs{display:flex;gap:4px}
+.ws-tab{border:1px solid var(--line);background:#fff;border-radius:7px;padding:5px 10px;font-size:10.5px;font-weight:700;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:5px}
+.ws-tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.ws-tab i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.ws-msgs{flex:1;min-height:0;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:9px}
+.wm{display:flex;gap:8px;align-items:flex-start;animation:up .18s ease-out;max-width:78%}
+.wm.me{align-self:flex-end;flex-direction:row-reverse}
+.wm .av{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0}
+.wm .body{display:flex;flex-direction:column;gap:3px;min-width:0}
+.wm.me .body{align-items:flex-end}
+.wm .who{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.wm .who b{color:var(--ink);font-weight:700}
+.wm .who .src{font-size:9px;font-weight:700;background:#FEE500;color:#111;border-radius:4px;padding:0 5px}
+.wm .who .src.wa{background:#25D366;color:#fff}.wm .who .src.wc{background:#07C160;color:#fff}.wm .who .src.app{background:var(--navy);color:#fff}
+.wm .bb{background:#fff;border:1px solid var(--line);border-radius:4px 12px 12px 12px;padding:8px 11px;font-size:12px;line-height:1.5;color:var(--ink);white-space:pre-wrap}
+.wm.me .bb{background:var(--purple);color:#fff;border-color:var(--purple);border-radius:12px 4px 12px 12px}
+.wm .tr{margin-top:5px;padding-top:5px;border-top:1px dashed rgba(0,0,0,.12);font-size:11px;color:#444}
+.wm.me .tr{border-top-color:rgba(255,255,255,.35);color:rgba(255,255,255,.9)}
+.wm .tr i{font-style:normal;font-size:8.5px;font-weight:800;background:rgba(0,0,0,.06);border-radius:4px;padding:0 4px;margin-right:4px}
+.wm.me .tr i{background:rgba(255,255,255,.22)}
+.wm .tm{font-size:9.5px;color:var(--faint)}
+.wm .unk{color:var(--red);font-weight:700;background:var(--red-bg);border-radius:4px;padding:0 5px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:800;border-radius:5px;padding:1px 6px;white-space:nowrap;animation:up .2s ease-out}
+.badge.pos{background:var(--pos-bg);color:var(--pos)}
+.badge.pur{background:var(--purple-bg);color:var(--purple)}
+.badge.amb{background:var(--amber-bg);color:var(--amber)}
+.badge.red{background:var(--red-bg);color:var(--red)}
+.badge.nav{background:#E7EAF3;color:var(--navy)}
+.wf{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;display:flex;gap:9px;align-items:center;min-width:220px}
+.wm.me .wf{background:#F1EEFD;border-color:#D9CEF7}
+.wf .fic{width:34px;height:34px;border-radius:8px;background:#F0F2F5;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#333;flex-shrink:0}
+.wf .fn{font-size:11.5px;font-weight:700;color:var(--ink);word-break:break-all}
+.wf .fn.rnd{font-family:ui-monospace,Menlo,monospace;color:var(--red)}
+.wf .fs{font-size:9.5px;color:var(--muted);margin-top:1px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.wcard{background:#fff;border:1px solid #D9CEF7;border-left:4px solid var(--purple);border-radius:10px;padding:9px 12px;min-width:230px}
+.wcard .ct{font-size:9.5px;font-weight:800;color:var(--purple);letter-spacing:.3px}
+.wcard .cv{font-size:12.5px;font-weight:800;margin-top:3px}
+.wcard .cd{font-size:10.5px;color:var(--muted);margin-top:2px}
+.wsys{align-self:center;font-size:10.5px;color:var(--muted);background:#EEF0F6;border-radius:8px;padding:4px 12px;text-align:center;animation:up .2s ease-out}
+.wsys.warn{background:var(--amber-bg);color:var(--amber);font-weight:700}
+.ws-fix{align-self:flex-start;display:flex;gap:6px;animation:up .2s ease-out}
+.fixbtn{border:1px solid var(--purple);background:#fff;color:var(--purple);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;cursor:pointer}
+.fixbtn.pulse{box-shadow:0 0 0 3px rgba(91,63,228,.28)}
+.ws-input{background:#fff;border-top:1px solid var(--line);padding:8px 12px 10px;flex-shrink:0;display:flex;flex-direction:column;gap:7px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;min-height:0}
+.chip{border:1px solid #D9CEF7;background:var(--purple-bg);color:var(--purple);border-radius:14px;padding:4px 11px;font-size:11px;font-weight:700;cursor:pointer;animation:up .2s ease-out}
+.chip:hover{background:var(--purple);color:#fff}
+.chip.lbl{border:none;background:transparent;color:var(--faint);font-weight:600;cursor:default;padding-left:0}
+.ws-row{display:flex;gap:8px;align-items:center}
+.ws-row .plus{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--muted);cursor:pointer;flex-shrink:0}
+.ws-row .plus.on{border-color:var(--purple);color:var(--purple)}
+.ws-row input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:10px;padding:9px 13px;font-size:12.5px;outline:none;background:#F7F8FC}
+.ws-row input:focus{border-color:var(--purple);background:#fff}
+.ws-row input:disabled{color:var(--faint)}
+.ws-row .snd{background:var(--navy);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:800;cursor:pointer;flex-shrink:0}
+.ws-row .snd.ai{background:var(--purple)}
+.ws-row .snd:disabled{opacity:.4;cursor:default}
+.ws-act{display:flex;gap:6px;flex-wrap:wrap}
+.actbtn{border:1px solid var(--navy);background:#fff;color:var(--navy);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:5px}
+.actbtn.pri{background:var(--navy);color:#fff}
+.actbtn.pulse{box-shadow:0 0 0 3px rgba(18,39,92,.25)}
+.actbtn:disabled{opacity:.35;cursor:default;box-shadow:none}
+.ws-main.locked .ws-row{opacity:.5;pointer-events:none}
+.ws-main{position:relative}
+/* 관리자 빈 패널(사각지대) */
+.blind{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--faint);text-align:center;padding:20px}
+.blind .ic{width:54px;height:54px;border-radius:16px;border:2px dashed #C9CEDE;display:flex;align-items:center;justify-content:center;font-size:20px;color:#C9CEDE}
+.blind .t{font-size:13px;font-weight:800;color:var(--muted)}
+.blind .d{font-size:11px;line-height:1.6}
+.blind .kv{display:flex;gap:16px;margin-top:6px}
+.blind .kv div{font-size:11px}.blind .kv b{display:block;font-size:20px;font-weight:800;color:var(--faint)}
+.blind.warn{background:repeating-linear-gradient(135deg,transparent 0 12px,rgba(200,50,47,.04) 12px 24px)}
+.blind.warn .t{color:var(--red)}
+/* 납기 확정 미니 폼 */
+.due-form{display:flex;gap:6px;align-items:center;background:#F7F8FC;border:1px solid var(--line);border-radius:10px;padding:8px 10px;animation:up .2s ease-out}
+.due-form label{font-size:11px;color:var(--muted);font-weight:700}
+.due-form input{border:1px solid var(--line);border-radius:7px;padding:6px 9px;font-size:12px;width:120px;outline:none}
+.due-form .ok{background:var(--purple);color:#fff;border:none;border-radius:7px;padding:7px 12px;font-size:11px;font-weight:800;cursor:pointer}
+/* 해외 통합 채널 목록 */
+.ovs-list{display:flex;flex-direction:column;gap:6px}
+.ovs-ch{display:flex;align-items:center;gap:9px;padding:8px;border-radius:9px;cursor:pointer;border:1px solid transparent}
+.ovs-ch.on{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)}
+.ovs-ch .ic{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fff}
+.ovs-ch .ic.wa{background:#25D366}.ovs-ch .ic.wc{background:#07C160}
+.ovs-ch .n{font-size:11px;font-weight:700}.ovs-ch .s{font-size:9px;color:rgba(255,255,255,.5)}
+.ovs-ch.lock{opacity:.45}
+/* 3대 요건 스트립 */
+.vstrip{flex-shrink:0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 22px 12px}
+.vs{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;border-top:3px solid var(--purple)}
+.vs.pain{border-top-color:var(--amber)}.vs.roi{border-top-color:var(--pos)}
+.vs .t{font-size:9.5px;font-weight:800;color:var(--muted);letter-spacing:.3px}
+.vs .b{font-size:11px;color:var(--ink);margin-top:2px;line-height:1.45}
+.vs .b b{color:var(--navy)}
+.tagb{font-size:8.5px;font-weight:800;border-radius:4px;padding:0 5px;margin-left:4px}
+.tagb.fix{background:var(--pos-bg);color:var(--pos)}.tagb.est{background:var(--amber-bg);color:var(--amber)}
+/* 데이터 툴팁 */
+#tip{position:fixed;z-index:300;background:var(--ink);color:#fff;border-radius:9px;padding:10px 12px;font-size:11px;max-width:290px;box-shadow:0 8px 26px rgba(0,0,0,.35);pointer-events:none;opacity:0;transition:opacity .12s;line-height:1.5}
+#tip.on{opacity:1}
+#tip .tt{font-weight:800;font-size:12px;margin-bottom:4px}
+#tip .tl{padding:2px 0;border-top:1px solid rgba(255,255,255,.14);color:#C7CCDC}
+#tip .tl:first-of-type{border-top:none}
+#tip .ta{margin-top:5px;padding-top:4px;border-top:1px dashed rgba(255,255,255,.24);color:#8FE0C4;font-weight:600}
+#tip .tamt{font-size:14px;font-weight:800;color:#FFB84D;margin:3px 0}
+/* ─── 액션 큐 ─── */
+.focus-target{outline:3px solid var(--purple)!important;outline-offset:3px;border-radius:10px;animation:ring 1.1s ease-in-out infinite;position:relative;z-index:47}
+@keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(91,63,228,.55)}60%{box-shadow:0 0 0 9px rgba(91,63,228,0)}}
+#cue{position:fixed;z-index:120;background:var(--purple);color:#fff;border-radius:11px;padding:8px 12px;box-shadow:0 10px 28px rgba(91,63,228,.4);max-width:320px;display:none;pointer-events:auto;animation:up .2s ease-out}
+#cue.on{display:block}
+#cue .cue-l{font-size:12px;font-weight:800;display:flex;align-items:center;gap:7px;white-space:nowrap}
+#cue .cue-n{width:18px;height:18px;border-radius:50%;background:#fff;color:var(--purple);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;flex-shrink:0}
+#cue .cue-chips{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+#cue .cue-chips:empty{display:none}
+#cue .cue-chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:600;cursor:pointer;text-align:left;white-space:normal;line-height:1.4}
+#cue .cue-chip:hover{background:#fff;color:var(--purple)}
+#cue .cue-chip small{display:block;font-size:9px;opacity:.75;font-weight:700;margin-bottom:1px}
+#cue .cue-arrow{position:absolute;width:14px;height:14px;background:var(--purple);transform:rotate(45deg);left:50%;margin-left:-7px}
+#cue.below .cue-arrow{top:-6px}
+#cue.above .cue-arrow{bottom:-6px}
+#cue.side .cue-arrow{left:-6px!important;margin-left:0!important;top:50%;margin-top:-7px}
+.narr-act{font-size:11px;font-weight:800;color:#fff;background:var(--purple);border-radius:7px;padding:4px 10px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.narr-act i{font-style:normal;width:16px;height:16px;border-radius:50%;background:#fff;color:var(--purple);display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:900}
+.narr-act:empty{display:none}
+/* S4 대시보드 루트 */
+#s4{display:none;flex:1;min-height:0;flex-direction:column}
+#s4.on{display:flex}
+.arena.s4off{display:none}
+.vstrip.s4off{display:none}
+@media(max-width:1280px){:root{--pw:220px}}
+@media(max-width:1100px){:root{--pw:200px}.ws{grid-template-columns:170px 1fr}}
+
+/* ─── 가맹점 관리 추가 요소 ─── */
+.ck{display:inline-block;font-size:10.5px;font-weight:700;border-radius:6px;padding:1px 7px;margin-right:4px;background:rgba(255,255,255,.10);color:rgba(255,255,255,.7)}
+.ck.ok{background:rgba(46,125,102,.35);color:#fff}
+.ck.bad{background:rgba(200,50,47,.55);color:#fff}
+/* 문자(SMS) */
+.app.sms{background:#fff}
+.sms-hd{background:#F6F6F8;border-bottom:1px solid #e5e5ea;padding:6px 12px 8px;display:flex;flex-direction:column;align-items:center;position:relative;flex-shrink:0}
+.sms-hd .back{position:absolute;left:12px;top:12px;font-size:20px;color:#007AFF}
+.sms-hd .av{width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.sms-hd .nm{font-size:11.5px;font-weight:700;color:#111;margin-top:3px}
+.sms-hd .sub{font-size:9px;color:#888}
+.sms-body{flex:1;min-height:0;overflow-y:auto;padding:12px 10px;display:flex;flex-direction:column;gap:8px}
+.sms-empty{text-align:center;color:#999;font-size:11px;padding:40px 0}
+.sms-b{align-self:flex-start;max-width:86%;background:#E9E9EB;color:#111;border-radius:16px;padding:8px 11px;font-size:11px;line-height:1.5;animation:up .2s ease-out}
+.sms-link{color:#007AFF;text-decoration:underline;cursor:pointer;font-weight:600;word-break:break-all}
+.sms-link.focus-target{outline:2px solid var(--purple);outline-offset:2px;border-radius:4px}
+.sms-t{font-size:8.5px;color:#888;margin-top:3px}
+/* 웹 채널 */
+.web-url{background:#F1F3F4;padding:4px 10px;font-size:9.5px;color:#444;flex-shrink:0;display:flex;align-items:center;gap:5px;border-bottom:1px solid #e3e5e8}
+.web-url .lk{font-size:8px}
+.web-hd{background:#fff;padding:8px 12px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #e7e9ee;flex-shrink:0}
+.web-hd .lg{width:26px;height:26px;border-radius:8px;background:var(--navy);color:#fff;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.web-hd .nm{font-size:12px;font-weight:800;color:#111}
+.web-hd .sub{font-size:9px;color:#1F7A5A;font-weight:700}
+.app.kk.web .kk-msgs{background:#F4F6F8}
+.app.kk.web .kk-in .snd.on{background:var(--navy);color:#fff}
+/* 조작 카드 (공지 · 교육 · 설문) */
+.kcard.act{min-width:180px}
+.kact{margin-top:8px;width:100%;border:none;border-radius:8px;background:var(--navy);color:#fff;font-size:11px;font-weight:800;padding:7px;cursor:pointer}
+.kact:disabled{background:#E7EAF3;color:var(--navy);cursor:default}
+.kact.live.focus-target{box-shadow:0 0 0 3px rgba(91,63,228,.45)}
+.svq{margin-top:6px;display:flex;flex-direction:column;gap:4px}
+.svr{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#333}
+.svo{display:flex;gap:3px}
+.svo i{font-style:normal;font-size:9px;border:1px solid #d9dde3;border-radius:5px;padding:1px 5px;color:#666}
+.svo i.on{background:var(--purple);border-color:var(--purple);color:#fff;font-weight:700}
+/* 관리자 양식 · 과업 · 구분선 */
+.adm-form{flex-wrap:wrap;border-color:#D9CEF7;background:#F6F3FF}
+.adm-form select{border:1px solid var(--line);border-radius:7px;padding:6px 8px;font-size:12px;background:#fff;outline:none}
+.af-tag{font-size:9.5px;font-weight:800;color:#fff;background:var(--navy);border-radius:5px;padding:2px 7px}
+.ff-fix{font-size:11.5px;font-weight:700;color:var(--ink);background:#fff;border:1px dashed var(--line);border-radius:7px;padding:5px 8px}
+.wcard.adm{border-color:#C9D2EA;border-left-color:var(--navy)}
+.wcard.adm .ct{color:var(--navy)}
+.wtask{align-self:center;background:var(--amber-bg);border:1px solid #F0D6A6;border-radius:10px;padding:8px 14px;text-align:center;animation:up .2s ease-out}
+.wtask .tt{font-size:11px;font-weight:800;color:var(--amber)}
+.wtask .td{font-size:10.5px;color:var(--ink);margin-top:2px}
+.wdiv{align-self:stretch;display:flex;align-items:center;gap:8px;font-size:10px;font-weight:800;color:var(--purple);margin:4px 0}
+.wdiv::before,.wdiv::after{content:'';flex:1;height:1px;background:#D9CEF7}
+#ws.adm .ws-rtag{background:var(--navy);color:#fff}
+.as-in{border:1px solid var(--line);border-radius:7px;padding:6px 8px;font-size:12px;background:#fff}
+
+.knm{white-space:nowrap}
+.ch-badge{white-space:nowrap}
+.row2b{align-items:start}
+
+</style>
+<style>/* ── S4 대시보드 (네임스페이스 #s4) ── */
+#s4{background:var(--bg);color:var(--ink);font-size:14px}
+#s4 .scene-bar{flex-shrink:0;background:var(--card);border-bottom:1px solid var(--line);padding:9px 24px;display:flex;align-items:center;gap:7px}
+#s4 .sb-i{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:8px;font-size:12px;font-weight:700;color:var(--faint)}
+#s4 .sb-i.done{color:var(--pos)}
+#s4 .sb-i.active{background:var(--navy);color:#fff}
+#s4 .sb-d{width:19px;height:19px;border-radius:50%;background:rgba(0,0,0,.07);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+#s4 .sb-i.active .sb-d{background:rgba(255,255,255,.22)}
+#s4 .sb-i.done .sb-d{background:var(--pos);color:#fff}
+#s4 .sb-sep{width:16px;height:1px;background:var(--line)}
+#s4 .dash-top{flex-shrink:0;background:var(--card);border-bottom:1px solid var(--line);padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+#s4 .dash-title{font-size:16px;font-weight:800;color:var(--navy)}
+#s4 .dash-title span{color:var(--muted);font-size:12px;font-weight:500;margin-left:8px}
+#s4 .dash-tabs{display:flex;gap:6px;background:var(--bg);padding:4px;border-radius:11px}
+#s4 .dash-tab{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:inherit;transition:.15s}
+#s4 .dash-tab.on{background:var(--card);color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+#s4 .dash-body{flex:1;overflow-y:auto;padding:18px 24px;min-height:0}
+#s4 .exec{background:linear-gradient(120deg,var(--navy),var(--navy2));color:#fff;border-radius:14px;padding:18px 22px;margin-bottom:16px;display:flex;align-items:center;gap:26px}
+#s4 .exec-lead-l{font-size:11px;opacity:.75;font-weight:600;letter-spacing:.3px}
+#s4 .exec-lead-v{font-size:30px;font-weight:800;margin-top:2px}
+#s4 .exec-lead-v small{font-size:14px;font-weight:600;opacity:.8}
+#s4 .exec-div{width:1px;height:44px;background:rgba(255,255,255,.2)}
+#s4 .exec-items{display:flex;gap:24px;flex:1}
+#s4 .exec-item-l{font-size:11px;opacity:.75;font-weight:600}
+#s4 .exec-item-v{font-size:19px;font-weight:800;margin-top:3px;display:flex;align-items:center;gap:6px}
+#s4 .exec-chip{font-size:10px;font-weight:800;padding:2px 8px;border-radius:6px}
+#s4 .chip-red{background:var(--red);color:#fff}
+#s4 .chip-amber{background:var(--amber);color:#fff}
+#s4 .exec-btn{background:#fff;color:var(--navy);border:none;border-radius:10px;padding:11px 18px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
+#s4 .toprow{display:grid;grid-template-columns:1.05fr 2fr;gap:12px;margin-bottom:16px}
+#s4 .insight{background:linear-gradient(140deg,var(--navy),#1E3A73);color:#fff;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+#s4 .insight::after{content:'';position:absolute;right:-30px;bottom:-30px;width:130px;height:130px;border-radius:50%;background:rgba(139,107,240,.16)}
+#s4 .ins-l{font-size:11px;opacity:.72;font-weight:700;letter-spacing:.4px}
+#s4 .ins-v{font-size:34px;font-weight:800;margin-top:6px;line-height:1.05;position:relative;z-index:1}
+#s4 .ins-v small{font-size:14px;font-weight:600;opacity:.8}
+#s4 .ins-sub{font-size:12px;margin-top:10px;opacity:.88;position:relative;z-index:1;line-height:1.5}
+#s4 .ins-sub b{color:#FFB84D}
+#s4 .ins-cta{margin-top:14px;position:relative;z-index:1}
+#s4 .ins-btn{background:#fff;color:var(--navy);border:none;border-radius:9px;padding:9px 15px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit}
+#s4 .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+#s4 .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 16px;cursor:pointer;transition:.15s;position:relative}
+#s4 .kpi:hover{border-color:var(--purple);box-shadow:0 4px 14px rgba(91,63,228,.12)}
+#s4 .kpi.on{border-color:var(--purple);box-shadow:0 0 0 2px rgba(91,63,228,.18)}
+#s4 .kpi-top{display:flex;justify-content:space-between;align-items:flex-start}
+#s4 .kpi-l{font-size:11px;color:var(--muted);font-weight:700}
+#s4 .kpi-ic{display:none}
+#s4 .kpi-v{font-size:26px;font-weight:800;color:var(--purple);margin-top:5px;line-height:1}
+#s4 .kpi-sub{font-size:10px;margin-top:5px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;color:var(--muted)}
+#s4 .kpi-delta{font-weight:800}
+#s4 .delta-pos{color:var(--pos)}
+#s4 .delta-neg{color:var(--red)}
+#s4 .tag{font-size:9px;font-weight:800;padding:1px 5px;border-radius:4px}
+#s4 .tag-fix{background:#EAF3EF;color:var(--pos)}
+#s4 .tag-est{background:var(--amber-bg);color:var(--amber)}
+#s4 .kpi-hint{position:absolute;bottom:7px;right:11px;font-size:9px;color:var(--faint)}
+#s4 .gauge-wrap{display:flex;flex-direction:column;align-items:center}
+#s4 .conc-wrap{display:flex;gap:18px;align-items:center}
+#s4 .conc-legend{flex:1}
+#s4 .conc-li{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--grid);font-size:12px}
+#s4 .conc-li:last-child{border-bottom:none}
+#s4 .conc-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:7px}
+#s4 .split-bar{display:flex;height:22px;border-radius:7px;overflow:hidden;margin:8px 0 6px}
+#s4 .split-seg{height:100%}
+#s4 .split-legend{display:flex;gap:16px;margin-top:6px}
+#s4 .split-lg{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}
+#s4 .split-lg b{color:var(--ink)}
+#s4 .drill-panel{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;overflow:hidden;display:none}
+#s4 .drill-panel.on{display:block}
+#s4 .drill-hd{background:#F7F8FC;padding:12px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+#s4 .drill-hd-t{font-size:13px;font-weight:800;color:var(--navy)}
+#s4 .drill-hd-x{cursor:pointer;color:var(--muted);font-size:15px}
+#s4 .drill-in{padding:16px 18px}
+#s4 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+#s4 .card-hd{display:flex;align-items:center;gap:9px;margin-bottom:3px}
+#s4 .sec-tag{display:flex;align-items:center;gap:8px;margin:6px 0 12px}
+#s4 .sec-line{flex:1;height:1px;background:var(--line)}
+#s4 .sec-label{font-size:11px;font-weight:800;letter-spacing:.4px;padding:4px 12px;border-radius:20px}
+#s4 .sec-today{background:var(--navy);color:#fff}
+#s4 .sec-period{background:#EDE9FB;color:var(--purple);border:1px solid #D9CEF7}
+#s4 .sec-desc{font-size:10.5px;color:var(--muted);font-weight:500}
+#s4 .card-ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:#EEF0FA;color:var(--purple)}
+#s4 .card-t{font-size:14px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:7px}
+#s4 .aitag{font-size:8px;font-weight:800;background:var(--purple);color:#fff;padding:1px 6px;border-radius:4px;letter-spacing:.3px}
+#s4 .card-sub{font-size:11px;color:var(--muted);margin:2px 0 14px 39px}
+#s4 .sub-h{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:10px}
+#s4 .row2{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:16px}
+#s4 .row2b{display:grid;grid-template-columns:1fr 1.3fr;gap:16px;align-items:center}
+#s4 .rank{margin-bottom:13px}
+#s4 .rank-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+#s4 .rank-name{font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:7px}
+#s4 .rank-badge{font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;color:#fff}
+#s4 .rank-amt{font-size:14px;font-weight:800}
+#s4 .rank-amt small{font-size:10px;color:var(--muted);font-weight:600;margin-left:3px}
+#s4 .rank-track{height:12px;background:var(--grid);border-radius:6px;overflow:hidden}
+#s4 .rank-fill{height:100%;border-radius:6px}
+#s4 .rank-ev{font-size:10px;color:var(--muted);margin-top:5px}
+#s4 .tbl{width:100%;border-collapse:collapse;font-size:12px}
+#s4 .tbl th{text-align:left;padding:8px 10px;background:#F7F8FC;color:var(--muted);font-size:10.5px;font-weight:700;border-bottom:1px solid var(--line)}
+#s4 .tbl td{padding:9px 10px;border-bottom:1px solid var(--grid)}
+#s4 .tbl tr:last-child td{border-bottom:none}
+#s4 .tbl tr.risk td{background:var(--red-bg)}
+#s4 .pill{font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px}
+#s4 .pill-red{background:var(--red-bg);color:var(--red)}
+#s4 .pill-amber{background:var(--amber-bg);color:var(--amber)}
+#s4 .pill-navy{background:#EAEDF7;color:var(--navy)}
+#s4 .pill-pos{background:#EAF3EF;color:var(--pos)}
+#s4 .hv{cursor:pointer}
+#s4 .chart-cap{font-size:10.5px;color:var(--muted);text-align:center;margin-top:8px}
+#s4 .legend{display:flex;flex-wrap:wrap;gap:7px 14px;margin-top:12px;justify-content:center}
+#s4 .lg{font-size:10.5px;color:var(--muted);display:flex;align-items:center;gap:5px}
+#s4 .lg-d{width:9px;height:9px;border-radius:2px}
+#s4 .brief{background:var(--card);border:1.5px dashed var(--navy);border-radius:12px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+#s4 .brief-t{font-size:13px;font-weight:800;color:var(--navy)}
+#s4 .brief-s{font-size:10.5px;color:var(--muted);margin-top:2px}
+#s4 .brief-btns{display:flex;gap:8px}
+#s4 .bbtn{border:none;border-radius:9px;padding:11px 16px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit}
+#s4 .bbtn-x{background:#EAEDF7;color:var(--navy)}
+#s4 .bbtn-p{background:var(--navy);color:#fff;animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(18,39,92,.35)}50%{box-shadow:0 0 0 6px rgba(18,39,92,0)}}
+.ovl{position:fixed;inset:0;background:rgba(10,14,30,.55);display:none;align-items:center;justify-content:center;z-index:200}
+.ovl.on{display:flex}
+.report{background:#fff;width:580px;max-height:86vh;overflow-y:auto;border-radius:14px}
+.rp-hd{background:var(--navy);color:#fff;padding:20px 24px;position:sticky;top:0}
+.rp-t{font-size:17px;font-weight:800}
+.rp-s{font-size:11px;opacity:.8;margin-top:3px}
+.rp-x{position:absolute;top:16px;right:18px;cursor:pointer;font-size:18px}
+.rp-body{padding:22px 24px}
+.rp-sec{margin-bottom:18px}
+.rp-st{font-size:12px;font-weight:800;color:var(--navy);border-bottom:2px solid var(--line);padding-bottom:5px;margin-bottom:9px}
+.rp-kv{display:flex;justify-content:space-between;font-size:12px;padding:4px 0}
+.rp-kv b{color:var(--navy)}
+.rp-line{display:flex;gap:8px;font-size:11.5px;margin-bottom:6px;line-height:1.5}
+.rp-line b{color:var(--red);flex-shrink:0}
+.rp-foot{font-size:10px;color:var(--muted);text-align:center;padding:14px;border-top:1px solid var(--line)}
+#s4 .period-btn{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:8px;padding:7px 13px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+#s4 .period-btn:hover{border-color:var(--purple)}
+#s4 .period-btn.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+#s4 .amt{font-weight:800}
+#s4 .hist-row{border:1px solid var(--line);border-radius:9px;margin-bottom:8px;overflow:hidden}
+#s4 .hist-hd{display:flex;align-items:center;gap:9px;padding:10px 12px;cursor:pointer;transition:.15s}
+#s4 .hist-hd:hover{background:#FAFBFD}
+#s4 .hist-arrow{transition:.2s}
+#s4 .hist-row.open .hist-arrow{transform:rotate(90deg)}
+#s4 .hist-tl{max-height:0;overflow:hidden;transition:max-height .35s;background:#FAFBFD}
+#s4 .hist-row.open .hist-tl{max-height:340px;border-top:1px solid var(--line);padding:12px 14px}
+#s4 .tl-item{display:flex;gap:10px;position:relative;padding-bottom:12px}
+#s4 .tl-item:last-child{padding-bottom:0}
+#s4 .tl-item::before{content:'';position:absolute;left:13px;top:26px;bottom:0;width:1.5px;background:var(--line)}
+#s4 .tl-item:last-child::before{display:none}
+#s4 .tl-ic{width:27px;height:27px;border-radius:50%;background:#fff;border:1.5px solid var(--purple);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;z-index:1;position:relative}
+#s4 .tl-ic::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--purple)}
+#s4 .tl-body{padding-top:3px}
+#s4 .tl-ev{font-size:12px;font-weight:700}
+#s4 .tl-meta{font-size:10px;color:var(--muted);margin-top:1px}
+#s4 .info-ic{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#E4E7F0;color:var(--muted);font-size:10px;font-weight:800;cursor:help;margin-left:5px;flex-shrink:0}
+#s4 .info-ic:hover{background:var(--purple);color:#fff}
+#itip{position:fixed;z-index:301;background:#F7F8FC;color:var(--ink);border:1px solid var(--purple);border-radius:9px;padding:10px 13px;font-size:11.5px;max-width:280px;box-shadow:0 6px 20px rgba(18,39,92,.18);pointer-events:none;opacity:0;transition:opacity .12s;line-height:1.55}
+#itip.on{opacity:1}
+#itip .it-t{font-weight:800;color:var(--navy);margin-bottom:3px;font-size:12px}
+#s4 .demo-ctrl{flex-shrink:0;background:var(--card);border-top:1px solid var(--line);padding:11px 24px}
+#s4 .narr{font-size:12px;color:var(--ink);line-height:1.5}
+#s4 .dash-body{padding:16px 22px}
+</style>
+</head><body>
+
+<div class="scene-bar">
+  <div class="scene-track" id="scene-track">
+    <div class="sb-i active" id="sb0" onclick="E.go(0)"><span class="sb-d">0</span>도입 배경</div><div class="sb-sep"></div>
+    <div class="sb-i" id="sb1" onclick="E.go(1)"><span class="sb-d">1</span>채널 전환</div><div class="sb-sep"></div>
+    <div class="sb-i" id="sb2" onclick="E.go(2)"><span class="sb-d">2</span>한계·해결</div><div class="sb-sep"></div>
+    <div class="sb-i" id="sb3" onclick="E.dd(event)"><span class="sb-d">3</span>현장 운영 <span id="ind-lbl" style="opacity:.75;font-weight:600">▾</span>
+      <div class="ind-dd" id="ind-dd">
+        <div class="ind-dd-i on" id="dd-dom" onclick="E.pickInd(event,'dom')">A 공지·교육·설문 <span style="font-size:9px;opacity:.7">도달 집계·재안내</span></div>
+        <div class="ind-dd-i" id="dd-ovs" onclick="E.pickInd(event,'ovs')">B 이슈·인수인계 <span style="font-size:9px;opacity:.7">본부 배정·승계</span></div>
+      </div>
+    </div><div class="sb-sep"></div>
+    <div class="sb-i" id="sb4" onclick="E.go(4)"><span class="sb-d">4</span>관리자 대시보드</div>
+  </div>
+  <div class="brand"><span class="brand-t">가맹점 관리 지원 솔루션 <span>Cowork+</span></span><span class="ver">v1 · 260930</span></div>
+</div>
+
+<div class="strip">
+  <div class="strip-l">
+    <span class="strip-k">진행 중 건</span>
+    <span class="strip-v" id="strip-acct">강동천호점</span><span class="strip-sep"></span>
+    <span class="strip-v" id="strip-item">아이스 신메뉴 2종 · 9/1 오픈</span><span class="strip-sep"></span>
+    <span class="strip-v" id="strip-due"></span><span class="strip-sep"></span>
+    <span class="strip-v" id="strip-doc" style="opacity:.85">발주 수량 미정</span>
+  </div>
+  <div class="strip-r">
+    <div class="cnt" id="c-msg"><span>메시지</span><b>0</b></div>
+    <div class="cnt" id="c-file"><span>파일</span><b>0</b></div>
+    <div class="cnt" id="c-audit"><span>감사 이력</span><b>0</b></div>
+    <div class="cnt" id="c-dec"><span>관리자 결정</span><b>0</b></div>
+  </div>
+</div>
+
+<div class="narr-bar">
+  <span class="narr-step" id="narr-step">S0 · 1/3</span>
+  <span class="narr-txt" id="narr-txt"></span>
+  <span class="narr-act" id="narr-act"></span>
+  <span class="narr-hint" id="narr-hint"></span>
+  <button class="next-btn" id="next-btn" onclick="E.next()">다음 →</button>
+  <button class="reset-btn" onclick="E.reset()" title="처음부터">초기화</button>
+</div>
+
+<div class="arena" id="arena">
+  <div class="left">
+    <div class="col-label" id="col-label">개인 카카오톡 1:1 <span class="tag" id="col-tag">사각지대</span></div>
+    <div class="phones" id="phones"></div>
+    <div class="more"><div class="more-i">+</div><div><div class="more-t">외 33개 점포 · 수도권 2권역</div><div class="more-s">담당 34개 점포 <span class="tagb est">예시</span> · 전국 가맹점 약 2,500개 <span class="tagb fix">확정</span></div></div></div>
+  </div>
+  <div class="wscol">
+    <div class="ws-role">
+      <button class="ws-rb on" id="rb-br" onclick="E.role('br')">한태민 담당자</button>
+      <button class="ws-rb" id="rb-admin" onclick="E.role('admin')">서윤아 관리자</button>
+      <span class="ws-rtag" id="ws-rtag">담당자 뷰</span>
+    </div>
+    <div class="ws" id="ws">
+      <div class="ws-side">
+        <div class="ws-logo">Cowork+ <small>근무중</small></div>
+        <div class="ws-sec">운영현황</div>
+        <div class="ws-menu" onclick="E.go(4)"><i>D</i><div><div>가맹본부 대시보드</div><div class="s">권역별 · 담당자별 · 점포별</div></div></div>
+        <div class="ws-sec" id="ws-sec-rooms">대화방 <span id="room-n" style="opacity:.6"></span></div>
+        <div id="ws-rooms"><div class="ws-empty">개설된 대화방 없음</div></div>
+        
+      </div>
+      <div class="ws-main" id="ws-main">
+        <div class="ws-chd">
+          <div><div class="ws-cn" id="ws-cn">가맹점 공식 채널</div><div class="ws-cs" id="ws-cs">카카오 채널 · 문자 · 웹 채널 통합</div></div>
+          <div class="ws-tabs" id="ws-tabs"></div>
+        </div>
+        <div class="ws-msgs" id="ws-msgs"></div>
+        <div class="sheet" id="sheet-ws" style="left:auto;right:12px;bottom:70px;width:300px;border-radius:14px"></div>
+        <div class="ws-input" id="ws-input">
+          <div class="chips" id="ws-chips"></div>
+          <div class="ws-act" id="ws-act"></div>
+          <div class="ws-row">
+            <div class="plus" id="ws-plus" onclick="E.wsPlus()">+</div>
+            <input id="ws-in" placeholder="메시지 입력" onkeydown="if(event.key==='Enter'){event.preventDefault();E.wsSend()}" disabled>
+            <button class="snd" id="ws-snd" onclick="E.wsSend()" disabled>전송</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="vstrip" id="vstrip">
+  <div class="vs sell"><div class="t">셀링포인트</div><div class="b" id="vs-sell"></div></div>
+  <div class="vs pain"><div class="t">페인포인트</div><div class="b" id="vs-pain"></div></div>
+  <div class="vs roi"><div class="t">ROI</div><div class="b" id="vs-roi"></div></div>
+</div>
+
+<div id="s4">
+<div class="dash-top">
+  <div class="dash-title">가맹본부 대시보드 <span>서윤아 관리자 · 가맹점 2,500개 소통 자산화 현황 · 2026.09</span></div>
+  <div class="dash-tabs">
+    <button class="dash-tab on" id="tab-gen" onclick="setTab('gen')">운영 지표</button>
+    <button class="dash-tab" id="tab-ai" onclick="setTab('ai')">AI 운영지표 · NOA</button>
+  </div>
+</div>
+<div class="dash-body" id="dash-body"></div>
+
+<div class="ovl" id="ovl" onclick="closeReport(event)"><div class="report" onclick="event.stopPropagation()"><div class="rp-hd"><div class="rp-t">가맹본부 이탈 위험 브리핑</div><div class="rp-s">2026.09 · 서윤아 관리자 → 가맹사업 본부장 · NOA 자동 생성</div><div class="rp-x" onclick="closeReport()">✕</div></div><div class="rp-body" id="rp-body"></div></div></div>
+
+<div id="itip"></div>
+</div>
+<div id="tip"></div>
+<div id="cue"><div class="cue-l"><span class="cue-n">▶</span><span id="cue-txt"></span></div><div class="cue-chips" id="cue-chips"></div><div class="cue-arrow"></div></div>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   가맹점 관리 지원 솔루션 · 인터랙티브 데모 v1
+   스크립트 상태머신 + 실제 폰 입력 + 추천 칩 (제조 v2 · WON TALK v1 동일 엔진)
+   관통 건: 강동천호점 · 9월 아이스 신메뉴 2종 오픈 준비(9/1)
+   ═══════════════════════════════════════════════════════════ */
+const q=id=>document.getElementById(id);
+const esc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+/* 시나리오 시계 — 시연 당일 날짜·현재 시각을 쓰지 않는다. 신마다 시작 시각을 두고 단계마다 3분씩 흐른다 */
+const SCN_START={'0':'2026-08-20T09:10','1':'2026-08-20T09:20','2':'2026-08-25T10:00','3A':'2026-08-26T09:00','3B':'2026-08-29T08:40','4':'2026-09-30T09:00'};
+const scnDate=()=>{const k=D.scene===3?(D.ind==='dom'?'3A':'3B'):String(D.scene);const d=new Date(SCN_START[k]||SCN_START['0']);d.setMinutes(d.getMinutes()+(D.step||0)*3);return d;};
+const now=()=>{const d=scnDate();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');};
+const kdate=()=>{const d=scnDate();return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${'일월화수목금토'[d.getDay()]}요일`;};
+
+/* ── 데모 상태 (단일 객체) ── */
+const D={scene:0,step:0,ind:'dom',role:'br',cnt:{msg:0,file:0,audit:0,dec:0},hist:[],chk:{po:0,nt:0,ed:0,fc:0},
+  phones:{},rooms:[],curRoom:null,active:null,steps:[],done:{},slots:{},sending:false};
+
+/* ── 관통 건 · 인물 ── */
+const ME0={n:'한태민',org:'수도권 2권역',av:'한',avc:'#5B3FE4'};
+const CASE={store:'강동천호점',item:'아이스 신메뉴 2종 · 9/1 오픈',
+  own:{n:'정미경 점주',org:'강동천호점',av:'정',avc:'#E67E22'},
+  mgr:{n:'김지아 매니저',org:'강동천호점',av:'김',avc:'#C0392B'},
+  osh:{n:'오세훈 점주',org:'하남미사점',av:'오',avc:'#1F7A5A'},
+  me:{...ME0},admin:{n:'서윤아 관리자',av:'서',avc:'#12275C'}};
+const FILES={
+  sales:{n:'강동천호점_8월_음료판매량.xlsx',s:'96KB',k:'XLS'},
+  po:{n:'강동천호점_아이스신메뉴_발주수량_0825.xlsx',s:'128KB',k:'XLS'},
+  guide:{n:'9월_아이스신메뉴_운영가이드.pdf',s:'2.1MB',k:'PDF'},
+  err:{n:'강동천호점_제빙기_에러코드_E03.jpg',s:'1.1MB',k:'JPG'}
+};
+const ROOM='강동천호점 점포방';
+
+/* ── SVG 아이콘 ── */
+const I={
+  sig:'<svg width="15" height="10" viewBox="0 0 15 10"><rect x="0" y="6" width="3" height="4" rx=".8" fill="currentColor"/><rect x="4" y="4" width="3" height="6" rx=".8" fill="currentColor"/><rect x="8" y="2" width="3" height="8" rx=".8" fill="currentColor"/><rect x="12" y="0" width="3" height="10" rx=".8" fill="currentColor"/></svg>',
+  wifi:'<svg width="14" height="10" viewBox="0 0 14 10"><path d="M7 9.2 4.6 6.8a3.4 3.4 0 0 1 4.8 0zM2.5 4.7a6.4 6.4 0 0 1 9 0l-1.3 1.3a4.6 4.6 0 0 0-6.4 0zM.3 2.5a9.5 9.5 0 0 1 13.4 0L12.4 3.8a7.7 7.7 0 0 0-10.8 0z" fill="currentColor"/></svg>',
+  bat:'<svg width="25" height="11" viewBox="0 0 25 11"><rect x=".5" y=".5" width="21" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="16" height="7" rx="1.2" fill="currentColor"/><path d="M23 3.5v4a1.6 1.6 0 0 0 0-4z" fill="currentColor" fill-opacity=".4"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11.5 21 3l-6.5 18-3-7.5z"/></svg>'
+};
+function sbar(light){return `<div class="sbar${light?' light':''}"><span class="num st-time">${now()}</span><span class="sbar-r">${I.sig}${I.wifi}${I.bat}</span></div>`;}
+setInterval(()=>document.querySelectorAll('.st-time').forEach(e=>e.textContent=now()),30000);
+
+/* ── 키보드 목업 ── */
+function kbdHTML(qwerty){
+  const rows=qwerty?[['q','w','e','r','t','y','u','i','o','p'],['a','s','d','f','g','h','j','k','l'],['⇧','z','x','c','v','b','n','m','⌫']]
+    :[['ㅂ','ㅈ','ㄷ','ㄱ','ㅅ','ㅛ','ㅕ','ㅑ','ㅐ','ㅔ'],['ㅁ','ㄴ','ㅇ','ㄹ','ㅎ','ㅗ','ㅓ','ㅏ','ㅣ'],['⇧','ㅋ','ㅌ','ㅊ','ㅍ','ㅠ','ㅜ','ㅡ','⌫']];
+  const r=rows.map(row=>`<div class="kbd-row">${row.map(k=>`<div class="kbd-k${(k==='⇧'||k==='⌫')?' w':''}">${k}</div>`).join('')}</div>`).join('');
+  return `<div class="kbd">${r}<div class="kbd-row"><div class="kbd-k w">123</div><div class="kbd-k w">${qwerty?'ABC':'한/영'}</div><div class="kbd-k sp">${qwerty?'space':'스페이스'}</div><div class="kbd-k ret">${qwerty?'return':'전송'}</div></div><div class="kbd-b"><span>☺</span><span>⌨</span></div></div>`;
+}
+function bindTyping(app,input){
+  input.addEventListener('focus',()=>app.classList.add('typing'));
+  input.addEventListener('blur',()=>setTimeout(()=>app.classList.remove('typing'),160));
+}
+
+/* ── 폰 생성 ── */
+function mkPhone(id,own){
+  const u=document.createElement('div');u.className='punit';u.id='pu-'+id;
+  u.innerHTML=`<div class="pown"><div><div class="pown-n">${esc(own.n)}</div><div class="pown-t" id="pt-${id}">${esc(own.t)}</div></div><span class="bg ${own.bg||'bg-g'}">${esc(own.tag||'점주')}</span></div>
+  <div class="phone" id="ph-${id}"><div class="screen"><div class="island"></div><div class="app" id="app-${id}"></div><div class="home-ind" id="hi-${id}"></div><div class="sheet" id="sheet-${id}"></div></div></div>`;
+  q('phones').appendChild(u);
+  D.phones[id]={id,own,kind:null};
+  return u;
+}
+function setSub(id,t){const e=q('pt-'+id);if(e)e.textContent=t;}
+function app(id){return q('app-'+id);}
+function phoneActive(id){document.querySelectorAll('.phone').forEach(p=>p.classList.remove('active'));if(id)q('ph-'+id)?.classList.add('active');}
+
+/* 카카오톡 화면 */
+function setKakao(id,o){
+  const a=app(id);a.className='app kk';a.style.background='';
+  const ch=o.ch?`<span class="ch-badge"><i></i>채널</span>`:'';
+  a.innerHTML=`${sbar(false)}<div class="kk-hd"><span class="back">‹</span><div class="mid"><div class="nm">${esc(o.room)}${ch}${o.members?`<span class="cnt2">${o.members}</span>`:''}</div>${o.sub?`<div class="sub">${esc(o.sub)}</div>`:''}</div><div class="ic"><span>⌕</span><span>≡</span></div></div>
+  <div class="kk-msgs" id="km-${id}"><div class="kk-date">${kdate()}</div></div>
+  <div class="kk-in"><span class="plus" onclick="E.plus('${id}')">+</span><input id="in-${id}" placeholder="메시지 입력" onkeydown="if(event.key==='Enter'){event.preventDefault();E.phoneSend('${id}')}" oninput="E.sndState('${id}')"><button class="snd" id="snd-${id}" onclick="E.phoneSend('${id}')">${I.send}</button></div>${kbdHTML(false)}`;
+  q('hi-'+id).className='home-ind';
+  bindTyping(a,q('in-'+id));D.phones[id].kind='kk';
+}
+/* 웹 채널 화면 (카카오톡 미사용 점주) — 대화 렌더는 카카오와 동일 함수 사용 */
+function setWeb(id,o){
+  setKakao(id,{room:o.room,members:o.members,sub:o.sub});
+  const a=app(id);a.classList.add('web');
+  a.querySelector('.kk-hd').outerHTML=`<div class="web-url"><span class="lk">🔒</span>cw.plus/h/hanam-misa</div><div class="web-hd"><span class="lg">C+</span><div><div class="nm">${esc(o.room)}</div><div class="sub">${esc(o.sub||'웹 채널 · 카카오톡 없이 입장')}</div></div></div>`;
+}
+/* 문자(SMS) 화면 */
+function setSMS(id){
+  const a=app(id);a.className='app sms';a.style.background='';
+  a.innerHTML=`${sbar(false)}<div class="sms-hd"><span class="back">‹</span><div class="av">C+</div><div class="nm">Cowork+ 가맹점 채널</div><div class="sub">문자 메시지</div></div><div class="sms-body" id="sms-${id}"><div class="sms-empty">새 메시지 없음</div></div>`;
+  q('hi-'+id).className='home-ind';D.phones[id].kind='sms';
+}
+function smsMsg(id,text,link){
+  const b=q('sms-'+id);if(!b)return;const e=b.querySelector('.sms-empty');if(e)e.remove();
+  const m=document.createElement('div');m.className='sms-b';
+  m.innerHTML=`${esc(text)}${link?`<br><span class="sms-link" onclick="E.smsTap('${id}')">${esc(link)}</span>`:''}<div class="sms-t">${now()}</div>`;
+  b.appendChild(m);
+}
+function kkMsg(id,o){
+  const box=q('km-'+id);if(!box)return;
+  const m=document.createElement('div');m.className='km'+(o.me?' me':'');
+  const avh=o.me?'':`<div class="kav${o.ch?' ch':''}" style="${o.ch?'':'background:'+o.avc}">${o.ch?'<span style="font-size:9px;font-weight:900">C+</span>':esc(o.av)}</div>`;
+  m.innerHTML=`${avh}<div class="kcol">${o.me?'':`<div class="knm">${esc(o.name)}${o.ch?'<span class="ch-badge"><i></i>채널</span>':''}</div>`}<div class="krow"><div class="kb">${esc(o.text)}</div><div class="kmeta">${o.read?'<span class="rd">1</span>':''}<span>${o.time||now()}</span></div></div></div>`;
+  box.appendChild(m);box.scrollTop=box.scrollHeight;return m;
+}
+function kkFile(id,o){
+  const box=q('km-'+id);if(!box)return;
+  const m=document.createElement('div');m.className='km'+(o.me?' me':'');
+  const avh=o.me?'':`<div class="kav${o.ch?' ch':''}" style="${o.ch?'':'background:'+o.avc}">${o.ch?'<span style="font-size:9px;font-weight:900">C+</span>':esc(o.av)}</div>`;
+  const f=o.f;
+  const body=o.stuck?`<div class="kfile err"><div class="fi"><div class="fic">${f.k}</div><div><div class="fn">${esc(f.n)}</div><div class="fs">${f.s} · 파일 전송 중…</div></div></div><div class="prog"><i></i></div></div>`
+    :`<div class="kfile${o.err?' err':''}"><div class="fi"><div class="fic">${f.k}</div><div><div class="fn">${esc(f.n)}</div><div class="fs">${f.s}${f.note?' · '+f.note:''}</div></div></div><div class="fx"><span>유효기간 <b>~${expDate()}</b></span><b>저장</b></div></div>`;
+  m.innerHTML=`${avh}<div class="kcol">${o.me?'':`<div class="knm">${esc(o.name)}</div>`}<div class="krow">${body}<div class="kmeta"><span>${o.time||now()}</span></div></div></div>`;
+  box.appendChild(m);box.scrollTop=box.scrollHeight;return m;
+}
+function expDate(){const d=scnDate();d.setDate(d.getDate()+30);return `${d.getMonth()+1}.${d.getDate()}`;}
+function kkSys(id,t){const box=q('km-'+id);if(!box)return;const s=document.createElement('div');s.className='ksys';s.innerHTML=t;box.appendChild(s);box.scrollTop=box.scrollHeight;}
+function kkCard(id,o){const box=q('km-'+id);if(!box)return;const m=document.createElement('div');m.className='km';m.innerHTML=`<div class="kav ch"><span style="font-size:9px;font-weight:900">C+</span></div><div class="kcol"><div class="knm">${esc(o.from)}<span class="ch-badge"><i></i>채널</span></div><div class="krow"><div class="kcard"><div class="ct">${esc(o.title)}</div><div class="cv">${esc(o.value)}</div><div class="cd">${esc(o.desc)}</div>${o.foot?`<div class="cf">${esc(o.foot)}</div>`:''}</div><div class="kmeta"><span>${now()}</span></div></div></div>`;box.appendChild(m);box.scrollTop=box.scrollHeight;return m;}
+/* 조작 카드 (공지 확인 · 교육 시청 · 설문 제출) */
+function kkAct(id,k,o){
+  const box=q('km-'+id);if(!box)return;
+  box.querySelectorAll('.kact-'+k+'.live').forEach(b=>b.classList.remove('live'));
+  const qs=o.qs?`<div class="svq">${o.qs.map(x=>`<div class="svr"><span>${esc(x[0])}</span><span class="svo">${x[1].map((v,i)=>`<i class="${i===x[2]?'on':''}">${esc(v)}</i>`).join('')}</span></div>`).join('')}</div>`:'';
+  const m=document.createElement('div');m.className='km';
+  m.innerHTML=`<div class="kav ch"><span style="font-size:9px;font-weight:900">C+</span></div><div class="kcol"><div class="knm">${esc(o.from)}<span class="ch-badge"><i></i>채널</span></div><div class="krow"><div class="kcard act"><div class="ct">${esc(o.title)}</div><div class="cv">${esc(o.value)}</div>${o.desc?`<div class="cd">${esc(o.desc)}</div>`:''}${qs}<button class="kact kact-${k} live" onclick="E.actTap('${id}','${k}',this)">${esc(o.btn)}</button></div><div class="kmeta"><span>${now()}</span></div></div></div>`;
+  box.appendChild(m);box.scrollTop=box.scrollHeight;return m;
+}
+
+/* 알림 화면 */
+function setAlim(id){const a=app(id);a.className='app al';a.style.background='';a.innerHTML=`${sbar(false)}<div class="al-hd"><span style="font-size:18px;color:#333">‹</span><span class="t">알림</span><span style="font-size:16px;color:#333">≡</span></div><div class="al-body" id="al-${id}"><div class="al-empty">새 알림 없음</div></div>`;q('hi-'+id).className='home-ind';D.phones[id].kind='al';}
+function alimCard(id,o){const b=q('al-'+id);b.innerHTML='';const c=document.createElement('div');c.className='alim';c.innerHTML=`<div class="alim-top"><span class="ch"><i>C+</i>Cowork+ ${esc(o.room)}</span><span class="lb">알림톡</span></div><div class="alim-bd"><div class="ti">[채널 입장 초대]</div><div class="tx">${esc(o.to)}님, <b>${esc(o.room)}</b>에 초대되었습니다. 가맹점 등록 정보 확인 후 입장하실 수 있습니다.</div><div class="nt">· 가맹점 등록 정보 확인 후 자동 입장<br>· 미등록자·퇴사자 자동 차단<br>· 카카오톡 그대로 사용 · 앱 설치 없음</div></div><button class="alim-btn pulse" onclick="E.alimTap('${id}')">인증하고 입장 ▶</button>`;b.appendChild(c);}
+function setAuth(id,o){const a=app(id);a.className='app';a.style.background='#fff';
+  a.innerHTML=`${sbar(false)}<div class="auth"><div class="lg">C+</div><div class="t">${esc(o.title)}</div><div class="d">${o.desc}</div>${o.rows.map(r=>`<div class="row"><span>${esc(r[0])}</span><b>${esc(r[1])}</b></div>`).join('')}<div class="row"><span>확인 결과</span><span class="chk" id="auth-r-${id}">대조 중…</span></div>${o.auto?'':`<button class="ok" id="auth-ok-${id}" disabled onclick="E.authOk('${id}')">입장</button>`}</div>`;
+  q('hi-'+id).className='home-ind';
+  setTimeout(()=>{const r=q('auth-r-'+id);if(r){r.textContent=o.ok;const b=q('auth-ok-'+id);if(b){b.disabled=false;b.classList.add('pulse');}}},700);}
+
+/* iOS 홈 + Cowork+ 앱 */
+function setIOS(id){const a=app(id);a.className='app iosapp';a.style.background='';const t=now();const d=scnDate();
+  const ic=(bg,l,ch)=>`<div class="ios-ic"><i style="background:${bg}">${ch}</i><span>${l}</span></div>`;
+  a.innerHTML=`${sbar(true)}<div class="ios"><div class="ios-time num">${t}</div><div class="ios-date">${d.getMonth()+1}월 ${d.getDate()}일 ${'일월화수목금토'[d.getDay()]}요일</div><div class="ios-grid">${ic('#FEE500','카카오톡','<span style=\"color:#111\">K</span>')}${ic('#1c7ed6','메일','M')}${ic('#2b8a3e','지도','L')}${ic('#e03131','카메라','C')}<div class="ios-ic cw pulse" onclick="E.openApp('${id}')"><i>C+</i><span>Cowork+</span></div>${ic('#495057','설정','S')}${ic('#f59f00','캘린더','D')}${ic('#0ca678','메모','N')}</div><div class="ios-dock"><i style="background:#22b8cf">P</i><i style="background:#7048e8">S</i><i style="background:#f76707">B</i><i style="background:#5B3FE4">C+</i></div></div>`;
+  q('hi-'+id).className='home-ind light';D.phones[id].kind='ios';}
+function setCw(id,o){const a=app(id);a.className='app cw';a.style.background='';a.innerHTML=`${sbar(true)}<div class="cw-hd"><div><div class="nm">${esc(o.room)}</div><div class="sub">${esc(o.sub)}</div></div><span class="lg">C+</span></div><div class="cw-msgs" id="km-${id}"></div><div class="cw-in"><span class="plus" onclick="E.plus('${id}')">+</span><input id="in-${id}" placeholder="메시지 입력" onkeydown="if(event.key==='Enter'){event.preventDefault();E.phoneSend('${id}')}"><button class="snd" onclick="E.phoneSend('${id}')">${I.send}</button></div>${kbdHTML(false)}`;
+  q('hi-'+id).className='home-ind';bindTyping(a,q('in-'+id));D.phones[id].kind='cw';
+  (o.history||[]).forEach(h=>cwMsg(id,h));}
+function cwMsg(id,o){const box=q('km-'+id);if(!box)return;const m=document.createElement('div');m.className='cm'+(o.me?' me':'');m.innerHTML=`${o.me?'':`<div class="kav" style="background:${o.avc}">${esc(o.av)}</div>`}<div><div class="cnm">${o.me?'':esc(o.name)}</div><div class="cb">${esc(o.text)}</div></div>`;box.appendChild(m);box.scrollTop=box.scrollHeight;}
+function cwFile(id,o){const box=q('km-'+id);if(!box)return;const m=document.createElement('div');m.className='cm'+(o.me?' me':'');m.innerHTML=`${o.me?'':`<div class="kav" style="background:${o.avc}">${esc(o.av)}</div>`}<div>${o.me?'':`<div class="cnm">${esc(o.name)}</div>`}<div class="kfile" style="${o.me?'background:#EDE9FB':'background:#fff'}"><div class="fi"><div class="fic">${o.f.k}</div><div><div class="fn">${esc(o.f.n)}</div><div class="fs">${o.f.s} · 자산화됨</div></div></div></div></div>`;box.appendChild(m);box.scrollTop=box.scrollHeight;}
+function cwNotice(id,t){const box=q('km-'+id);if(!box)return;const n=document.createElement('div');n.className='cw-notice';n.innerHTML=t;box.appendChild(n);box.scrollTop=box.scrollHeight;}
+
+/* 파일 시트 */
+function openSheet(id,files,onPick){const s=q('sheet-'+id);s.innerHTML=`<div class="sh-t">파일 선택</div>${files.map((f,i)=>`<div class="sh-i${i===0?' rec':''}" data-i="${i}"><div class="fic">${f.k}</div><div><div class="fn">${esc(f.n)}</div><div class="fs">${f.s}${f.note?' · '+f.note:''}${i===0?' · 추천':''}</div></div></div>`).join('')}<div class="sh-x">취소</div>`;
+  s.classList.add('on');s.querySelectorAll('.sh-i').forEach(el=>el.onclick=()=>{s.classList.remove('on');onPick(files[+el.dataset.i]);});s.querySelector('.sh-x').onclick=()=>{s.classList.remove('on');CUE.restore();};
+  CUE.set(s.querySelector('.sh-i.rec'),'추천 파일 선택 (다른 파일도 가능)',null,null,true);}
+
+/* ── 워크스페이스 렌더 ── */
+const SRC={kakao:'카카오 채널',web:'웹 채널',app:'앱'};
+const W={
+  clear(){q('ws-msgs').innerHTML='';},
+  head(n,s,mem){q('ws-cn').innerHTML=esc(n)+(mem?`<span class="mem">${esc(mem)}</span>`:'');q('ws-cs').textContent=s;},
+  rooms(){const box=q('ws-rooms');if(!D.rooms.length){box.innerHTML='<div class="ws-empty">개설된 대화방 없음</div>';q('room-n').textContent='';return;}
+    box.innerHTML=D.rooms.map(r=>`<div class="ws-room${r.id===D.curRoom?' on':''}" onclick="E.room('${r.id}')"><div class="av" style="background:${r.c}">${esc(r.av)}</div><div><div class="rn">${esc(r.n)}</div><div class="rs">${esc(r.s)}</div></div>${r.unread?`<span class="ub">${r.unread}</span>`:''}</div>`).join('');
+    q('room-n').textContent='· '+(D.roomTotal||D.rooms.length);},
+  in(o){
+    const m=document.createElement('div');m.className='wm';
+    const src=o.src?`<span class="src ${o.src==='kakao'?'':o.src}">${SRC[o.src]}</span>`:'';
+    const who=o.unk?`<span class="unk">알 수 없음</span>`:`<b>${esc(o.org)} ${esc(o.who)}</b>`;
+    m.innerHTML=`<div class="av" style="background:${o.unk?'#9AA1B8':o.avc}">${o.unk?'?':esc(o.av)}</div><div class="body"><div class="who">${who}${src}<span class="bdg"></span></div><div class="bb">${esc(o.text)}</div><div class="tm num">${o.time||now()}</div></div>`;
+    q('ws-msgs').appendChild(m);(o.badges||[]).forEach(b=>W.badge(m,b));W.scroll();return m;},
+  me(o){const p=o.by||CASE.me;const m=document.createElement('div');m.className='wm me';m.innerHTML=`<div class="av" style="background:${p.avc}">${esc(p.av)}</div><div class="body"><div class="who"><b>${esc(p.n)}</b>${o.src==='app'?'<span class="src app">앱 · 순회</span>':''}<span class="bdg"></span></div><div class="bb">${esc(o.text)}</div><div class="tm num">${o.time||now()}</div></div>`;q('ws-msgs').appendChild(m);(o.badges||[]).forEach(b=>W.badge(m,b));W.scroll();return m;},
+  file(o){
+    const m=document.createElement('div');m.className='wm'+(o.me?' me':'');
+    const src=o.src?`<span class="src ${o.src==='kakao'?'':o.src}">${SRC[o.src]}</span>`:'';
+    const p=CASE.me;
+    m.innerHTML=`<div class="av" style="background:${o.me?p.avc:o.avc}">${o.me?esc(p.av):esc(o.av)}</div><div class="body"><div class="who"><b>${o.me?esc(p.n):esc(o.org+' '+o.who)}</b>${src}<span class="bdg"></span></div><div class="wf"><div class="fic">${o.f.k}</div><div><div class="fn">${esc(o.f.n)}</div><div class="fs"><span>${o.f.s}</span></div></div></div><div class="tm num">${now()}</div></div>`;
+    q('ws-msgs').appendChild(m);(o.badges||[]).forEach(b=>W.badge(m,b));W.scroll();return m;},
+  card(o){const p=o.by||CASE.me;const m=document.createElement('div');m.className='wm me';m.innerHTML=`<div class="av" style="background:${p.avc}">${esc(p.av)}</div><div class="body"><div class="who"><b>${esc(p.n)}</b><span class="bdg"></span></div><div class="wcard${o.adm?' adm':''}"><div class="ct">${esc(o.title)}</div><div class="cv">${esc(o.value)}</div><div class="cd">${esc(o.desc)}</div></div><div class="tm num">${now()}</div></div>`;q('ws-msgs').appendChild(m);(o.badges||[]).forEach(b=>W.badge(m,b));W.scroll();return m;},
+  task(t,d){const s=document.createElement('div');s.className='wtask';s.innerHTML=`<div class="tt">${esc(t)}</div><div class="td">${d}</div>`;q('ws-msgs').appendChild(s);W.scroll();return s;},
+  sys(t,warn){const s=document.createElement('div');s.className='wsys'+(warn?' warn':'');s.innerHTML=t;q('ws-msgs').appendChild(s);W.scroll();return s;},
+  div(t){const s=document.createElement('div');s.className='wdiv';s.innerHTML=`<span>${esc(t)}</span>`;q('ws-msgs').appendChild(s);W.scroll();},
+  fix(label,fn){const w=document.createElement('div');w.className='ws-fix';const b=document.createElement('button');b.className='fixbtn pulse';b.textContent=label;b.onclick=()=>{b.classList.remove('pulse');b.disabled=true;w.remove();fn();};w.appendChild(b);q('ws-msgs').appendChild(w);W.scroll();return b;},
+  badge(m,b){const [cls,txt]=b;const s=document.createElement('span');s.className='badge '+cls;s.textContent=txt;m.querySelector('.bdg').appendChild(s);},
+  who(m,p){const w=m.querySelector('.who');const u=w.querySelector('.unk');if(u){const b=document.createElement('b');b.textContent=p.org+' '+p.n;u.replaceWith(b);}const av=m.querySelector('.av');av.style.background=p.avc;av.textContent=p.av;},
+  scroll(){const b=q('ws-msgs');b.scrollTop=b.scrollHeight;},
+  chips(list,target){const c=q('ws-chips');c.innerHTML='';if(!list||!list.length)return;c.innerHTML=`<span class="chip lbl">${target==='ws'?'추천 입력':'폰 입력 추천'}</span>`+list.map(t=>`<button class="chip" onclick="E.chip(this)">${esc(t)}</button>`).join('');},
+  act(list){const a=q('ws-act');a.innerHTML='';list.forEach(b=>{const el=document.createElement('button');el.className='actbtn'+(b.pri?' pri':'')+(b.pulse?' pulse':'');el.textContent=b.l;el.onclick=b.fn;a.appendChild(el);});},
+  input(on,ph){const i=q('ws-in'),s=q('ws-snd');i.disabled=!on;s.disabled=!on;i.placeholder=ph||'메시지 입력';s.textContent='전송';q('ws-plus').classList.toggle('on',false);q('ws-main').classList.toggle('locked',false);if(on)setTimeout(()=>i.focus(),50);},
+  blind(o){q('ws-msgs').innerHTML=`<div class="blind${o.warn?' warn':''}"><div class="ic">?</div><div class="t">${esc(o.t)}</div><div class="d">${o.d}</div><div class="kv"><div><b>0</b>대화방</div><div><b>0</b>메시지</div><div><b>0</b>파일</div></div></div>`;}
+};
+
+/* ── 관리자 양식 (배정 · 기준 · 발송 · 이관 · 승계) ── */
+function showForm(fields,okLabel,onOk){
+  const a=q('ws-act');
+  a.innerHTML=`<div class="due-form adm-form"><span class="af-tag">관리자 양식</span>${fields.map((f,i)=>`<label>${esc(f.l)}</label>${f.opts?`<select id="ff-${i}">${f.opts.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`:f.fixed?`<span class="ff-fix">${esc(f.fixed)}</span>`:`<input id="ff-${i}" value="${esc(f.v||'')}"${f.w?` style="width:${f.w}px"`:''}>`}`).join('')}<button class="ok" id="ff-ok">${esc(okLabel)}</button></div>`;
+  q('ff-ok').onclick=()=>{const vals=fields.map((f,i)=>f.fixed?f.fixed:(q('ff-'+i)?.value||''));a.innerHTML='';onOk(vals);E.advance();};
+  CUE.set(q('ff-ok'),'값 확인 후 "'+okLabel+'" 클릭 (선택값 변경 가능)');
+}
+function formStep(n,btn,fields,okLabel,onOk,pre){return {n,expect:'button',pre,buttons:[{l:btn,stay:true,fn:()=>showForm(fields,okLabel,onOk)}]};}
+
+/* ── 카운터 · 스트립 · 이력 ── */
+function bump(k,n){n=n||1;D.cnt[k]+=n;const e=q('c-'+k);e.querySelector('b').textContent=D.cnt[k];e.classList.add('bump');setTimeout(()=>e.classList.remove('bump'),900);}
+const CHK=[['po','발주'],['nt','공지 열람'],['ed','교육 이수'],['fc','설비']];
+function renderChk(){q('strip-due').innerHTML=CHK.map(([k,l])=>{const v=D.chk[k];return `<span class="ck ${v===1?'ok':v===-1?'bad':''}">${l}${v===1?' ✓':v===-1?' !':''}</span>`;}).join('');}
+function strip(o){if(o.chk){Object.assign(D.chk,o.chk);renderChk();}if(o.doc!=null)q('strip-doc').textContent=o.doc;}
+function tl(d,ev,who){D.hist.push({t:d,ev,who});}
+
+/* ── 발신 공통 ── */
+function custSay(pid,text,o){
+  const c=o.who||CASE.own;
+  kkMsg(pid,{me:true,text,read:true});
+  (o.toPhones||[]).forEach(p=>{if(D.phones[p]?.kind==='kk')kkMsg(p,{name:c.n,av:c.av,avc:c.avc,text});else if(D.phones[p]?.kind==='cw')cwMsg(p,{name:c.org+' '+c.n,av:c.av,avc:c.avc,text});});
+  let m=null;if(o.ws!==false){m=W.in({who:c.n,org:c.org,av:c.av,avc:c.avc,text,src:o.src||'kakao',unk:o.unk,badges:o.badges});bump('msg');}
+  return m;
+}
+function custFile(pid,f,o){const c=o.who||CASE.own;
+  kkFile(pid,{me:true,f});
+  (o.toPhones||[]).forEach(p=>{if(D.phones[p]?.kind==='kk')kkFile(p,{name:c.n,av:c.av,avc:c.avc,f});else if(D.phones[p]?.kind==='cw')cwFile(p,{name:c.org+' '+c.n,av:c.av,avc:c.avc,f});});
+  let m=null;if(o.ws!==false){m=W.file({who:c.n,org:c.org,av:c.av,avc:c.avc,f,src:o.src||'kakao',badges:o.badges});bump('file');}
+  return m;
+}
+function meSay(text,o){
+  const m=W.me({text,src:o.src,badges:o.badges});bump('msg');
+  (o.toPhones||[]).forEach(p=>{const k=D.phones[p]?.kind;if(k==='kk')kkMsg(p,{name:'Cowork+ 가맹본부',ch:true,text});else if(k==='cw')cwMsg(p,{me:true,text});});
+  return m;
+}
+
+/* ── 액션 큐: 매 단계 정확히 하나의 대상에 링 + 포인터 ── */
+const CUE={el:null,timer:null,last:null,
+  set(el,label,chips,chipTarget,tmp){CUE.clear();if(!el)return;if(!tmp)CUE.last=[el,label,chips,chipTarget];CUE.el=el;el.classList.add('focus-target');
+    q('cue-txt').textContent=label;q('narr-act').innerHTML=`<i>▶</i>${esc(label)}`;
+    const c=q('cue-chips');c.innerHTML=(chips||[]).map(t=>`<button class="cue-chip" data-t="${esc(t)}"><small>추천 입력 · 클릭 시 채움</small>${esc(t)}</button>`).join('');
+    c.querySelectorAll('.cue-chip').forEach(b=>b.onclick=()=>{const i=chipTarget==='ws'?q('ws-in'):q('in-'+chipTarget);if(i){i.value=b.dataset.t;i.focus();if(chipTarget!=='ws')E.sndState(chipTarget);}});
+    q('cue').classList.add('on');CUE.place();clearInterval(CUE.timer);CUE.timer=setInterval(CUE.place,250);},
+  place(){const el=CUE.el,c=q('cue');if(!el||!document.body.contains(el)){return;}const r=el.getBoundingClientRect();const cw=c.offsetWidth,ch=c.offsetHeight;
+    const ph=el.closest('.phone');
+    if(ph){const pr=ph.getBoundingClientRect();const x=pr.right+16;let y=r.top+r.height/2-ch/2;y=Math.max(100,Math.min(y,innerHeight-ch-8));
+      c.className='on side';c.style.left=x+'px';c.style.top=y+'px';const ar=c.querySelector('.cue-arrow');ar.style.left='';ar.style.marginLeft='';ar.style.top=Math.max(12,Math.min(ch-12,r.top+r.height/2-y))+'px';return;}
+    let x=r.left+r.width/2-cw/2;x=Math.max(8,Math.min(x,innerWidth-cw-8));
+    const above=r.top-ch-14>=110;const y=above?r.top-ch-12:r.bottom+12;
+    c.className='on '+(above?'above':'below');c.style.left=x+'px';c.style.top=y+'px';
+    const ax=r.left+r.width/2-x;const ar=c.querySelector('.cue-arrow');ar.style.top='';ar.style.left=Math.max(10,Math.min(cw-10,ax))+'px';ar.style.marginLeft='-7px';},
+  clear(){if(CUE.el)CUE.el.classList.remove('focus-target');CUE.el=null;q('cue').classList.remove('on');q('narr-act').innerHTML='';clearInterval(CUE.timer);},
+  restore(){if(CUE.last)CUE.set(...CUE.last);}
+};
+
+/* ── 엔진 ── */
+const TAPSEL={alim:id=>'#al-'+id+' .alim-btn',auth:id=>'#auth-ok-'+id,ios:id=>'#app-'+id+' .ios-ic.cw',sms:id=>'#sms-'+id+' .sms-link',
+  notice:id=>'#km-'+id+' .kact-notice.live',edu:id=>'#km-'+id+' .kact-edu.live',survey:id=>'#km-'+id+' .kact-survey.live'};
+const TAPLB={alim:'"인증하고 입장" 탭',auth:'"입장" 탭',ios:'Cowork+ 앱 아이콘 탭',sms:'문자 속 링크 탭',notice:'공지 카드 "확인" 탭',edu:'교육 카드 "시청 완료" 탭',survey:'설문 "제출" 탭'};
+const E={
+  narr(t,step){q('narr-txt').innerHTML=t;if(step)q('narr-step').textContent=step;},
+  narrRaw(t){q('narr-txt').innerHTML=t;},
+  hint(t){q('narr-hint').textContent=t||'';},
+  next(){const st=D.steps[D.step];if(!st)return;if(st.expect==='next'){st.on&&st.on();E.advance();}else if(st.expect==='scene'){E.go(st.to);}},
+  advance(){D.step++;E.enter();},
+  enter(){
+    const st=D.steps[D.step];const total=D.steps.filter(s=>s.expect!=='scene').length;
+    q('narr-step').textContent=`S${D.scene}${D.scene===3?(D.ind==='dom'?'A':'B'):''} · ${Math.min(D.step+1,total)}/${total}`;
+    const nb=q('next-btn');W.chips([]);W.act([]);D.active=null;phoneActive(null);CUE.clear();
+    if(!st){nb.disabled=true;return;}
+    st.pre&&st.pre();
+    const chips=typeof st.chips==='function'?st.chips():st.chips;
+    q('narr-txt').innerHTML=typeof st.n==='function'?st.n():(st.n||'');
+    nb.textContent=st.expect==='scene'?'다음 신 →':'다음 →';
+    nb.disabled=!(st.expect==='next'||st.expect==='scene');nb.classList.toggle('need',st.expect==='next'||st.expect==='scene');
+    const hints={text:'타이핑 후 Enter · 칩 클릭 시 자동 채움',file:'+ 버튼 → 파일 선택',button:'버튼 클릭',tap:'폰 화면 탭',next:'',scene:'',wstext:'타이핑 후 Enter · 칩 클릭 시 자동 채움'};
+    E.hint(hints[st.expect]||'');
+    const pn=id=>(D.phones[id]?.own.n||'').split(' · ')[0];
+    const stepAt=D.step,sceneAt=D.scene;
+    const cueLater=(sel,label,chips,ct)=>{let n=0;const tryC=()=>{if(D.step!==stepAt||D.scene!==sceneAt)return;const el=typeof sel==='string'?document.querySelector(sel):sel;if(!el&&n++<40){setTimeout(tryC,60);return;}CUE.set(el,label,chips,ct);if(ct&&ct!=='ws'){const i=q('in-'+ct);if(i){i.disabled=false;}}};setTimeout(tryC,30);};
+    if(st.expect==='text'||st.expect==='file'){D.active={kind:'phone',id:st.actor,expect:st.expect,chips};phoneActive(st.actor);W.input(false);
+      if(st.expect==='text'){const i=q('in-'+st.actor);if(i){i.disabled=false;i.focus();}cueLater('#in-'+st.actor,pn(st.actor)+' 폰 입력창에 입력 → Enter',chips,st.actor);}
+      else{cueLater('#app-'+st.actor+' .plus',pn(st.actor)+' 폰 + 버튼 → 파일 선택');}
+    }else if(st.expect==='wstext'){D.active={kind:'ws',expect:'text',chips};W.chips([]);W.input(true,st.ph);cueLater('#ws-in','워크스페이스 입력창에 입력 → Enter',chips,'ws');}
+    else if(st.expect==='button'){W.input(false);W.act((st.buttons||[]).map(b=>({l:b.l,pri:true,pulse:true,fn:()=>{b.fn&&b.fn();if(!b.stay)E.advance();}})));if(st.inline)st.inline();
+      cueLater(st.inline?'#ws-msgs .fixbtn':'#ws-act .actbtn',(st.inline?q('ws-msgs')?.querySelector('.fixbtn')?.textContent:(st.buttons||[])[0]?.l)+' 클릭');}
+    else if(st.expect==='tap'){W.input(false);phoneActive(st.actor);cueLater(TAPSEL[st.tap](st.actor),pn(st.actor)+' 폰 · '+TAPLB[st.tap]);}
+    else{W.input(false);cueLater('#next-btn',st.expect==='scene'?'다음 신으로':'다음 단계로');}
+  },
+  chip(b){const t=b.textContent;if(D.active?.kind==='ws'){const i=q('ws-in');i.value=t;i.focus();}else if(D.active?.kind==='phone'){const i=q('in-'+D.active.id);if(i){i.value=t;i.focus();E.sndState(D.active.id);}}},
+  sndState(id){const s=q('snd-'+id),i=q('in-'+id);if(s&&i)s.classList.toggle('on',!!i.value.trim());},
+  phoneSend(id){const st=D.steps[D.step];if(!st||D.active?.kind!=='phone'||D.active.id!==id||D.active.expect!=='text'){E.flash('지금은 이 폰의 입력 단계가 아닙니다');return;}
+    const i=q('in-'+id);let t=i.value.trim();if(!t)t=(D.active.chips||[])[0]||'';if(!t)return;i.value='';E.sndState(id);i.blur();
+    st.on(t);E.advance();},
+  plus(id){const st=D.steps[D.step];if(!st||D.active?.kind!=='phone'||D.active.id!==id||D.active.expect!=='file'){E.flash('지금은 파일 전송 단계가 아닙니다');return;}
+    openSheet(id,st.files,f=>{st.on(f);E.advance();});},
+  wsSend(){const st=D.steps[D.step];if(!st||st.expect!=='wstext')return;const i=q('ws-in');let t=i.value.trim();if(!t)t=(D.active?.chips||[])[0]||'';if(!t)return;i.value='';st.on(t);E.advance();},
+  wsPlus(){E.flash('지금은 파일 첨부 단계가 아닙니다');},
+  tapOk(k,id){const st=D.steps[D.step];return st&&st.expect==='tap'&&st.tap===k&&st.actor===id;},
+  alimTap(id){if(E.tapOk('alim',id)){D.steps[D.step].on();E.advance();}},
+  authOk(id){if(E.tapOk('auth',id)){D.steps[D.step].on();E.advance();}},
+  openApp(id){if(E.tapOk('ios',id)){D.steps[D.step].on();E.advance();}},
+  smsTap(id){if(E.tapOk('sms',id)){D.steps[D.step].on();E.advance();}else E.flash('지금은 이 단계가 아닙니다');},
+  actTap(id,k,btn){if(!E.tapOk(k,id)){E.flash('지금은 이 카드의 단계가 아닙니다');return;}btn.classList.remove('live');btn.disabled=true;btn.textContent={notice:'확인함 ✓',edu:'시청 완료 ✓',survey:'제출 완료 ✓'}[k];D.steps[D.step].on(btn);E.advance();},
+  flash(t){const h=q('narr-hint');const o=h.textContent;h.textContent=t;h.style.color='var(--red)';setTimeout(()=>{h.textContent=o;h.style.color='';},1400);},
+  room(id){D.curRoom=id;W.rooms();const r=D.rooms.find(x=>x.id===id);if(r){r.unread=0;W.rooms();W.head(r.n,r.s,r.mem);}},
+  role(r){D.role=r;q('rb-br').classList.toggle('on',r==='br');q('rb-admin').classList.toggle('on',r==='admin');q('ws-rtag').textContent=r==='br'?'담당자 뷰':'관리자 뷰 · 대화 비참여';q('ws').classList.toggle('adm',r==='admin');},
+  dd(e){e.stopPropagation();q('ind-dd').classList.toggle('on');},
+  pickInd(e,ind){e.stopPropagation();D.ind=ind;q('dd-dom').classList.toggle('on',ind==='dom');q('dd-ovs').classList.toggle('on',ind==='ovs');q('ind-dd').classList.remove('on');q('ind-lbl').textContent=ind==='dom'?'· A':'· B';E.go(3);},
+  reset(){if(typeof dashReset==='function')dashReset();D.cnt={msg:0,file:0,audit:0,dec:0};['msg','file','audit','dec'].forEach(k=>q('c-'+k).querySelector('b').textContent='0');D.hist=[];D.slots={};D.chk={po:0,nt:0,ed:0,fc:0};renderChk();q('strip-doc').textContent='발주 수량 미정';D.done={};document.querySelectorAll('.sb-i').forEach(s=>s.classList.remove('done'));E.go(0);},
+  go(n){
+    q('ind-dd').classList.remove('on');
+    if(D.scene!==n&&D.steps.length)D.done[D.scene]=true;
+    D.scene=n;D.step=0;D.steps=[];D.active=null;
+    document.querySelectorAll('.sb-i').forEach((s,i)=>{s.classList.toggle('active',i===n);s.classList.toggle('done',!!D.done[i]&&i!==n);});
+    const s4=n===4;q('s4').classList.toggle('on',s4);q('arena').classList.toggle('s4off',s4);q('vstrip').classList.toggle('s4off',s4);
+    if(s4){CUE.clear();SC4();return;}
+    q('phones').innerHTML='';D.phones={};D.rooms=[];D.curRoom=null;D.roomTotal=0;W.clear();W.rooms();W.head('가맹점 공식 채널','카카오 채널 · 문자 · 웹 채널 통합');q('ws-tabs').innerHTML='';q('ws-main').classList.remove('locked');
+    CASE.me={...ME0};q('rb-br').textContent=CASE.me.n+' 담당자';E.role('br');
+    if(n===3)D.slots[D.ind]=true;
+    ({0:SC0,1:SC1,2:SC2,3:()=>D.ind==='dom'?SC3A():SC3B()})[n]();
+    E.enter();
+  },
+  value(sell,pain,roi){q('vs-sell').innerHTML=sell;q('vs-pain').innerHTML=pain;q('vs-roi').innerHTML=roi;}
+};
+document.addEventListener('click',()=>q('ind-dd').classList.remove('on'));
+
+/* ═══════════════ 신 스크립트 ═══════════════ */
+const FIX='<span class="tagb fix">확정</span>',EST='<span class="tagb est">예시</span>';
+function roomsSet(list,cur,total){D.rooms=list;D.roomTotal=total||list.length;if(cur)E.room(cur);else W.rooms();}
+const R1={id:'r1',n:ROOM,s:'카카오 채널 · 점주 · 매니저 · 담당자',c:'#E67E22',av:'천'};
+const R2={id:'r2',n:'하남미사점 점포방',s:'웹 채널 · 카카오톡 미사용',c:'#1F7A5A',av:'미'};
+const R0={id:'r0',n:'전체 공지 · 수도권 2권역',s:'34개 점포 · 열람 · 이수 · 응답 집계',c:'#12275C',av:'공'};
+const RH={id:'rh',n:'본부 협업방 · 수도권 2권역',s:'관리자 · 담당자 · 점주 비공개',c:'#5B3FE4',av:'본'};
+function priorHistory(upto){
+  const c=CASE.own;
+  W.in({who:c.n,org:c.org,av:c.av,avc:c.avc,text:'9월 아이스 신메뉴 2종 재료 발주 수량 문의드립니다. 판매량 파일 다시 첨부합니다',time:'8/20',src:'kakao',badges:[['pur','인입']]});
+  W.file({who:c.n,org:c.org,av:c.av,avc:c.avc,f:FILES.sales,src:'kakao',badges:[['pos','자산화됨']]});
+  W.me({text:'판매량 확인했습니다. 매장 규모 기준 발주 수량을 8/25까지 회신드리겠습니다',time:'8/20',badges:[['nav','응답 시각 기록']]});
+  if(upto>=2){
+    W.in({who:CASE.mgr.n,org:CASE.mgr.org,av:CASE.mgr.av,avc:CASE.mgr.avc,text:'매니저 김지아입니다. 발주 수량 확정되면 입고 받을 날짜도 같이 알려주세요',time:'8/25',src:'kakao',badges:[['pos','실명 복원']]});
+    W.file({me:true,f:FILES.po,src:'app',badges:[['pos','정상 공유 · 자산화됨']]});
+    W.me({text:'발주 수량표 보냅니다. 1주차 120잔분 기준이고, 재료 입고는 8/28 오전입니다',time:'8/25',src:'app',badges:[['nav','순회 중 응답']]});
+  }
+}
+function phoneHistory(p,asOwner){ // 강동천호점 점포방 폰 기록 (신 2까지)
+  kkMsg(p,{me:asOwner,name:'정미경 점주',av:'정',avc:CASE.own.avc,text:'9월 아이스 신메뉴 2종 재료 발주 수량 문의드립니다. 판매량 파일 다시 첨부합니다',time:'8/20',read:true});
+  kkMsg(p,{name:'Cowork+ 가맹본부',ch:true,text:'발주 수량표 보냅니다. 1주차 120잔분 기준이고, 재료 입고는 8/28 오전입니다',time:'8/25'});
+}
+
+/* ─── S0 도입 배경 ─── */
+function SC0(){
+  E.value('(다음 신 예고) 점주는 <b>쓰던 카카오톡 그대로</b>, 관리자는 보고가 아닌 <b>실제 기록</b>으로 현장 확인.',
+    '관리자 확인 불가 · 담당자 퇴사 시 문의·파일 소실 · 담당자 1명이 30~40개 점포를 개인 카카오톡으로 응대'+FIX,
+    '가맹점 약 2,500개 · 담당자 약 60명 규모의 소통을 본부 관리 대상으로 전환'+FIX+' · 계량 근거는 전환 후 확보');
+  q('col-label').innerHTML='개인 카카오톡 1:1 · 담당자 개인폰 <span class="tag">사각지대</span>';
+  mkPhone('b',{n:'정미경 점주 · 강동천호점',t:'개인 카카오톡',tag:'점주'});
+  mkPhone('a',{n:'한태민 · 수도권 2권역',t:'개인 카카오톡 · 개인폰',bg:'bg-me',tag:'담당자'});
+  setKakao('b',{room:'한태민 슈퍼바이저',sub:'개인'});setKakao('a',{room:'정미경 점주 (강동천호점)',sub:'개인'});
+  E.role('admin');W.head('관리자 패널','서윤아 관리자 · 수도권 2권역');W.blind({t:'관리자 패널 · 조회할 데이터 없음',d:'담당자 개인 카카오톡 소통은 회사 시스템에 존재하지 않습니다'});q('ws-main').classList.add('locked');
+  strip({chk:{po:0,nt:0,ed:0,fc:0},doc:'발주 수량 미정'});
+  D.steps=[
+    {n:'정미경 점주가 담당자 개인 카카오톡으로 신메뉴 발주 수량을 문의합니다. 정미경 폰 입력창에 직접 입력하십시오.',expect:'text',actor:'b',
+     chips:['9월 아이스 신메뉴 2종 재료 발주 수량 어떻게 잡을까요? 작년 8월 음료 판매량 첨부합니다','오픈 전에 수량 확정이 필요해서 이번 주 안에 부탁드립니다'],
+     on:t=>{kkMsg('b',{me:true,text:t,read:true});kkMsg('a',{name:'정미경 점주',av:'정',avc:CASE.own.avc,text:t});}},
+    {n:'같은 폰에서 판매량 파일을 첨부합니다. + 버튼을 누르고 파일을 선택하십시오.',expect:'file',actor:'b',files:[FILES.sales],
+     on:f=>{kkFile('b',{me:true,f});kkFile('a',{name:'정미경 점주',av:'정',avc:CASE.own.avc,f});strip({doc:'발주: 담당자 개인폰에만 존재'});}},
+    {n:'한태민 담당자가 개인폰에서 답합니다. 한태민 폰 입력창에 입력하십시오.',expect:'text',actor:'a',
+     chips:['판매량 확인했습니다. 매장 규모 기준으로 정리해서 오후에 회신드리겠습니다'],
+     on:t=>{kkMsg('a',{me:true,text:t,read:true});kkMsg('b',{name:'한태민',av:'한',avc:ME0.avc,text:t});kkSys('a','다른 대화방 안 읽음 11건 · 담당 34개 점포');}},
+    {n:'우측 관리자 패널을 확인합니다. 서윤아 팀장은 방금 오간 문의도, 판매량 파일도 볼 수 없습니다.',expect:'button',
+     buttons:[{l:'서윤아 팀장 관리자 패널 확인',fn:()=>{W.blind({t:'사각지대 · 대화방 0 · 파일 0',d:'방금 오간 발주 문의와 판매량 파일은 회사 어디에도 없습니다<br>수도권 2권역 주간 보고: <b>특이사항 없음</b> · 34개 점포 문의 현황 산출 불가 '+EST,warn:true});}}]},
+    {n:'담당자 퇴사를 가정합니다. 개인폰 안의 문의와 파일이 회사에서 사라집니다.',expect:'button',
+     buttons:[{l:'담당자 퇴사 시뮬레이션',fn:()=>{q('pu-a').classList.add('dim');setSub('a','퇴사 · 개인폰 반출');kkSys('b','한태민 님이 나갔습니다');W.blind({t:'소실 · 발주 문의 · 판매량 파일 회수 불가',d:'담당자 약 60명 · 가맹점 약 2,500개가 같은 방식으로 운영되고 있습니다 '+FIX,warn:true});}}]},
+    {n:'같은 문의를 다음 신에서 공식 채널로 옮깁니다.',expect:'scene',to:1}
+  ];
+}
+
+/* ─── S1 채널 전환 ─── */
+function SC1(){
+  E.value('회사가 <b>채널을 만들고 초대</b>. 점주 앱 설치 없음 · 알림톡 한 번으로 입장 · 미등록자·퇴사자 <b>입장 불가</b>.',
+    '해결: 관리자 확인 불가 → <b>통합 조회</b> · 퇴사 시 소실 → <b>회사 기록</b> · 점주에게 별도 앱 요구 시 참여 저하 → 카카오톡 그대로',
+    '수도권 2권역 34개 점포 편입(알림톡 29 · 문자 5) · 1시간 응대 기준 적용'+EST);
+  q('col-label').innerHTML='강동천호점 점주 폰 · 알림톡 → 카카오 채널 <span class="tag" style="background:var(--purple-bg);color:var(--purple)">기업계정</span>';
+  mkPhone('b',{n:'정미경 점주 · 강동천호점',t:'카카오톡 알림',tag:'점주'});setAlim('b');
+  E.role('admin');W.head('관리자 콘솔','서윤아 관리자 · 점포 배정 · 응대 기준');
+  W.sys('관리자와 담당자는 우측 Cowork+ 워크스페이스에서 일합니다. 관리자는 대화방에 참여하지 않고 배정과 기준만 정합니다.');
+  D.steps=[
+    formStep('관리자 서윤아 팀장이 수도권 2권역 점포를 담당자에게 배정합니다. 버튼을 누르고 양식에서 권역과 담당자를 확인하십시오.','점포 배정 · 수도권 2권역',
+      [{l:'권역',opts:['수도권 2권역 · 34개 점포','수도권 1권역 · 41개 점포','충청권 · 312개 점포']},{l:'담당자',opts:['한태민','이서준','윤재석']}],'배정 확정',
+      v=>{W.sys(`${esc(v[0])} → <b>${esc(v[1])}</b> 배정 · <span class="badge nav">배정 이력 기록</span>`);bump('dec');bump('audit');tl('8/20','점포 배정 · 수도권 2권역 → '+v[1],'서윤아 관리자');}),
+    {n:'한태민 담당자가 강동천호점 정미경 점주를 채널로 초대합니다. 버튼을 클릭하십시오.',expect:'button',pre:()=>{E.role('br');W.head('가맹점 공식 채널','카카오 채널 · 문자 · 웹 채널 통합');},
+     buttons:[{l:'점포 초대 · 강동천호점 정미경 점주',fn:()=>{alimCard('b',{room:ROOM,to:'정미경'});W.sys('초대 발송 · 강동천호점 정미경 점주 · 알림톡 · <span class="badge nav">초대 이력 기록</span>');bump('audit');}}]},
+    {n:'정미경 폰에 알림톡이 도착했습니다. 폰 화면의 "인증하고 입장"을 탭하십시오.',expect:'tap',tap:'alim',actor:'b',
+     on:()=>{setAuth('b',{title:'가맹점 등록 정보 확인',desc:ROOM+' 입장을 위해<br>가맹점 등록 정보와 대조합니다',rows:[['점포','강동천호점'],['점주','정미경'],['휴대전화','010-****-3317']],ok:'등록 점주 확인'});}},
+    {n:'가맹점 등록 정보와 대조가 끝났습니다. "입장"을 탭하십시오.',expect:'tap',tap:'auth',actor:'b',
+     on:()=>{setKakao('b',{room:ROOM,ch:true,members:2,sub:'Cowork+ 채널 · 기업계정'});setSub('b','카카오톡 · 가맹점 채널');kkSys('b','등록 점주 확인 · 채널에 입장했습니다');roomsSet([R1],'r1');W.sys('대화방 생성 · '+ROOM+' · <span class="badge pos">등록 점주 확인</span>');bump('audit');tl('8/20','채널 입장 · 등록 점주 확인','정미경 점주');}},
+    {n:'신 0과 같은 문의를 채널에서 다시 보냅니다. 정미경 폰에 입력하십시오. 이번에는 워크스페이스에 인입됩니다.',expect:'text',actor:'b',
+     chips:['9월 아이스 신메뉴 2종 재료 발주 수량 문의드립니다. 판매량 파일 다시 첨부합니다'],
+     on:t=>{custSay('b',t,{badges:[['pur','인입']]});}},
+    {n:'판매량 파일을 채널로 다시 보냅니다. + 버튼 → 파일 선택.',expect:'file',actor:'b',files:[FILES.sales],
+     on:f=>{custFile('b',f,{badges:[['pos','자산화됨']]});strip({doc:'발주: 회사 보관 · 수량 미정'});tl('8/20','발주 문의 · 판매량 파일 접수','정미경 점주');}},
+    {n:'한태민 담당자가 워크스페이스에서 응답합니다. 우측 입력창에 입력하십시오. 정미경 폰에는 채널 프로필로 도착합니다.',expect:'wstext',
+     chips:['판매량 확인했습니다. 매장 규모 기준 발주 수량을 8/25까지 회신드리겠습니다'],
+     on:t=>{meSay(t,{toPhones:['b'],badges:[['nav','응답 시각 기록']]});}},
+    formStep('관리자가 미응답 기준을 정합니다. 1차 알림은 담당자에게, 2차 알림만 관리자에게 갑니다. 버튼을 누르고 양식을 확인하십시오.','응대 기준 설정 · 수도권 2권역',
+      [{l:'1차 · 담당자 재알림',opts:['1시간','30분','2시간']},{l:'2차 · 관리자 알림',opts:['2시간','3시간','4시간']}],'기준 적용',
+      v=>{W.sys(`수도권 2권역 응대 기준 적용 · 1차 <b>${esc(v[0])}</b> 미응답 → 담당자 재알림 · 2차 <b>${esc(v[1])}</b> 미응답 → 관리자 알림 ${EST}`);bump('dec');bump('audit');tl('8/20','응대 기준 적용 · 1차 '+v[0]+' · 2차 '+v[1],'서윤아 관리자');},
+      ()=>{E.role('admin');}),
+    {n:'폰 1대는 예시입니다. 수도권 2권역 34개 점포가 같은 절차로 편입됩니다.',expect:'next',pre:()=>E.role('br'),
+     on:()=>{W.sys('34개 점포 초대 · 알림톡 29 · 문자 5 → 대화방 34개 '+EST);D.roomTotal=34;W.rooms();}},
+    {n:'같은 문의와 같은 파일이 이번에는 회사에 남았습니다. 다음 신에서 카카오 채널만으로는 해결되지 않는 한계 3가지를 해결합니다.',expect:'scene',to:2}
+  ];
+}
+
+/* ─── S2 한계·해결 ─── */
+function SC2(){
+  E.value('카카오 채널의 기업 관리 위에, Cowork+가 <b>편입 · 실명 · 모바일 공유</b>를 보완. 한계를 숨기지 않고 해결 과정을 시연.',
+    '카카오톡 미사용 점포 사각지대'+FIX+' · 매니저 발신 시 발신자 미표시 · 순회 중 모바일 파일 전송 끊김 (상담톡 사양)',
+    '카카오톡 미사용 5개 점포 편입 누락 0 · 매니저 발신 실명 기록 · 순회 중 발주 수량표 당일 공유'+EST);
+  q('col-label').innerHTML='한계 ① 카카오톡 미사용 점포 · 문자 → 웹 채널 <span class="tag">사각지대</span>';
+  mkPhone('o',{n:'오세훈 점주 · 하남미사점',t:'문자 메시지 · 카카오톡 미사용',tag:'점주',bg:'bg-o'});setSMS('o');
+  roomsSet([R1],null,34);W.head('카카오톡 미사용 점포','문자 · 웹 채널 편입 대기 5개 점포');
+  W.sys('수도권 2권역 34개 점포 중 카카오톡 미사용 5개 점포 · 알림톡 초대 불가 '+EST);
+  strip({doc:'발주: 회사 보관 · 수량 미정'});
+  let m1;
+  D.steps=[
+    {n:'한계 ① 하남미사점 오세훈 점주는 카카오톡을 사용하지 않습니다. 담당자가 문자로 초대합니다. 버튼을 클릭하십시오.',expect:'button',
+     buttons:[{l:'문자 초대 · 하남미사점 오세훈 점주',fn:()=>{smsMsg('o','[Cowork+] 하남미사점 오세훈 점주님, 본사 가맹점 채널 안내입니다. 카카오톡 없이 아래 링크로 입장하실 수 있습니다.','https://cw.plus/h/hanam-misa');W.sys('카카오톡 미사용 점포 · 문자 초대 · <span class="badge nav">초대 이력 기록</span>');bump('audit');}}]},
+    {n:'오세훈 폰의 링크를 탭하십시오. 휴대전화 인증 후 같은 채널의 웹 화면으로 입장합니다.',expect:'tap',tap:'sms',actor:'o',
+     on:()=>{setAuth('o',{title:'웹 채널 입장',desc:'하남미사점 점포방 입장을 위해<br>휴대전화 인증 후 가맹점 등록 정보와 대조합니다',rows:[['점포','하남미사점'],['점주','오세훈'],['휴대전화','010-****-5520 · 인증 완료']],ok:'등록 점주 확인',auto:true});
+       setTimeout(()=>{setWeb('o',{room:'하남미사점 점포방',members:2});setSub('o','웹 채널 · 카카오톡 없이 입장');kkSys('o','등록 점주 확인 · 웹 채널에 입장했습니다');},1300);
+       roomsSet([R1,R2],'r2',34);W.sys('대화방 생성 · 하남미사점 점포방 · <span class="badge pur">웹 채널</span>');bump('audit');}},
+    {n:'오세훈 점주가 웹 채널에서 문의합니다. 오세훈 폰 입력창에 입력하십시오. 카카오 채널과 같은 워크스페이스로 들어옵니다.',expect:'text',actor:'o',
+     chips:['9/1 개점 준비 중입니다. 아이스 신메뉴 재료 입고일 확인 부탁드립니다'],
+     on:t=>{custSay('o',t,{who:CASE.osh,src:'web',badges:[['pur','웹 채널 인입'],['amb','응대 기준 1시간 적용 중']]});}},
+    {n:'카카오톡 미사용 점포도 같은 채널로 편입됩니다. 다음을 누르십시오. 강동천호점 점포방으로 돌아갑니다.',expect:'next',
+     on:()=>{W.sys('카카오톡 미사용 5개 점포 문자 · 웹 편입 → 편입 <b>34/34</b> · 누락 0 '+EST);
+       {q('pu-o').remove();delete D.phones.o;
+         q('col-label').innerHTML='한계 ② ③ · 강동천호점 점포방 · 점주 · 매니저 · 담당자 <span class="tag" style="background:var(--purple-bg);color:var(--purple)">3인</span>';
+         mkPhone('b',{n:'정미경 점주 · 강동천호점',t:'카카오톡 · 가맹점 채널',tag:'점주'});mkPhone('c',{n:'김지아 매니저 · 강동천호점',t:'카카오톡 · 가맹점 채널',tag:'매니저'});
+         ['b','c'].forEach(p=>{setKakao(p,{room:ROOM,ch:true,members:3,sub:'Cowork+ 채널 · 기업계정'});kkMsg(p,{me:p==='b',name:'정미경 점주',av:'정',avc:CASE.own.avc,text:'9월 아이스 신메뉴 2종 재료 발주 수량 문의드립니다. 판매량 파일 다시 첨부합니다',time:'8/20',read:true});kkMsg(p,{name:'Cowork+ 가맹본부',ch:true,text:'판매량 확인했습니다. 매장 규모 기준 발주 수량을 8/25까지 회신드리겠습니다',time:'8/20'});});
+         W.clear();E.room('r1');priorHistory(1);}}},
+    {n:'한계 ② 같은 방의 김지아 매니저가 메시지를 보냅니다. 김지아 폰에 입력하십시오. 워크스페이스에는 발신자가 "알 수 없음"으로 들어옵니다.',expect:'text',actor:'c',
+     chips:['매니저 김지아입니다. 발주 수량 확정되면 입고 받을 날짜도 같이 알려주세요'],
+     on:t=>{m1=custSay('c',t,{who:CASE.mgr,toPhones:['b'],unk:true,badges:[['red','발신자 미표시 · 카카오 사양']]});}},
+    {n:'가맹점 인력 대장과 연동해 발신자를 복원합니다. 워크스페이스의 버튼을 클릭하십시오.',expect:'button',
+     inline:()=>{W.fix('인력 대장 연동 · 실명 복원',()=>{W.who(m1,CASE.mgr);W.badge(m1,['pos','실명 복원']);bump('audit');E.advance();});}},
+    {n:'한계 ③ 한태민 담당자가 다른 매장을 순회 중입니다. 모바일 원톡 화면에서 발주 수량표를 보냅니다. 순회 폰 + 버튼 → 파일. 전송이 멈춥니다.',expect:'file',actor:'a',files:[FILES.po],
+     pre:()=>{mkPhone('a',{n:'한태민 순회 폰',t:'카카오 모바일 원톡 · iOS',bg:'bg-me',tag:'담당자'});setKakao('a',{room:ROOM,ch:true,members:3,sub:'모바일 원톡'});q('pu-a').style.order='-1';},
+     on:f=>{kkFile('a',{me:true,f,stuck:true});W.sys('한태민 순회 중 · 모바일 원톡 파일 전송 중 … 점포 미수신 · iOS 앱 간 파일 공유 제한',true);}},
+    {n:'전송이 "파일 전송 중"에서 멈췄습니다. 기능 결함이 아니라 iOS 앱 간 파일 공유 제한입니다. 다음을 누르면 전용 앱으로 전환합니다.',expect:'next',
+     on:()=>{setIOS('a');setSub('a','iOS 홈 → Cowork+ 앱');}},
+    {n:'홈 화면의 Cowork+ 아이콘을 탭하십시오.',expect:'tap',tap:'ios',actor:'a',
+     on:()=>{setCw('a',{room:ROOM,sub:'정미경 · 김지아 · 한태민',history:[{name:'강동천호점 김지아 매니저',av:'김',avc:CASE.mgr.avc,text:'매니저 김지아입니다. 발주 수량 확정되면 입고 받을 날짜도 같이 알려주세요'}]});cwNotice('a','순회 모드 · 생체 인증 로그인 · 채널 접속');setSub('a','Cowork+ 앱 · 순회 중');}},
+    {n:'앱에서 발주 수량표를 보냅니다. 순회 폰 + 버튼 → 파일. 정미경 · 김지아 폰과 워크스페이스에 정상 공유됩니다.',expect:'file',actor:'a',files:[FILES.po],
+     on:f=>{cwFile('a',{me:true,f});['b','c'].forEach(p=>kkFile(p,{name:'Cowork+ 가맹본부',ch:true,f}));W.file({me:true,f,src:'app',badges:[['pos','정상 공유 · 자산화됨']]});bump('file');strip({chk:{po:1},doc:'발주 확정 · 1주차 120잔분'});tl('8/25','발주 수량표 공유 · 발주 확정','한태민 담당자');}},
+    {n:'앱에서 수량과 입고일을 안내합니다. 순회 폰 입력창에 입력하십시오.',expect:'text',actor:'a',
+     chips:['발주 수량표 보냅니다. 1주차 120잔분 기준이고, 재료 입고는 8/28 오전입니다'],
+     on:t=>{cwMsg('a',{me:true,text:t});['b','c'].forEach(p=>kkMsg(p,{name:'Cowork+ 가맹본부',ch:true,text:t}));W.me({text:t,src:'app',badges:[['nav','순회 중 응답 · 응답 시각 기록']]});bump('msg');}},
+    {n:'세 한계가 관통 건 진행 중에 해결됐고 발주가 확정됐습니다. 다음 신에서 상단 "현장 운영 ▾"의 A(공지·교육·설문) 또는 B(이슈·인수인계)를 선택합니다. 다음을 누르면 A로 진행합니다.',expect:'scene',to:3}
+  ];
+}
+
+/* ─── S3A 공지 · 교육 · 설문 ─── */
+function SC3A(){
+  E.value('관리자 · 시스템 · 담당자의 역할 분담으로, 공지가 <b>발송에서 완결되지 않고</b> 전 점포 열람과 준비 확인까지 관리.',
+    '공지가 담당자 전달에 의존해 관리자는 열람 여부 확인 불가 · 프로모션 당일에야 미준비 점포 확인 · 공지·교육·설문 요구'+FIX,
+    '열람 82% → 재안내 97% → 담당자 확인 100% · 담당자 확인 대상 34 → 1개 점포 · 오픈 3일 전 포스터 미수령 확인'+EST);
+  q('col-label').innerHTML='현장 운영 A · 공지 · 교육 · 설문 <span class="tag" style="background:var(--purple-bg);color:var(--purple)">점포 단위 집계</span>';
+  mkPhone('b',{n:'정미경 점주 · 강동천호점',t:'카카오톡 · 가맹점 채널',tag:'점주'});
+  mkPhone('c',{n:'김지아 매니저 · 강동천호점',t:'카카오톡 · 가맹점 채널',tag:'매니저'});
+  mkPhone('o',{n:'오세훈 점주 · 하남미사점',t:'웹 채널',tag:'점주',bg:'bg-o'});
+  ['b','c'].forEach(p=>{setKakao(p,{room:ROOM,ch:true,members:3,sub:'Cowork+ 채널 · 기업계정'});phoneHistory(p,p==='b');});
+  setWeb('o',{room:'하남미사점 점포방',members:2});kkMsg('o',{me:true,text:'9/1 개점 준비 중입니다. 아이스 신메뉴 재료 입고일 확인 부탁드립니다',time:'8/24',read:true});kkMsg('o',{name:'Cowork+ 가맹본부',ch:true,text:'재료 입고는 8/28 오전입니다. 개점 체크리스트와 함께 안내드리겠습니다',time:'8/24'});
+  roomsSet([R0,R1,R2],'r0',34);E.role('admin');
+  W.sys('강동천호점 발주 확정 · 1주차 120잔분 · 재료 입고 8/28 (신 2)');
+  strip({chk:{po:1,nt:0,ed:0,fc:0},doc:'발주 확정 · 1주차 120잔분'});
+  D.steps=[
+    formStep('관리자가 9월 아이스 신메뉴 오픈 공지를 보냅니다. 버튼을 누르고 발송 대상을 선택하십시오.','공지 작성 · 9월 아이스 신메뉴 오픈',
+      [{l:'발송 대상',opts:['수도권 2권역 · 34개 점포','전국 · 2,500개 점포']},{l:'제목',v:'[공지] 9월 아이스 신메뉴 2종 9/1 오픈',w:230},{l:'첨부',fixed:FILES.guide.n}],'발송',
+      v=>{const nt={from:'Cowork+ 공지',title:v[1]||'[공지] 9월 아이스 신메뉴 2종 9/1 오픈',value:'포스터 8/27 배송 · 재료 8/28 입고',desc:'운영가이드 PDF 첨부 · 확인 후 "확인"을 눌러주십시오',btn:'확인'};
+        ['b','c','o'].forEach(p=>{kkAct(p,'notice',nt);kkFile(p,{name:'Cowork+ 공지',ch:true,f:FILES.guide});});
+        W.card({by:CASE.admin,adm:true,title:'공지 발송',value:(v[1]||'9월 아이스 신메뉴 오픈')+' · '+v[0],desc:'첨부 '+FILES.guide.n+' · 점포별 열람 추적 시작'});
+        bump('dec');bump('file');bump('audit');tl('8/26','공지 수신 · 9월 아이스 신메뉴 오픈','서윤아 관리자');}),
+    {n:'정미경 폰의 공지 카드에서 "확인"을 탭하십시오. 열람이 점포 이름으로 집계됩니다.',expect:'tap',tap:'notice',actor:'b',
+     on:()=>{W.sys('열람 집계 · 수도권 2권역 <b>28/34 (82%)</b> · 미열람 6개 점포: 하남미사점 외 5 '+EST);strip({chk:{nt:1}});tl('8/26','공지 열람','정미경 점주');}},
+    {n:'미열람 6개 점포에만 재안내를 보냅니다. 이미 열람한 점포는 제외됩니다. 버튼을 클릭하십시오.',expect:'button',
+     buttons:[{l:'미열람 6개 점포 재안내',fn:()=>{kkAct('o','notice',{from:'Cowork+ 공지',title:'[재안내] 9월 아이스 신메뉴 2종 9/1 오픈',value:'공지 확인이 필요합니다',desc:'열람하지 않은 점포에만 발송됩니다',btn:'확인'});
+       W.sys('재안내 발송 · 미열람 6개 점포만 · 이미 열람한 28개 점포 제외');W.sys('열람 <b>33/34 (97%)</b> · 잔여 1: 하남미사점 '+EST);bump('dec');
+       setTimeout(()=>{E.role('br');D.rooms.find(r=>r.id==='r2').unread=1;E.room('r2');W.task('확인 필요 점포 1건 · 담당자 과업','하남미사점 · 공지 미열람 · 재안내 후 미확인 · 담당 한태민');},200);}}]},
+    {n:'한태민 담당자는 남은 1개 점포만 확인합니다. 우측 입력창에 입력하십시오. 오세훈 폰 웹 채널로 도착합니다.',expect:'wstext',
+     chips:['점주님, 9월 신메뉴 공지 확인 부탁드립니다. 9/1 개점 일정과 겹치는 항목은 제가 정리해 드리겠습니다'],
+     on:t=>{meSay(t,{toPhones:['o'],roomLabel:'하남미사점 점포방',badges:[['pur','과업 처리'],['nav','응답 시각 기록']]});}},
+    {n:'오세훈 폰에서 공지를 확인하십시오.',expect:'tap',tap:'notice',actor:'o',
+     on:()=>{W.sys('열람 <b>34/34 (100%)</b> · 과업 완료');setTimeout(()=>{E.role('admin');E.room('r0');},200);}},
+    {n:'관리자가 신메뉴 제조 교육을 배포합니다. 버튼을 클릭하십시오.',expect:'button',
+     buttons:[{l:'교육 배포 · 신메뉴 제조 교육 영상 8분 · 8/31까지',fn:()=>{['b','c','o'].forEach(p=>kkAct(p,'edu',{from:'Cowork+ 교육',title:'[교육] 아이스 신메뉴 제조',value:'영상 8분 · 8/31까지 이수',desc:'제조 담당자가 시청 후 "시청 완료"를 눌러주십시오',btn:'시청 완료'}));
+       W.card({by:CASE.admin,adm:true,title:'교육 배포',value:'아이스 신메뉴 제조 · 8분 · 34개 점포',desc:'점포별 이수 추적 시작'});bump('dec');bump('audit');}}]},
+    {n:'실제 제조를 맡는 김지아 매니저가 교육을 이수합니다. 김지아 폰의 "시청 완료"를 탭하십시오.',expect:'tap',tap:'edu',actor:'c',
+     on:()=>{W.sys('이수 <b>31/34 (91%)</b> · 강동천호점 김지아 매니저 이수 '+EST);strip({chk:{ed:1}});tl('8/27','교육 이수 · 아이스 신메뉴 제조','김지아 매니저');}},
+    {n:'관리자가 오픈 준비 점검 설문을 배포합니다. 버튼을 클릭하십시오.',expect:'button',
+     buttons:[{l:'설문 배포 · 오픈 준비 점검 (포스터 · 재료 · 설비)',fn:()=>{['b','c','o'].forEach(p=>kkAct(p,'survey',{from:'Cowork+ 설문',title:'[설문] 9/1 오픈 준비 점검',value:'3문항 · 선택형',qs:[['포스터',['수령','미수령'],1],['재료',['입고 완료','미입고'],0],['설비',['정상','이상'],0]],btn:'제출'}));
+       W.card({by:CASE.admin,adm:true,title:'설문 배포',value:'9/1 오픈 준비 점검 · 34개 점포',desc:'포스터 · 재료 · 설비 3문항'});bump('dec');}}]},
+    {n:'정미경 폰에서 설문에 응답하십시오. 추천 선택(포스터 미수령 · 재료 입고 완료 · 설비 정상)이 미리 표시되어 있습니다.',expect:'tap',tap:'survey',actor:'b',
+     on:()=>{W.in({who:CASE.own.n,org:CASE.own.org,av:CASE.own.av,avc:CASE.own.avc,text:'[설문 응답] 포스터 미수령 · 재료 입고 완료 · 설비 정상',src:'kakao',badges:[['amb','포스터 미수령']]});
+       W.sys('응답 <b>33/34 (97%)</b> · 포스터 미수령 2개 점포: 강동천호점 외 1 '+EST,true);strip({chk:{fc:1},doc:'포스터 미수령'});tl('8/28','설문 응답 · 포스터 미수령','정미경 점주');}},
+    formStep('오픈 3일 전에 포스터 미수령이 확인됐습니다. 관리자가 물류팀으로 이관합니다. 버튼을 누르고 양식을 확인하십시오.','포스터 미수령 이관',
+      [{l:'대상',fixed:'포스터 미수령 2개 점포'},{l:'담당 부서',opts:['물류팀','마케팅팀']},{l:'기한',v:'8/29',w:70}],'이관',
+      v=>{W.sys(`이관 <b>LG-0828-012</b> · ${esc(v[1])} 접수 · 기한 ${esc(v[2])} `+EST);bump('dec');bump('audit');
+        setTimeout(()=>{W.sys('8/29 오전 재배송 완료 · LG-0828-012 처리 완료');['b','c'].forEach(p=>kkCard(p,{from:'Cowork+ 공지',title:'포스터 재배송',value:'8/29 오전 재배송 · 수령 확인',desc:'이관 LG-0828-012 · '+v[1],foot:'9/1 오픈 준비 항목 확인 완료'}));strip({doc:'포스터 8/29 수령 · 오픈 준비 완료'});},700);
+        tl('8/29','포스터 재배송 · 이관 LG-0828-012 처리','물류팀');}),
+    {n:'오픈 준비 항목이 오픈 3일 전에 모두 확인됐습니다. 다음 신에서 이 기록이 대시보드에 그대로 나타납니다.',expect:'scene',to:4}
+  ];
+}
+
+/* ─── S3B 이슈 · 인수인계 ─── */
+function SC3B(){
+  E.value('이슈는 <b>관리자 배정</b>으로, 담당자 교체는 <b>관리자 승인</b>으로 처리 · 점주가 같은 설명을 반복하지 않는 구조.',
+    '이슈가 담당자 개인 판단에 머물러 본부 조치 지연 · 담당자 교체마다 30~40개 점포 관계 초기화'+FIX,
+    '이슈 접수 50분 만에 부서 배정 · 오픈 전 당일 조치 · 승계 시 34개 점포 이력 손실 0'+EST);
+  q('col-label').innerHTML='현장 운영 B · 이슈 · 인수인계 <span class="tag" style="background:var(--purple-bg);color:var(--purple)">본부 협업방</span>';
+  mkPhone('b',{n:'정미경 점주 · 강동천호점',t:'카카오톡 · 가맹점 채널',tag:'점주'});
+  mkPhone('a',{n:'한태민 · 수도권 2권역',t:'Cowork+ 앱 · 순회 중',bg:'bg-me',tag:'담당자'});
+  setKakao('b',{room:ROOM,ch:true,members:3,sub:'Cowork+ 채널 · 기업계정'});phoneHistory('b',true);
+  setCw('a',{room:ROOM,sub:'정미경 · 김지아 · 한태민',history:[{me:true,text:'발주 수량표 보냅니다. 1주차 120잔분 기준이고, 재료 입고는 8/28 오전입니다'}]});
+  roomsSet([R1,RH],'r1',34);priorHistory(2);
+  strip({chk:{po:1,nt:0,ed:0,fc:0},doc:'발주 확정 · 오픈 D-3'});
+  D.steps=[
+    {n:'8/29 08:40 · 오픈 3일 전, 강동천호점 제빙기가 멈췄습니다. 정미경 폰에 입력하십시오.',expect:'text',actor:'b',
+     chips:['제빙기가 오늘만 두 번 멈췄습니다. 9/1 아이스 신메뉴 오픈 전에 조치 가능할까요?'],
+     on:t=>{custSay('b',t,{toPhones:['a'],badges:[['pur','인입']]});cwNotice('a','강동천호점 신규 문의 · 응대 기준 1시간');}},
+    {n:'같은 폰에서 제빙기 에러 화면 사진을 보냅니다. + 버튼 → 파일.',expect:'file',actor:'b',files:[FILES.err],
+     on:f=>{custFile('b',f,{toPhones:['a'],badges:[['pos','자산화됨']]});strip({chk:{fc:-1},doc:'설비 이상 · 제빙기 E03'});tl('8/29','제빙기 정지 접수 · 에러코드 E03','정미경 점주');}},
+    {n:'08:55 · 담당자가 처리할 수 없는 설비 이슈입니다. 점포방이 아니라 본부 협업방으로 올립니다. 버튼을 클릭하십시오.',expect:'button',
+     buttons:[{l:'본부 상향 · 강동천호점 제빙기',fn:()=>{E.room('rh');W.div('본부 협업방 · 점주 비공개');W.card({title:'본부 상향 요청',value:'강동천호점 · 오픈 D-3 · 제빙기 E03',desc:'금일 2회 정지 · 아이스 신메뉴 판매 불가 위험 · 에러 사진 첨부'});bump('audit');tl('8/29','본부 상향 · 제빙기','한태민 담당자');}}]},
+    formStep('09:30 · 관리자가 담당 부서와 처리 기한을 정합니다. 버튼을 누르고 양식을 확인하십시오.','배정 · 강동천호점 제빙기',
+      [{l:'담당 부서',opts:['시설팀','구매팀']},{l:'처리 기한',opts:['당일','익일','3일 이내']},{l:'대체 운영',v:'인근 강동암사점 얼음 지원',w:170}],'배정',
+      v=>{W.card({by:CASE.admin,adm:true,title:'배정 완료 · 접수번호 FR-26082901',value:`${v[0]} · 15:00 A/S · ${v[1]} 조치`,desc:'대체 운영: '+v[2]});cwNotice('a','본부 회신 · FR-26082901 · '+v[0]+' 15:00 A/S');bump('dec');bump('audit');tl('8/29','부서 배정 · FR-26082901 · '+v[0]+' '+v[1],'서윤아 관리자');},
+      ()=>{E.role('admin');}),
+    {n:'09:35 · 한태민 담당자가 순회 중 앱에서 점주에게 회신합니다. 한태민 폰 입력창에 입력하십시오. 본부 협업방 내용은 점주에게 보이지 않습니다.',expect:'text',actor:'a',
+     pre:()=>{E.role('br');E.room('r1');W.div(ROOM);},
+     chips:['오늘 15시 A/S 배정됐습니다(접수 FR-26082901). 수리 전까지 얼음은 강동암사점에서 지원합니다'],
+     on:t=>{cwMsg('a',{me:true,text:t});kkMsg('b',{name:'Cowork+ 가맹본부',ch:true,text:t});W.me({text:t,src:'app',badges:[['nav','순회 중 응답 · 응답 시각 기록']]});bump('msg');}},
+    {n:'15:40 · 시설팀 조치가 끝났습니다. 다음을 누르십시오.',expect:'next',
+     on:()=>{kkCard('b',{from:'Cowork+ 가맹본부',title:'조치 완료',value:'FR-26082901 · 제빙기 정상',desc:'시설팀 15:40 조치',foot:'9/1 오픈 설비 점검 완료'});W.sys('15:40 시설팀 조치 완료 · FR-26082901 · 제빙기 정상 '+EST);strip({chk:{fc:1},doc:'설비 정상 · 오픈 준비 완료'});tl('8/29','조치 완료 · FR-26082901 · 제빙기 정상','시설팀');}},
+    formStep('9/12 · 한태민 담당자가 퇴사합니다. 관리자가 후임을 지정하고 34개 점포를 일괄 승계합니다. 버튼을 누르고 후임을 선택하십시오.','담당자 교체 · 수도권 2권역',
+      [{l:'전임',fixed:'한태민 · 9/12 퇴사 · 비활성'},{l:'후임',opts:['이서준','윤재석','박소연']},{l:'대상',fixed:'수도권 2권역 34개 점포'}],'승계 실행',
+      v=>{const nm=v[1];q('pu-a').classList.add('dim');setSub('a','계정 비활성 · 9/12');
+        mkPhone('n',{n:nm+' · 수도권 2권역(후임)',t:'Cowork+ 앱',bg:'bg-me',tag:'담당자'});
+        setCw('n',{room:ROOM,sub:'정미경 · 김지아 · '+nm,history:[{name:'강동천호점 정미경 점주',av:'정',avc:CASE.own.avc,text:'제빙기가 오늘만 두 번 멈췄습니다. 9/1 아이스 신메뉴 오픈 전에 조치 가능할까요?'},{name:'이전 담당 한태민',av:'한',avc:'#9AA1B8',text:'오늘 15시 A/S 배정됐습니다(접수 FR-26082901).'}]});
+        cwNotice('n','승계 완료 · 강동천호점 이력<br>발주 120잔분 · 제빙기 FR-26082901 조치 완료 · 오픈 9/1');
+        CASE.me={n:nm,org:'수도권 2권역',av:nm[0],avc:'#8B6BF0'};q('rb-br').textContent=nm+' 담당자';
+        W.sys(`9/12 한태민 계정 비활성 → 수도권 2권역 34개 점포 <b>${esc(nm)}</b> 일괄 승계 · 이력 손실 0`);kkSys('b','담당자 변경 · '+esc(nm)+' · 대화 이력 유지');
+        bump('dec');bump('audit');tl('9/12','담당자 승계 · 한태민 → '+nm,'서윤아 관리자');},
+      ()=>{E.role('admin');}),
+    {n:()=>'9/15 · '+CASE.me.n+' 담당자가 승계된 이력을 근거로 연락합니다. '+CASE.me.n+' 폰 입력창에 입력하십시오.',expect:'text',actor:'n',pre:()=>E.role('br'),
+     chips:()=>['점주님, 후임 '+CASE.me.n+'입니다. 제빙기 A/S 이후 재발은 없는지, 아이스 신메뉴 판매는 어떤지 확인차 연락드립니다'],
+     on:t=>{cwMsg('n',{me:true,text:t});kkMsg('b',{name:'Cowork+ 가맹본부',ch:true,text:t});W.me({text:t,src:'app',badges:[['nav','승계 후 첫 응대']]});bump('msg');tl('9/15','후임 첫 응대 · 재설명 없음',CASE.me.n+' 담당자');}},
+    {n:'정미경 점주가 답합니다. 정미경 폰에 입력하십시오.',expect:'text',actor:'b',
+     chips:['인수인계 받으셨군요. 처음부터 설명하지 않아도 되니 편합니다. 오픈 2주차 판매량 보내드리겠습니다'],
+     on:t=>{custSay('b',t,{toPhones:['n'],badges:[['pur','인입']]});}},
+    {n:'이슈 조치와 담당자 교체가 모두 기록으로 이어졌습니다. 다음 신에서 대시보드로 확인합니다.',expect:'scene',to:4}
+  ];
+}
+
+/* ─── S4 관리자 대시보드 (임베드) ─── */
+function SC4(){
+  E.value('시연한 건이 <b>그대로 지표</b> · 관리자 판단이 담당자 과업으로 연결 · 재가공 없이 경영진 보고.',
+    '담당자 보고로만 점포 상태 파악 · 폐점 선행 신호 누락 · 관리자 지시 이행 여부 미확인',
+    '응대 누락 198 → 12건 · 공지 열람 98% · 조기 접촉 24개 점포 복귀'+EST);
+  window.LIVE_TL=D.hist.slice();window.LIVE_CNT={...D.cnt};window.LIVE_SLOTS={...D.slots};window.LIVE_SV=CASE.me.n;
+  E.role('admin');
+  q('narr-step').textContent='S4 · 대시보드';q('narr-hint').textContent='KPI 클릭 → 근거 · 강동천호점 이력 전개 · AI 탭 → 과업 지정';
+  q('next-btn').disabled=true;q('next-btn').classList.remove('need');q('next-btn').textContent='데모 종료';
+  if(typeof renderGen==='function'){setTab('gen');}
+  E.narrRaw(`신 0의 빈 관리자 패널이 대시보드가 됐습니다. 시연 건 메시지 ${D.cnt.msg} · 파일 ${D.cnt.file} · 감사 이력 ${D.cnt.audit} · 관리자 결정 ${D.cnt.dec}이 지표와 강동천호점 이력에 유입됐습니다. AI 운영지표 탭에서 이탈 위험 점포에 과업을 지정하십시오.`);
+}
+
+/* ─── 시작 ─── */
+window.addEventListener('DOMContentLoaded',()=>{renderChk();E.go(0);});
+
+
+
+/* ═══ 대시보드 (임베드) · 가맹본부 ═══ */
+const $=id=>document.getElementById(id);
+function narr(t){if(window.E&&E.narrRaw)E.narrRaw(t);}
+function showTip(e,h){const t=$('tip');t.innerHTML=h;t.classList.add('on');moveTip(e);}
+function moveTip(e){const t=$('tip');let x=e.clientX+14,y=e.clientY+14;const w=t.offsetWidth,h=t.offsetHeight;if(x+w>innerWidth-10)x=e.clientX-w-14;if(y+h>innerHeight-10)y=e.clientY-h-14;t.style.left=x+'px';t.style.top=y+'px';}
+function hideTip(){$('tip').classList.remove('on');}
+// 지표 설명 툴팁
+function showITip(e,t,d){const el=$('itip');el.innerHTML=`<div class="it-t">${t}</div>${d}`;el.classList.add('on');let x=e.clientX+14,y=e.clientY+14;const w=el.offsetWidth,h=el.offsetHeight;if(x+w>innerWidth-10)x=e.clientX-w-14;if(y+h>innerHeight-10)y=e.clientY-h-14;el.style.left=x+'px';el.style.top=y+'px';}
+function moveITip(e){const el=$('itip');let x=e.clientX+14,y=e.clientY+14;const w=el.offsetWidth,h=el.offsetHeight;if(x+w>innerWidth-10)x=e.clientX-w-14;if(y+h>innerHeight-10)y=e.clientY-h-14;el.style.left=x+'px';el.style.top=y+'px';}
+function hideITip(){$('itip').classList.remove('on');}
+// ⓘ 아이콘 HTML (title=설명키)
+function iIc(key){return `<span class="info-ic" data-info="${key}">i</span>`;}
+const INFO={
+  reach:['공지 · 교육 · 설문 도달','권역별 공지 열람률 · 교육 이수율 · 설문 응답률. 발송 여부가 아니라 점포 단위 도달 결과.'],
+  storehist:['점포 이력 타임라인','점포별 채널 입장 · 발주 · 공지 · 교육 · 이슈 · 승계 기록을 시각순으로 표시. 담당자 교체 시 그대로 승계되는 근거.'],
+  conn:['연결성','권역별 월간 메시지량. 채널 이용도와 권역 간 활동 편차 진단.'],
+  load:['담당자 부하','권역별 담당자 1인당 점포 수. 43개 점포 초과 구간은 응대 기준 준수율 하락 구간.'],
+  audit:['감사 이력 · 관리자 결정','공지 발송 · 부서 이관 · 이슈 배정 · 담당자 승계 등 관리자 결정의 기록. 지시 이행 여부 확인 근거.'],
+  daily_msg:['일별 메시지량','최근 14일 전사 채널 메시지 추이.'],
+  churn:['이탈 위험 판정','3주 무활동 · 교육 미이수 · 설문 무응답 세 신호가 겹친 점포를 이탈(폐점) 위험으로 판정. 판정 기준은 예시값(고객사 확정).'],
+  assign:['조치 지정','판정된 위험 점포에 관리자가 담당자 접촉 과업을 지정. 처리 결과가 조치 트래킹에 반영.'],
+  quality:['서비스 품질','권역 · 담당자별 응대 기준 준수율. 1차 기준 1시간은 예시값.'],
+  daily_sla:['일별 응대 기준 준수율','최근 14일 준수율 추이. 목표 90%(예시).'],
+  track:['조치 트래킹','기간별 식별 리스크의 해결 · 조치중 · 미해결 현황.'],
+};
+function bindInfo(){document.querySelectorAll('[data-info]').forEach(el=>{const k=el.dataset.info;if(!INFO[k])return;el.addEventListener('mousemove',e=>showITip(e,INFO[k][0],INFO[k][1]));el.addEventListener('mouseleave',hideITip);});}
+const won=n=>n>=10000?(n/10000).toLocaleString()+'만':n.toLocaleString();
+function setTab(t){$('tab-gen').classList.toggle('on',t==='gen');$('tab-ai').classList.toggle('on',t==='ai');if(t==='gen')renderGen();else renderAI();}
+
+/* ════════════ 원천 데이터 (가상 · 구조 검증용) ════════════ */
+const REG=[ // 권역 · 점포 · 담당자 · 월 메시지 · 응대 기준 준수율 · 이탈 위험
+  {n:'수도권1',store:520,sv:13,msg:14200,sla:92,risk:4,reach:[98,93,96]},
+  {n:'수도권2',store:470,sv:12,msg:13100,sla:94,risk:3,reach:[100,91,97]},
+  {n:'충청',store:312,sv:7,msg:6100,sla:71,risk:17,reach:[89,78,81]},
+  {n:'호남',store:350,sv:9,msg:8800,sla:89,risk:5,reach:[97,88,93]},
+  {n:'영남',store:610,sv:14,msg:15400,sla:84,risk:8,reach:[96,86,90]},
+  {n:'강원·제주',store:238,sv:6,msg:5200,sla:90,risk:1,reach:[98,90,94]},
+];
+const load=r=>+(r.store/r.sv).toFixed(1);
+const STORE_HIST=[
+  {n:'하남미사점',owner:'수도권 2권역 · 신규 개점 9/1',tl:[
+    {t:'8/24',who:'오세훈 점주',ev:'웹 채널 입장 · 카카오톡 미사용 점포 편입'},
+    {t:'8/26',who:'시스템',ev:'공지 미열람 → 재안내'},
+    {t:'8/26',who:'한태민 담당자',ev:'담당자 과업 · 개별 안내 → 열람 확인'},
+  ]},
+  {n:'명일역점',owner:'수도권 2권역 · 이탈 위험',tl:[
+    {t:'8/05',who:'시스템',ev:'마지막 대화 · 이후 3주 무활동'},
+    {t:'8/31',who:'시스템',ev:'신메뉴 제조 교육 미이수'},
+    {t:'8/28',who:'시스템',ev:'오픈 준비 설문 무응답'},
+    {t:'9/30',who:'NOA',ev:'이탈 위험 판정 · 세 신호 중첩'},
+  ]},
+];
+const AUDIT=[
+  {n:'9월_아이스신메뉴_운영가이드.pdf',type:'공지',recv:'수도권 2권역 34개 점포 · 열람 34/34',who:'서윤아 관리자'},
+  {n:'이관 LG-0828-012 · 포스터 미수령',type:'이관',recv:'물류팀 · 2개 점포 · 8/29 처리',who:'서윤아 관리자'},
+  {n:'접수 FR-26082901 · 강동천호점 제빙기',type:'배정',recv:'시설팀 · 당일 조치 · 15:40 완료',who:'서윤아 관리자'},
+  {n:'담당자 승계 · 수도권 2권역',type:'승계',recv:'34개 점포 · 이력 손실 0',who:'서윤아 관리자'},
+];
+function auditRows(){
+  const live=(window.LIVE_TL||[]).filter(e=>/관리자/.test(e.who)).map(e=>({n:e.ev,type:'시연 건',recv:e.t+' · 수도권 2권역',who:e.who,live:true}));
+  const base=[{n:'충청권 응대 기준 조정 · 1차 1시간 유지',type:'기준',recv:'9/22 · 충청권 312개 점포',who:'서윤아 관리자'},{n:'영남권 교육 미이수 재배포',type:'교육',recv:'9/24 · 미이수 61개 점포',who:'서윤아 관리자'}];
+  return live.concat(base);
+}
+const DAILY_MSG=[4120,3980,4610,4480,3310,2890,4950,5020,4380,5260,5110,4790,5380,5120];
+
+/* ════════════ 운영 지표 ════════════ */
+function renderGen(){
+  narr('운영 지표 — 점포 단위 기록을 권역 · 담당자 · 점포로 집계. KPI 카드 클릭 시 근거 전개, 지표명 ⓘ에서 설명 확인.');
+  const L=window.LIVE_CNT;
+  $('dash-body').innerHTML=`
+    <div class="toprow">
+      ${insightCard('gen')}
+      <div class="kpis">
+        ${kpi('store','','소통 자산화 점포','2,500',null,'카카오 채널 2,380 · 문자·웹 120','fix')}
+        ${kpi('notice','','공지 열람률','98%',null,'최초 82% → 재안내 포함','est')}
+        ${kpi('miss','','응대 누락','12',{d:'▼ 94%',cls:'delta-pos'},'전월 198 → 당월 12건','est')}
+        ${kpi('churn','','이탈 위험 점포','38',null,'세 신호 중첩','est')}
+      </div>
+    </div>
+    <div id="drill-gen" class="drill-panel"></div>
+
+    <div class="sec-tag"><span class="sec-label sec-today">당일 현황</span><span class="sec-desc">현재 시점 스냅샷</span><span class="sec-line"></span></div>
+
+    <div class="card">
+      <div class="card-hd"><div class="card-t">공지 · 교육 · 설문 도달${iIc('reach')}</div></div>
+      <div class="card-sub" style="margin-left:0">권역별 도달률과 점포별 이력. 발송이 아니라 점포 단위 도달 결과.</div>
+      <div class="row2b">
+        <div><div class="sub-h">권역 × 도달 지표 (셀 농도 = 도달률)</div><div id="reach-heat"></div></div>
+        <div><div class="sub-h" style="display:flex;align-items:center">점포 이력 타임라인${iIc('storehist')}<span style="font-weight:400;margin-left:4px;color:var(--faint)">· 점포 선택 시 이력 전개</span></div><div id="file-hist"></div></div>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="card"><div class="card-hd"><div class="card-t">연결성${iIc('conn')}</div></div>
+        <div class="card-sub" style="margin-left:0">권역별 월간 메시지량.</div>
+        <div id="room-bars"></div></div>
+      <div class="card"><div class="card-hd"><div class="card-t">담당자 부하${iIc('load')}</div></div>
+        <div class="card-sub" style="margin-left:0">권역별 담당자 1인당 점포 수. 43개 초과 구간 주의.</div>
+        <div id="op-agents"></div></div>
+    </div>
+
+    <div class="card"><div class="card-hd"><div class="card-t">감사 이력 · 관리자 결정${iIc('audit')}</div></div>
+      <div class="card-sub" style="margin-left:0">관리자 결정의 기록과 처리 결과.${L?` 시연 중 관리자 결정 <b>${L.dec}</b>건 유입.`:''}</div>
+      <table class="tbl"><thead><tr><th>대상</th><th>유형</th><th>처리 결과</th><th>결정</th></tr></thead><tbody>
+        ${auditRows().map(f=>`<tr><td><b>${esc(f.n)}</b></td><td><span class="pill ${f.live?'pill-pos':'pill-navy'}">${f.type}</span></td><td>${esc(f.recv)}</td><td>${esc(f.who)}</td></tr>`).join('')}
+      </tbody></table></div>
+
+    <div class="sec-tag"><span class="sec-label sec-period">기간 추이</span><span class="sec-desc">일별 추이</span><span class="sec-line"></span></div>
+
+    <div class="card"><div class="card-hd"><div class="card-t">일별 메시지량${iIc('daily_msg')}</div></div>
+      <div class="card-sub" style="margin-left:0">최근 14일 전사 채널 메시지.</div>
+      <div id="daily-msg"></div></div>`;
+  drawReachHeat();drawStoreHist();
+  drVBar('room-bars',REG.map(r=>[r.n,r.msg,r.n==='수도권2'?'#5B3FE4':'#8B6BF0','점포 '+r.store]),16000,'',v=>(v/1000).toFixed(1)+'천');
+  drVBar('op-agents',REG.map(r=>[r.n,load(r),load(r)>43?'var(--amber)':'#5B3FE4','담당자 '+r.sv+'명']),50,'개');
+  drawDailyMsg();bindInfo();
+}
+function drawReachHeat(){
+  const T=['공지 열람','교육 이수','설문 응답'];
+  const shade=v=>`rgba(91,63,228,${(0.12+Math.max(0,(v-70))/30*0.78).toFixed(2)})`;
+  const txt=v=>v>=92?'#fff':'#141A2E';
+  let h='<table style="width:100%;border-collapse:separate;border-spacing:3px;font-size:11px"><thead><tr><th></th>'+T.map(t=>`<th style="font-size:10px;color:var(--muted);font-weight:700;padding-bottom:4px;text-align:center">${t}</th>`).join('')+'</tr></thead><tbody>';
+  REG.forEach((r,ri)=>{h+=`<tr><td style="font-size:11px;font-weight:700;padding-right:8px;white-space:nowrap;text-align:right">${r.n}</td>`+r.reach.map((v,ci)=>`<td class="hv" data-h="${ri}-${ci}" style="background:${v<85?'var(--amber-bg)':shade(v)};color:${v<85?'var(--amber)':txt(v)};text-align:center;height:34px;border-radius:5px;font-weight:700">${v}%</td>`).join('')+'</tr>';});
+  $('reach-heat').innerHTML=h+'</tbody></table>';
+  $('reach-heat').querySelectorAll('[data-h]').forEach(el=>{const[ri,ci]=el.dataset.h.split('-').map(Number);const r=REG[ri];
+    el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">${r.n} · ${T[ci]}</div><div class="tl">${r.reach[ci]}% · 점포 ${r.store}개</div>${r.reach[ci]<85?'<div class="tl">목표 85% 미달</div>':''}`));el.addEventListener('mouseleave',hideTip);});
+}
+let histOpen=null;
+function drawStoreHist(){
+  const LV=window.LIVE_TL||[];
+  const live=LV.length?[{n:'강동천호점',owner:'수도권 2권역 · 9/1 아이스 신메뉴 오픈',live:true,tl:LV.map(e=>({t:e.t,who:e.who,ev:e.ev}))}]:[];
+  const FH=live.concat(STORE_HIST);
+  $('file-hist').innerHTML=FH.map((f,i)=>`
+    <div class="hist-row" id="hist-${i}">
+      <div class="hist-hd" onclick="toggleHist(${i})">
+        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700">${f.n}${f.live?' <span class="pill pill-pos">시연 건</span>':''}</div><div style="font-size:10px;color:var(--muted)">${f.owner} · 이력 ${f.tl.length}건</div></div>
+        <span class="hist-arrow" style="font-size:11px;color:var(--muted)">▶</span>
+      </div>
+      <div class="hist-tl">
+        ${f.tl.map(t=>`<div class="tl-item"><span class="tl-ic"></span><div class="tl-body"><div class="tl-ev">${esc(t.ev)}</div><div class="tl-meta">${esc(t.t)} · ${esc(t.who)}</div></div></div>`).join('')}
+      </div>
+    </div>`).join('');
+  if(live.length)toggleHist(0);
+}
+function toggleHist(i){const e=$('hist-'+i);const open=e.classList.contains('open');document.querySelectorAll('.hist-row').forEach(r=>r.classList.remove('open'));if(!open){e.classList.add('open');narr('점포 이력 타임라인 — 채널 입장부터 발주 · 공지 · 이슈 · 승계까지 점포 단위 기록. 담당자가 바뀌어도 그대로 남습니다.');}}
+function drawDailyMsg(){
+  const data=DAILY_MSG;const W=1240,H=200,padL=46,padB=28,padT=14;const max=6000;
+  const bw=(W-padL-16)/data.length;
+  const x=i=>padL+i*bw,y=v=>H-padB-v/max*(H-padB-padT);
+  let grid='';[0,3000,6000].forEach(g=>{const yy=y(g);grid+=`<line x1="${padL}" y1="${yy}" x2="${W-8}" y2="${yy}" stroke="#EDEFF5"/><text x="${padL-6}" y="${yy+3}" font-size="8" fill="#9AA1B8" text-anchor="end">${g.toLocaleString()}</text>`;});
+  let bars='';data.forEach((v,i)=>{
+    const bwid=Math.min(26,bw*0.5);const bx=x(i)+(bw-bwid)/2;const bh=Math.max(H-padB-y(v),bwid);const by=H-padB-bh;const rad=bwid/2;const today=i===data.length-1;
+    bars+=`<rect x="${bx}" y="${padT}" width="${bwid}" height="${H-padB-padT}" rx="${rad}" fill="#F1F2F8"/>`;
+    bars+=`<rect class="hv" x="${bx}" y="${by}" width="${bwid}" height="${bh}" rx="${rad}" fill="${today?'#5B3FE4':'#B9C0DE'}" data-d="${i}"/>`;
+    bars+=`<text x="${x(i)+bw/2}" y="${H-10}" font-size="8" fill="#9AA1B8" text-anchor="middle">D-${13-i}</text>`;
+  });
+  $('daily-msg').innerHTML=`<svg width="${W}" height="${H}" style="max-width:100%">${grid}${bars}</svg>`;
+  $('daily-msg').querySelectorAll('[data-d]').forEach(el=>{const i=+el.dataset.d;el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">D-${13-i}</div><div class="tl">메시지 ${data[i].toLocaleString()}건</div>`));el.addEventListener('mouseleave',hideTip);});
+}
+function kpi(id,ic,label,val,delta,sub,tagcls){
+  return `<div class="kpi" id="kpi-${id}" onclick="drillKPI('${id}')">
+    <div class="kpi-top"><span class="kpi-l">${label}</span><span class="kpi-ic">${ic}</span></div>
+    <div class="kpi-v">${val}</div>
+    <div class="kpi-sub">${delta?`<span class="kpi-delta ${delta.cls}">${delta.d}</span>`:''}<span style="color:var(--muted)">${sub}</span> <span class="tag tag-${tagcls}">${tagcls==='fix'?'확정':'예시'}</span></div>
+    <div class="kpi-hint">클릭 ↓</div></div>`;
+}
+const KPI_DRILL={
+  store:{t:'소통 자산화 점포 · 편입 경로와 권역 분포',html:()=>`<div class="row2b"><div id="dr-a"></div><div><div class="sub-h">권역별 점포 수</div><div id="dr-b"></div></div></div>`,after:()=>{
+    drDonut('dr-a',[['카카오 채널',2380,'#5B3FE4'],['문자 · 웹 채널',120,'#12275C']],'2,500','편입 점포');
+    drVBar('dr-b',REG.map(r=>[r.n,r.store,'#5B3FE4','담당자 '+r.sv]),650,'개');}},
+  notice:{t:'공지 열람 · 수도권 2권역 단계별 · 권역별',html:()=>`<div class="row2b"><div><div class="sub-h">수도권 2권역 · 9월 신메뉴 공지</div><div id="dr-a"></div></div><div><div class="sub-h">권역별 열람률</div><div id="dr-b"></div></div></div>`,after:()=>{
+    drVBar('dr-a',[['최초 열람',82,'#B9C0DE','28/34'],['재안내 후',97,'#8B6BF0','33/34'],['담당자 확인',100,'#5B3FE4','34/34']],100,'%');
+    drVBar('dr-b',REG.map(r=>[r.n,r.reach[0],r.reach[0]<90?'var(--amber)':'#5B3FE4','']),100,'%');}},
+  miss:{t:'응대 누락 추이 · 채널 전환(8월 말) 전후',html:()=>`<div id="miss-trend"></div>`,after:()=>drawMissTrend()},
+  churn:{t:'이탈 위험 점포 · 권역 분포',html:()=>`<div id="dr-a"></div>`,after:()=>{
+    const cols=['#C8322F','#D98A00','#8B6BF0','#5B3FE4','#12275C','#B9C0DE'];
+    drDonut('dr-a',[...REG].sort((a,b)=>b.risk-a.risk).map((r,i)=>[r.n,r.risk,cols[i]]),'38','위험 점포');}},
+};
+function drDonut(id,segs,centerV,centerL,size){
+  size=size||170;const cx=size/2,cy=size/2,r=size/2-12,ri=r-26;const tot=segs.reduce((a,b)=>a+b[1],0);
+  let a=-Math.PI/2,h='';
+  segs.forEach((sg,i)=>{const f=sg[1]/tot,a2=a+f*2*Math.PI;const p=(g,rr)=>[cx+Math.cos(g)*rr,cy+Math.sin(g)*rr];const[x1,y1]=p(a,r),[x2,y2]=p(a2,r),[xi1,yi1]=p(a2,ri),[xi2,yi2]=p(a,ri);const lg=f>0.5?1:0;h+=`<path class="hv" data-dn="${i}" d="M${x1} ${y1} A${r} ${r} 0 ${lg} 1 ${x2} ${y2} L${xi1} ${yi1} A${ri} ${ri} 0 ${lg} 0 ${xi2} ${yi2} Z" fill="${sg[2]}"/>`;a=a2;});
+  const legend=segs.map(sg=>`<div class="conc-li"><span><span class="conc-dot" style="background:${sg[2]}"></span>${sg[0]}</span><b>${sg[1]}</b></div>`).join('');
+  $(id).innerHTML=`<div class="conc-wrap"><svg width="${size}" height="${size}">${h}<text x="${cx}" y="${cy-4}" font-size="24" font-weight="800" fill="#12275C" text-anchor="middle">${centerV}</text><text x="${cx}" y="${cy+14}" font-size="10" fill="#6B7391" text-anchor="middle">${centerL}</text></svg><div class="conc-legend">${legend}</div></div>`;
+  $(id).querySelectorAll('[data-dn]').forEach(el=>{const sg=segs[+el.dataset.dn];el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">${sg[0]}</div><div class="tl">${sg[1]} · ${Math.round(sg[1]/tot*100)}%</div>`));el.addEventListener('mouseleave',hideTip);});
+}
+// 공용 라운드 세로막대 (rows=[[label,val,col,sub],...])
+function drVBar(id,rows,max,unit,fmt){
+  const n=rows.length;const W=Math.max(360,n*100),H=210,padB=44,padT=18;const bw=(W-20)/n;
+  let bars='';rows.forEach((r,i)=>{
+    const bwid=Math.min(34,bw*0.42);const bx=10+i*bw+(bw-bwid)/2;
+    const bh=Math.max((H-padB-padT)*r[1]/max,bwid);const by=H-padB-bh;const rad=bwid/2;
+    bars+=`<rect x="${bx}" y="${padT}" width="${bwid}" height="${H-padB-padT}" rx="${rad}" fill="#EDEFF5"/>`;
+    bars+=`<rect class="hv" x="${bx}" y="${by}" width="${bwid}" height="${bh}" rx="${rad}" fill="${r[2]}" data-vb2="${i}"/>`;
+    bars+=`<text x="${10+i*bw+bw/2}" y="${by-7}" font-size="11" font-weight="800" fill="#141A2E" text-anchor="middle">${fmt?fmt(r[1]):r[1]+(unit||'')}</text>`;
+    bars+=`<text x="${10+i*bw+bw/2}" y="${H-padB+16}" font-size="9.5" fill="#6B7391" text-anchor="middle">${r[0].length>6?r[0].slice(0,6):r[0]}</text>`;
+    if(r[3])bars+=`<text x="${10+i*bw+bw/2}" y="${H-padB+29}" font-size="8" fill="#9AA1B8" text-anchor="middle">${r[3]}</text>`;
+  });
+  $(id).innerHTML=`<div style="display:flex;justify-content:center"><svg width="${W}" height="${H}">${bars}</svg></div>`;
+  $(id).querySelectorAll('[data-vb2]').forEach(el=>{const r=rows[+el.dataset.vb2];el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">${r[0]}</div><div class="tl">${fmt?fmt(r[1]):r[1]+(unit||'')}${r[3]?' · '+r[3]:''}</div>`));el.addEventListener('mouseleave',hideTip);});
+}
+// 드릴다운 공용 가로 막대 (라운드+트랙+툴팁)
+function drCatBar(id,rows,max,unit){
+  $(id).innerHTML=rows.map((r,i)=>{
+    const risk=r[2];const col=risk?'var(--amber)':'linear-gradient(90deg,var(--navy),var(--purple))';
+    return `<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>${r[0]}</span><b>${r[1]}${unit}</b></div><div class="rank-track" style="height:13px"><div class="rank-fill hv" data-cb="${i}" style="width:${r[1]/max*100}%;background:${col}"></div></div></div>`;
+  }).join('');
+  $(id).querySelectorAll('[data-cb]').forEach(el=>{const r=rows[+el.dataset.cb];el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">${r[0]}</div><div class="tl">${r[1]}${unit}</div>`));el.addEventListener('mouseleave',hideTip);});
+}
+function drillKPI(id){
+  document.querySelectorAll('.kpi').forEach(k=>k.classList.remove('on'));
+  $('kpi-'+id).classList.add('on');
+  const d=KPI_DRILL[id];const p=$('drill-gen');
+  p.innerHTML=`<div class="drill-hd"><div class="drill-hd-t">${d.t}</div><div class="drill-hd-x" onclick="closeDrill()">✕</div></div><div class="drill-in">${d.html()}</div>`;
+  p.classList.add('on');if(d.after)d.after();
+  narr('KPI를 클릭하면 그 지표의 상세로 드릴다운합니다 — 임원이 "이 숫자 근거가 뭐냐" 물으면 즉시 파고듭니다.');
+}
+function closeDrill(){$('drill-gen').classList.remove('on');document.querySelectorAll('.kpi').forEach(k=>k.classList.remove('on'));}
+function drawMissTrend(){const data=[['5월',204],['6월',212],['7월',205],['8월',198],['9월',12]];const W=1240,H=220,padL=42,padB=30,padT=20,max=240;const bw=(W-padL-16)/data.length;const x=i=>padL+i*bw,y=v=>H-padB-v/max*(H-padB-padT);let grid='';[0,120,240].forEach(g=>{const yy=y(g);grid+=`<line x1="${padL}" y1="${yy}" x2="${W-8}" y2="${yy}" stroke="#EDEFF5"/><text x="${padL-6}" y="${yy+3}" font-size="9" fill="#9AA1B8" text-anchor="end">${g}</text>`;});let b='';data.forEach((d,i)=>{const bx=x(i)+bw*0.22,by=y(d[1]),bh=H-padB-by,bwid=bw*0.56;const col=i===4?'#2E7D66':i===3?'#C8322F':'#8B6BF0';b+=`<rect x="${bx}" y="${by}" width="${bwid}" height="${bh}" rx="4" fill="${col}"/><text x="${x(i)+bw/2}" y="${by-6}" font-size="13" font-weight="800" fill="#141A2E" text-anchor="middle">${d[1]}</text><text x="${x(i)+bw/2}" y="${H-10}" font-size="10" fill="#6B7391" text-anchor="middle">${d[0]}</text>`;});$('miss-trend').innerHTML=`<svg width="${W}" height="${H}" style="max-width:100%">${grid}${b}</svg>`;}
+
+/* ════════════ AI 운영지표 (NOA) — 이탈 위험 중심 ════════════ */
+const SIG=['3주 무활동','교육 미이수','설문 무응답'];
+const SIGDATA={'수도권1':[12,26,10],'수도권2':[9,18,7],'충청':[31,44,29],'호남':[14,21,12],'영남':[22,35,18],'강원·제주':[5,9,4]};
+const RISK_STORES=[
+  {n:'명일역점',sig:['무활동 23일','교육 미이수','설문 무응답']},
+  {n:'고덕점',sig:['무활동 21일','교육 미이수','설문 무응답']},
+  {n:'상일동점',sig:['무활동 25일','교육 미이수','설문 무응답']},
+];
+let ASSIGNED=null;
+const TRACK={
+  '월':{label:'8월 → 9월',opened:14,closed:9,items:[
+    {n:'응대 누락',before:198,after:12,st:'해결',ev:'1시간 · 2시간 단계형 응대 기준 적용'},
+    {n:'공지 미열람 점포',before:41,after:6,st:'조치중',ev:'미열람 자동 재안내 · 잔여 점포 담당자 과업'},
+    {n:'충청권 응대 기준 미달',before:1,after:1,st:'미해결',ev:'담당자 1인당 44.6개 점포 · 증원 검토'},
+  ]},
+  '분기':{label:'2026 Q3',opened:27,closed:19,items:[
+    {n:'개인 카카오톡 사각지대',before:60,after:0,st:'해결',ev:'담당자 60명 공식 채널 전환'},
+    {n:'카카오톡 미사용 점포',before:120,after:0,st:'해결',ev:'문자 · 웹 채널 편입'},
+    {n:'이탈 위험 점포',before:52,after:38,st:'조치중',ev:'조기 접촉 24개 점포 복귀'},
+  ]},
+  '반기':{label:'2026 하반기(누적)',opened:31,closed:21,items:[
+    {n:'담당자 교체 이력 초기화',before:9,after:0,st:'해결',ev:'관리자 승인 일괄 승계'},
+    {n:'오픈 준비 누락',before:14,after:2,st:'조치중',ev:'설문 기반 사전 확인 · 부서 이관'},
+    {n:'권역 부하 편차',before:1,after:1,st:'미해결',ev:'충청권 증원 2명 권고'},
+  ]},
+  '연':{label:'2026 연간(누적)',opened:44,closed:30,items:[
+    {n:'채널 전환 · 자산화',before:1,after:0,st:'해결',ev:'가맹점 2,500개 편입'},
+    {n:'관리자 결정 기록',before:1,after:0,st:'해결',ev:'배정 · 이관 · 승계 전량 감사 이력'},
+    {n:'이탈 위험 조기 감지',before:0,after:1,st:'조치중',ev:'NOA 세 신호 판정 도입'},
+  ]},
+};
+let trackPeriod='월';
+const TRACK0=JSON.stringify(TRACK);
+function dashReset(){ASSIGNED=null;trackPeriod='월';const t=JSON.parse(TRACK0);Object.keys(t).forEach(k=>TRACK[k]=t[k]);}
+const DAILY_SLA=[86,85,88,84,87,89,86,88,90,87,89,88,91,88];
+
+function renderAI(){
+  narr('AI 운영지표(NOA) — 운영 기록을 이탈 위험 중심으로 교차 분석. 판정 → 조치 지정 → 품질 → 추이 순. KPI · 지표명 ⓘ에서 근거 확인.');
+  $('dash-body').innerHTML=`
+    <div class="toprow">
+      ${insightCard('ai')}
+      <div class="kpis">
+        ${aiKpi('churn','','이탈 위험 점포','38개','세 신호 중첩','est')}
+        ${aiKpi('sla','','응대 기준 준수율','88%','1차 기준 1시간','est')}
+        ${aiKpi('load','','담당자 부하 지수','44.6','충청권 1인당 점포','est')}
+        ${aiKpi('top','','최우선 리스크','충청권','담당자 7명 · 312개 점포','est')}
+      </div>
+    </div>
+    <div id="drill-ai" class="drill-panel"></div>
+
+    <div class="sec-tag"><span class="sec-label sec-today">당일 현황</span><span class="sec-desc">판정 · 조치 · 품질</span><span class="sec-line"></span></div>
+
+    <div class="card"><div class="card-hd"><div class="card-t">이탈 위험 판정${iIc('churn')}<span class="aitag">NOA</span></div></div>
+      <div class="card-sub" style="margin-left:0">권역 × 신호별 점포 수. 세 신호가 겹친 점포가 위험 판정.</div>
+      <div id="churn-heat"></div></div>
+
+    <div class="card" id="assign-card"><div class="card-hd"><div class="card-t">조치 지정 · 수도권 2권역 위험 점포${iIc('assign')}<span class="aitag">관리자</span></div></div>
+      <div class="card-sub" style="margin-left:0">위험 점포를 선택해 담당자 접촉 과업을 지정합니다.</div>
+      <div id="assign-body"></div></div>
+
+    <div class="card"><div class="card-hd"><div class="card-t">서비스 품질${iIc('quality')}<span class="aitag">응대 기준</span></div></div>
+      <div class="card-sub" style="margin-left:0">권역 · 담당자별 응대 기준 준수율.</div>
+      <div class="row2b"><div id="org-bar"></div><div id="agent-sla"></div></div></div>
+
+    <div class="sec-tag"><span class="sec-label sec-period">기간 추이</span><span class="sec-desc">일별 · 기간별</span><span class="sec-line"></span></div>
+
+    <div class="card"><div class="card-hd"><div class="card-t">일별 응대 기준 준수율${iIc('daily_sla')}</div></div>
+      <div class="card-sub" style="margin-left:0">최근 14일 추이 · 목표 90%.</div>
+      <div id="daily-sla"></div></div>
+
+    <div class="card"><div class="card-hd"><div class="card-t">조치 트래킹${iIc('track')}<span class="aitag">기간</span></div></div>
+      <div class="card-sub" style="margin-left:0">기간별 리스크 해결 · 조치중 · 미해결.</div>
+      <div style="display:flex;gap:6px;margin:0 0 14px 0">
+        ${['월','분기','반기','연'].map(p=>`<button class="period-btn${p===trackPeriod?' on':''}" data-per="${p}" onclick="setPeriod('${p}')">${p==='월'?'지난달 · 이번달':p}</button>`).join('')}
+      </div>
+      <div class="row2b"><div id="track-chart"></div><div id="track-list"></div></div></div>
+
+    <div class="brief"><div><div class="brief-t">본부장 브리핑 리포트</div><div class="brief-s">이탈 위험 · 조치 현황 · 권역 부하를 1장으로 정제 · 재가공 없이 경영진 보고</div></div>
+      <div class="brief-btns"><button class="bbtn bbtn-x">Excel</button><button class="bbtn bbtn-p" onclick="openReport()">본부장 브리핑 PDF</button></div></div>`;
+  drawChurnHeat();drawAssign();drawTrack();drawOrgBar();drawAgentSla();drawDailySla();bindInfo();
+}
+function drawChurnHeat(){
+  const shade=(v,mx)=>v===0?'#F4F5F9':`rgba(200,50,47,${(0.12+v/mx*0.7).toFixed(2)})`;
+  let h='<table style="width:100%;border-collapse:separate;border-spacing:3px;font-size:11px"><thead><tr><th></th>'+SIG.map(t=>`<th style="font-size:10px;color:var(--muted);font-weight:700;padding-bottom:4px;text-align:center">${t}</th>`).join('')+'<th style="font-size:10px;color:var(--muted);font-weight:700;text-align:center">세 신호 중첩 = 위험</th></tr></thead><tbody>';
+  [...REG].sort((a,b)=>b.risk-a.risk).forEach(r=>{const v=SIGDATA[r.n];
+    h+=`<tr><td style="font-size:11.5px;font-weight:700;padding-right:8px;white-space:nowrap;text-align:right">${r.n}<div style="font-size:9px;font-weight:400;color:var(--muted)">점포 ${r.store} · 담당자 ${r.sv}</div></td>`+v.map((x,ci)=>`<td class="hv" data-cr="${r.n}|${ci}" style="background:${shade(x,44)};color:${x>28?'#fff':'#141A2E'};text-align:center;height:38px;border-radius:6px;font-weight:700;font-size:12px">${x}</td>`).join('')+`<td style="text-align:center;font-weight:800;font-size:14px;color:${r.risk>=8?'var(--red)':r.risk>=4?'var(--amber)':'var(--muted)'}">${r.risk}</td></tr>`;});
+  $('churn-heat').innerHTML=h+'</tbody></table>';
+  $('churn-heat').querySelectorAll('[data-cr]').forEach(el=>{const[n,ci]=el.dataset.cr.split('|');const v=SIGDATA[n][+ci];el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">${n} · ${SIG[+ci]}</div><div class="tl">${v}개 점포</div>`));el.addEventListener('mouseleave',hideTip);});
+}
+function drawAssign(){
+  const sv=window.LIVE_SV||'이서준';
+  const rows=RISK_STORES.map(s=>`<tr><td><b>${s.n}</b></td><td>${s.sig.map(x=>`<span class="pill pill-red" style="margin-right:4px">${x}</span>`).join('')}</td><td>${ASSIGNED?`<span class="pill pill-amber">진행 중 · ${esc(ASSIGNED.sv)} · ${esc(ASSIGNED.due)}</span>`:'<span class="pill">미지정</span>'}</td></tr>`).join('');
+  $('assign-body').innerHTML=`<table class="tbl"><thead><tr><th>위험 점포</th><th>판정 신호</th><th>조치 상태</th></tr></thead><tbody>${rows}</tbody></table>
+    <div id="assign-act" style="display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap">${ASSIGNED?`<span style="font-size:12px;color:var(--pos);font-weight:800">과업 지정 완료 · 조치 트래킹 반영</span>`:
+    `<label style="font-size:11px;color:var(--muted);font-weight:700">담당자</label><select id="as-sv" class="as-in"><option>${esc(sv)}</option><option>윤재석</option></select>
+     <label style="font-size:11px;color:var(--muted);font-weight:700">기한</label><select id="as-due" class="as-in"><option>3일</option><option>7일</option></select>
+     <button class="bbtn bbtn-p" id="as-ok" onclick="assignTask()">담당자 과업 지정</button>`}</div>`;
+}
+function assignTask(){
+  ASSIGNED={sv:$('as-sv').value,due:$('as-due').value};
+  TRACK['월'].items=TRACK['월'].items.filter(x=>x.n!=='이탈 위험 점포 접촉').concat([{n:'이탈 위험 점포 접촉',before:3,after:3,st:'조치중',ev:'수도권 2권역 3개 점포 · '+ASSIGNED.sv+' · 기한 '+ASSIGNED.due}]);
+  TRACK['월'].opened+=3;
+  if(typeof bump==='function')bump('dec');if(typeof tl==='function')tl('9/30','이탈 위험 3개 점포 과업 지정 → '+ASSIGNED.sv,'서윤아 관리자');
+  drawAssign();drawTrack();
+  narr('관리자 판단이 담당자 과업으로 전달됐습니다 — 수도권 2권역 위험 3개 점포 · '+esc(ASSIGNED.sv)+' · 기한 '+esc(ASSIGNED.due)+'. 조치 트래킹에 "조치중 3"으로 반영됩니다. 데모 종료.');
+}
+function drawDailySla(){
+  const data=DAILY_SLA;const W=1240,H=200,padL=42,padB=28,padT=16;const min=50,max=100;
+  const bw=(W-padL-16)/data.length;
+  const x=i=>padL+bw*i+bw/2,y=v=>H-padB-(v-min)/(max-min)*(H-padB-padT);
+  let grid='';[50,70,90,100].forEach(g=>{const yy=y(g);grid+=`<line x1="${padL}" y1="${yy}" x2="${W-8}" y2="${yy}" stroke="#EDEFF5"/><text x="${padL-6}" y="${yy+3}" font-size="8" fill="#9AA1B8" text-anchor="end">${g}%</text>`;});
+  // 목표선 90%
+  grid+=`<line x1="${padL}" y1="${y(90)}" x2="${W-8}" y2="${y(90)}" stroke="#5B3FE4" stroke-width="1" stroke-dasharray="4 3"/><text x="${W-10}" y="${y(90)-4}" font-size="8" fill="#5B3FE4" text-anchor="end">목표 90%</text>`;
+  let line='',dots='',labels='';data.forEach((v,i)=>{const cx=x(i),cy=y(v);line+=`${i===0?'M':'L'}${cx} ${cy} `;const col=v<87?'#D98A00':'#5B3FE4';dots+=`<circle class="hv" cx="${cx}" cy="${cy}" r="4" fill="${col}" data-s="${i}"/>`;labels+=`<text x="${cx}" y="${H-9}" font-size="8" fill="#9AA1B8" text-anchor="middle">D-${14-i===1?'0':14-i-1}</text>`;});
+  $('daily-sla').innerHTML=`<svg width="${W}" height="${H}" style="max-width:100%">${grid}<path d="${line}" fill="none" stroke="#5B3FE4" stroke-width="2"/>${dots}${labels}</svg>`;
+  $('daily-sla').querySelectorAll('[data-s]').forEach(el=>{const i=+el.dataset.s;el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">D-${14-i===1?'0':14-i-1}</div><div class="tl">응대 기준 준수율 ${data[i]}%</div>`));el.addEventListener('mouseleave',hideTip);});
+}
+function aiKpi(id,ic,label,val,sub,tagcls){
+  return `<div class="kpi" id="aikpi-${id}" onclick="drillAI('${id}')">
+    <div class="kpi-top"><span class="kpi-l">${label}</span><span class="kpi-ic">${ic}</span></div>
+    <div class="kpi-v" style="font-size:24px">${val}</div>
+    <div class="kpi-sub"><span style="color:var(--muted)">${sub}</span> <span class="tag tag-${tagcls}">${tagcls==='fix'?'확정':'예시'}</span></div>
+    <div class="kpi-hint">클릭 ↓</div></div>`;
+}
+const AI_DRILL={
+  churn:{t:'이탈 위험 · 권역별 위험 점포',html:()=>`<div id="dr-a"></div>`,after:()=>{
+    drVBar('dr-a',[...REG].sort((a,b)=>b.risk-a.risk).map(r=>[r.n,r.risk,r.risk>=8?'var(--red)':r.risk>=4?'var(--amber)':'#5B3FE4','점포 '+r.store]),20,'개');}},
+  sla:{t:'응대 기준 준수율 · 권역별',html:()=>`<div style="font-size:10.5px;color:var(--muted);margin-bottom:10px">1차 기준 1시간 · 2차 기준 2시간 [예시 · 고객사 확정]</div><div id="dr-a"></div>`,after:()=>{
+    drVBar('dr-a',REG.map(r=>[r.n,r.sla,r.sla<80?'var(--red)':r.sla<90?'var(--amber)':'#5B3FE4','']),100,'%');}},
+  load:{t:'담당자 부하 · 권역별 1인당 점포 수',html:()=>`<div class="row2b"><div id="dr-a"></div><div style="background:#F7F8FC;border-radius:9px;padding:14px"><div style="font-size:11px;font-weight:800;color:var(--navy);margin-bottom:8px">충청권 증원 시뮬레이션</div><div class="rp-kv"><span>현재</span><b style="color:var(--amber)">7명 · 1인당 44.6개</b></div><div class="rp-kv"><span>2명 증원</span><b style="color:var(--pos)">9명 · 1인당 34.7개</b></div><div class="rp-kv"><span>기준 준수율</span><b>71% → 목표 90%</b></div></div></div>`,after:()=>{
+    drVBar('dr-a',REG.map(r=>[r.n,load(r),load(r)>43?'var(--amber)':'#5B3FE4','담당자 '+r.sv]),50,'개');}},
+  top:{t:'최우선 리스크 · 충청권 판정 근거',html:()=>`<div style="background:#F7F8FC;border-radius:9px;padding:14px;max-width:520px"><div class="rp-kv"><span>점포 · 담당자</span><b>312개 · 7명</b></div><div class="rp-kv"><span>1인당 점포</span><b style="color:var(--amber)">44.6개 (전사 최고)</b></div><div class="rp-kv"><span>응대 기준 준수율</span><b style="color:var(--red)">71%</b></div><div class="rp-kv"><span>이탈 위험</span><b style="color:var(--red)">17개 점포 (전사의 45%)</b></div></div>`},
+};
+function drillAI(id){
+  document.querySelectorAll('#aikpi-churn,#aikpi-sla,#aikpi-load,#aikpi-top').forEach(k=>k.classList.remove('on'));
+  $('aikpi-'+id).classList.add('on');
+  const d=AI_DRILL[id];const p=$('drill-ai');
+  p.innerHTML=`<div class="drill-hd"><div class="drill-hd-t">${d.t}</div><div class="drill-hd-x" onclick="closeDrillAI()">✕</div></div><div class="drill-in">${d.html()}</div>`;
+  p.classList.add('on');if(d.after)d.after();
+  narr('AI KPI 클릭 → 근거 전개. 이 수치가 어느 권역 · 담당자 · 신호에서 나왔는지 확인합니다.');
+}
+function closeDrillAI(){$('drill-ai').classList.remove('on');document.querySelectorAll('#aikpi-churn,#aikpi-sla,#aikpi-load,#aikpi-top').forEach(k=>k.classList.remove('on'));}
+function setPeriod(p){trackPeriod=p;document.querySelectorAll('.period-btn').forEach(b=>b.classList.toggle('on',b.dataset.per===p));drawTrack();}
+function drawTrack(){
+  const t=TRACK[trackPeriod];
+  const closed=t.closed,mid=Math.max(0,Math.round((t.opened-t.closed)*0.5)),open=t.opened-t.closed-mid;
+  const segs=[[closed,'#2E7D66','해결'],[mid,'#D98A00','조치중'],[open,'#C8322F','미해결']].filter(x=>x[0]>0);
+  const tot=t.opened;
+  const bar=segs.map(x=>`<div class="split-seg hv" data-sp="${x[2]}" style="width:${x[0]/tot*100}%;background:${x[1]}"></div>`).join('');
+  const legend=segs.map(x=>`<div class="split-lg"><span class="conc-dot" style="background:${x[1]}"></span>${x[2]} <b>${x[0]}</b></div>`).join('');
+  const stCol={'해결':'pill-pos','조치중':'pill-amber','미해결':'pill-red'};
+  const items=t.items.map(it=>`<div class="hv" data-ti="${it.n}" style="display:flex;justify-content:space-between;align-items:center;padding:9px 4px;border-bottom:1px solid var(--grid);font-size:12px"><b>${it.n}</b><span style="display:flex;gap:12px;align-items:center"><span style="color:var(--muted)">${it.before} → <b style="color:${it.after<it.before?'var(--pos)':'var(--red)'}">${it.after}</b></span><span class="pill ${stCol[it.st]}">${it.st}</span></span></div>`).join('');
+  $('track-chart').innerHTML=`<div style="display:flex;justify-content:space-between;align-items:baseline"><span class="sub-h" style="margin-bottom:0">${t.label}</span><span style="font-size:20px;font-weight:800;color:var(--navy)">${Math.round(closed/tot*100)}%<span style="font-size:10px;color:var(--muted);font-weight:600;margin-left:4px">조치 완료</span></span></div><div class="split-bar">${bar}</div><div class="split-legend">${legend}</div>`;
+  $('track-list').innerHTML=items;
+  const SP={'해결':closed,'조치중':mid,'미해결':open};
+  $('track-chart').querySelectorAll('[data-sp]').forEach(el=>{const k=el.dataset.sp;el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">${k}</div><div class="tl">${SP[k]}건 · 전체 ${tot}건 중 ${Math.round(SP[k]/tot*100)}%</div>`));el.addEventListener('mouseleave',hideTip);});
+  const TI=t.items;
+  $('track-list').querySelectorAll('[data-ti]').forEach(el=>{const it=TI.find(x=>x.n===el.dataset.ti);el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">${it.n}</div><div class="tl">${it.ev}</div><div class="tl">${it.before}건 → ${it.after}건 · ${it.st}</div>`));el.addEventListener('mouseleave',hideTip);});
+}
+function drawOrgBar(){
+  const gauge=(rate,label,cnt,col,idx)=>{
+    const W=230,H=150,cx=115,thick=20,R=88,cy=132;
+    const ang=Math.PI*(1-rate/100);
+    const px=cx+Math.cos(ang)*R, py=cy-Math.sin(ang)*R;
+    return `<div class="gauge-wrap"><svg width="${W}" height="${H}">
+      <path d="M${cx-R} ${cy} A${R} ${R} 0 0 1 ${cx+R} ${cy}" fill="none" stroke="#EDEFF5" stroke-width="${thick}" stroke-linecap="round"/>
+      <path class="hv" data-gg="${idx}" d="M${cx-R} ${cy} A${R} ${R} 0 0 1 ${px} ${py}" fill="none" stroke="${col}" stroke-width="${thick}" stroke-linecap="round"/>
+      <text x="${cx}" y="${cy-30}" font-size="28" font-weight="800" fill="#12275C" text-anchor="middle">${rate}%</text>
+      <text x="${cx}" y="${cy-8}" font-size="11" fill="#6B7391" text-anchor="middle">${label} · ${cnt}</text>
+    </svg></div>`;
+  };
+  $('org-bar').innerHTML=`<div class="sub-h">권역별 응대 기준 준수율</div><div style="display:flex;gap:14px;justify-content:center">${gauge(93,'수도권 평균','담당자 25명','#5B3FE4',0)}${gauge(71,'충청권','담당자 7명','#D98A00',1)}</div>`;
+  const GD=[{n:'수도권 평균',rate:93,note:'목표 90% 상회'},{n:'충청권',rate:71,note:'목표 90% 하회 · 1인당 44.6개 점포'}];
+  $('org-bar').querySelectorAll('[data-gg]').forEach(el=>{const g=GD[+el.dataset.gg];el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">${g.n}</div><div class="tl">준수율 ${g.rate}%</div><div class="tl">${g.note}</div>`));el.addEventListener('mouseleave',hideTip);});
+}
+function drawAgentSla(){
+  const sv=window.LIVE_SV||'이서준';
+  const AG=[{n:sv,org:'수도권2',rate:94,vol:34},{n:'윤재석',org:'수도권1',rate:91,vol:40},{n:'박소연',org:'영남',rate:84,vol:44},{n:'최민호',org:'충청',rate:66,vol:46}];
+  const cols=['#5B3FE4','#8B6BF0','#D98A00','#C8322F'];
+  const cx=95,cy=95;const rings=[80,63,46,29];const thick=13;let svg='';
+  AG.forEach((a,i)=>{const R=rings[i],circ=2*Math.PI*R;
+    svg+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#EDEFF5" stroke-width="${thick}"/>`;
+    svg+=`<circle class="hv" data-ag="${i}" cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${cols[i]}" stroke-width="${thick}" stroke-linecap="round" stroke-dasharray="${(circ*a.rate/100).toFixed(1)} ${circ.toFixed(1)}" transform="rotate(-90 ${cx} ${cy})"/>`;});
+  const legend=AG.map((a,i)=>`<div class="conc-li"><span><span class="conc-dot" style="background:${cols[i]}"></span><b>${esc(a.n)}</b> <span style="font-size:10px;color:var(--muted)">${a.org}</span></span><span style="font-weight:800;color:${cols[i]}">${a.rate}%</span></div>`).join('');
+  $('agent-sla').innerHTML=`<div class="sub-h">담당자별 응대 기준 준수율</div><div class="conc-wrap"><svg width="190" height="190">${svg}</svg><div class="conc-legend">${legend}</div></div>`;
+  $('agent-sla').querySelectorAll('[data-ag]').forEach(el=>{const a=AG[+el.dataset.ag];el.addEventListener('mousemove',e=>showTip(e,`<div class="tt">${esc(a.n)}</div><div class="tl">준수율 ${a.rate}% · 담당 점포 ${a.vol}개 · ${a.org}</div>`));el.addEventListener('mouseleave',hideTip);});
+}
+function insightCard(mode){
+  const L=window.LIVE_CNT;
+  if(mode==='gen'){
+    return `<div class="insight">
+      <div class="ins-l">이번 달 핵심</div>
+      <div class="ins-v">98<small>% 공지 열람</small></div>
+      <div class="ins-sub">응대 누락 <b>198 → 12건</b> · 이탈 위험 <b>38개 점포</b>${L?` · 시연 건 메시지 <b>${L.msg}</b> · 관리자 결정 <b>${L.dec}</b>`:''}</div>
+      <div class="ins-cta"><button class="ins-btn" onclick="setTab('ai')">AI 이탈 위험 분석 →</button></div>
+    </div>`;
+  }
+  return `<div class="insight">
+    <div class="ins-l">이탈 위험 · NOA 판정</div>
+    <div class="ins-v">38<small>개 점포</small></div>
+    <div class="ins-sub">최우선 <b>충청권 17개</b> · 1인당 <b>44.6개 점포</b> · 증원 2명 시 34.7개</div>
+    <div class="ins-cta"><button class="ins-btn" onclick="openReport()">본부장 브리핑 →</button></div>
+  </div>`;
+}
+function openReport(){
+  $('rp-body').innerHTML=`
+    <div class="rp-sec"><div class="rp-st">1. 요약</div>
+      <div class="rp-kv"><span>이탈 위험 점포 (세 신호 중첩 [예시])</span><b style="color:var(--red)">38개</b></div>
+      <div class="rp-kv"><span>응대 기준 준수율 (1차 1시간 [예시])</span><b>88%</b></div>
+      <div class="rp-kv"><span>응대 누락</span><b style="color:var(--pos)">198 → 12건</b></div></div>
+    <div class="rp-sec"><div class="rp-st">2. 판정 — 권역별 이탈 위험</div>
+      ${[...REG].sort((a,b)=>b.risk-a.risk).slice(0,3).map(r=>`<div class="rp-line"><b>${r.n}</b><span>위험 ${r.risk}개 점포 · 1인당 ${load(r)}개 · 준수율 ${r.sla}%</span></div>`).join('')}</div>
+    <div class="rp-sec"><div class="rp-st">3. 조치 · 권고</div>
+      <div class="rp-line" style="font-size:11.5px"><span>• 충청권 담당자 2명 증원 시 1인당 44.6 → 34.7개 점포</span></div>
+      <div class="rp-line" style="font-size:11.5px"><span>• 수도권 2권역 위험 3개 점포 · ${ASSIGNED?esc(ASSIGNED.sv)+' 과업 지정 완료':'과업 지정 대기'}</span></div>
+      <div class="rp-line" style="font-size:11.5px"><span>• 조기 접촉으로 이탈 위험 점포 24개 복귀 (분기 누적)</span></div></div>
+    <div class="rp-foot">NOA가 운영 기록을 이탈 위험 중심으로 교차해 자동 생성 · 수치는 예시이며 고객사 확정 데이터로 교체</div>`;
+  $('ovl').classList.add('on');
+  narr('본부장 브리핑이 원클릭 추출됐습니다 — 이탈 위험 · 권역 부하 · 조치 현황이 1장으로 정제됩니다.');
+}
+function closeReport(e){if(e&&e.target!==$('ovl')&&!e.target.classList.contains('rp-x'))return;$('ovl').classList.remove('on');}
+
+</script></body></html>

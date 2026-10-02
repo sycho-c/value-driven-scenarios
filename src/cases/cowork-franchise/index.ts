@@ -35,6 +35,21 @@ export const coworkFranchiseCase: CaseDef = {
   accentColor: coworkFranchiseMeta.accentColor,
   // 실제 도입 사례가 아니라, 확보한 요구사항으로 구성한 제안 시나리오다.
   kind: 'proposal',
+  // 같은 가맹점 관리 시나리오를 두 가지 방식으로 — 진입 시 고른다
+  variantSelect: {
+    eyebrow: '가맹점 관리 · 진행 방식 선택',
+    title: '어떤 방식으로 보시겠습니까?',
+    subtitle: '같은 가맹점 관리 시나리오를 두 가지 방식으로 준비했습니다.',
+    guided: {
+      label: '단계 안내형',
+      desc: '관리자 · 담당자 · 점주 세 화면이 단계마다 함께 움직입니다. → 키로 한 단계씩 진행합니다.',
+    },
+    live: {
+      label: '직접 체험형',
+      desc: '강동천호점 9/1 오픈 준비 한 건을 처음부터 끝까지 따라갑니다. 점주 폰에 직접 입력하며 진행합니다.',
+      src: 'demos/franchise-live.html',
+    },
+  },
   cast: coworkFranchiseCast,
   chapters: [
     chapter00SupervisorOverload,

@@ -5,6 +5,8 @@ import { CaseShell } from '@/components/shells/CaseShell';
 import { ChapterRunner } from '@/components/scenario/ChapterRunner';
 import { CaseIntroVideo } from '@/components/scenario/CaseIntroVideo';
 import { ChapterGroupSelect } from '@/components/scenario/ChapterGroupSelect';
+import { CaseVariantSelect } from '@/components/scenario/CaseVariantSelect';
+import variantStyles from '@/components/scenario/CaseVariantSwitch.module.css';
 
 export default function CasePage() {
   const { caseId } = useParams<{ caseId: string }>();
@@ -18,12 +20,15 @@ export default function CasePage() {
   const [introDismissed, setIntroDismissed] = useState<boolean>(!caseDef?.introVideo);
   // 산업 적용 등 그룹 슬롯 선택 — number(선택된 챕터 id) | 'all'(전체 보기) | null(미선택)
   const [groupChoice, setGroupChoice] = useState<number | 'all' | null>(null);
+  // 같은 시나리오의 진행 방식 — 'guided'(단계 안내형) | 'live'(직접 체험형) | null(미선택)
+  const [variant, setVariant] = useState<'guided' | 'live' | null>(null);
 
   useEffect(() => {
     setCurrentChapterId(caseDef?.chapters[0]?.id ?? null);
     setPendingStartIndex(0);
     setIntroDismissed(!caseDef?.introVideo);
     setGroupChoice(null);
+    setVariant(null);
   }, [caseDef?.id, caseDef?.introVideo]);
 
   // 그룹 슬롯에서 산업 하나를 골랐으면, 나머지 그룹 멤버를 챕터 목록에서 제거한
@@ -92,9 +97,38 @@ export default function CasePage() {
     setPendingStartIndex(0);
   };
 
+  const variantSelect = caseDef.variantSelect;
+  const showVariantSelect = !!variantSelect && variant === null && introDismissed;
+  const otherVariant = variant === 'live' ? 'guided' : 'live';
+  const variantBar = variantSelect && variant && (
+    <div className={variantStyles.bar}>
+      <span>진행 방식</span>
+      <span className={variantStyles.current}>
+        {variant === 'live' ? variantSelect.live.label : variantSelect.guided.label}
+      </span>
+      <button type="button" className={variantStyles.switchBtn} onClick={() => setVariant(otherVariant)}>
+        {otherVariant === 'live' ? variantSelect.live.label : variantSelect.guided.label}으로 보기 →
+      </button>
+    </div>
+  );
+
+  if (variantSelect && variant === 'live') {
+    return (
+      <CaseShell caseDef={caseDef}>
+        {variantBar}
+        <iframe
+          className={variantStyles.frame}
+          src={`${import.meta.env.BASE_URL}${variantSelect.live.src}`}
+          title={`${caseDef.label} · ${variantSelect.live.label}`}
+        />
+      </CaseShell>
+    );
+  }
+
   return (
     <>
       <CaseShell caseDef={caseDef}>
+        {variantBar}
         <ChapterRunner
           key={`${activeCaseDef.id}-${currentChapter.id}-${pendingStartIndex}`}
           caseDef={activeCaseDef}
@@ -113,6 +147,9 @@ export default function CasePage() {
             else navigate('/');
           }}
         />
+      )}
+      {showVariantSelect && variantSelect && (
+        <CaseVariantSelect select={variantSelect} accentColor={caseDef.accentColor} onSelect={setVariant} />
       )}
       {showGroupSelect && groupSelect && (
         <ChapterGroupSelect

@@ -1806,4 +1806,18 @@ export interface CaseDef {
   roi: RoiCardDef[];
   /** 산업 적용 등 그룹 슬롯을 시나리오 시작 전에 고르게 할 때 지정 */
   chapterGroupSelect?: ChapterGroupSelectDef;
+  /**
+   * 같은 시나리오를 두 가지 방식으로 보여줄 때 — 진입 시 고르게 한다.
+   * guided 는 이 사례의 챕터(단계 안내형), live 는 public/ 의 단독 HTML 데모(직접 체험형)다.
+   */
+  variantSelect?: CaseVariantSelectDef;
+}
+
+export interface CaseVariantSelectDef {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  guided: { label: string; desc: string };
+  /** src 는 BASE_URL 기준 상대 경로 (예: 'demos/franchise-live.html') */
+  live: { label: string; desc: string; src: string };
 }
